@@ -4,10 +4,36 @@ DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
 	user_id SERIAL,
-	username varchar(50) NOT NULL UNIQUE,
-	password_hash varchar(200) NOT NULL,
-	role varchar(50) NOT NULL,
+	username VARCHAR(50) NOT NULL UNIQUE,
+	password_hash VARCHAR(200) NOT NULL,
+	role VARCHAR(50) NOT NULL,
 	CONSTRAINT PK_user PRIMARY KEY (user_id)
 );
+
+CREATE TABLE matches (
+    match_id SERIAL PRIMARY KEY,
+    team1 VARCHAR(50) NOT NULL,
+    team2 VARCHAR(50) NOT NULL,
+	round INTEGER NOT NULL,
+    start_time TIMESTAMP NOT NULL,
+	venue_id VARCHAR(100),
+	FOREIGN KEY (venue_id) REFERENCES venues(id)
+);
+
+CREATE TABLE venues (
+	id SERIAL PRIMARY KEY,
+    stadium VARCHAR (50) NOT NULL,
+    city VARCHAR(50),
+    state VARCHAR(50),
+    timezone_id INT,
+	FOREIGN KEY (timezone_id) REFERENCES timezones(id)
+);
+
+CREATE TABLE timezones (
+	id SERIAL PRIMARY KEY,
+	name VARCHAR(100),
+	abbreviation VARCHAR(4),
+	utc_offset DECIMAL (4, 2) NOT NULL,
+)
 
 COMMIT TRANSACTION;
