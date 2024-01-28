@@ -5,29 +5,72 @@ import java.time.LocalDateTime;
 public class Match {
 
     private int matchId;
-    private String team1;
-    private String team2;
+    private int team1Id;
+    private int team2Id;
+    private String team1Name;
+    private String team2Name;
+    private Integer winnerId;
+    private String winnerName;
     private int round;
     private LocalDateTime startTime;
     private Integer team1PointsScored;
     private Integer team2PointsScored;
     private boolean isWatched;
-    private String winner;
 
-    public Match(int matchId, String team1, String team2, int round, LocalDateTime startTime, int venueId, Integer team1PointsScored, Integer team2PointsScored, boolean isWatched, String winner) {
+    public Match(int matchId, int team1Id , int team2Id, Integer winnerId, int round, LocalDateTime startTime, int venueId, Integer team1PointsScored, Integer team2PointsScored, boolean isWatched) {
         this.matchId = matchId;
-        this.team1 = team1;
-        this.team2 = team2;
+        this.team1Id = team1Id;
+        this.team2Id = team2Id;
         this.round = round;
         this.startTime = startTime;
         this.team1PointsScored = team1PointsScored;
         this.team2PointsScored = team2PointsScored;
         this.isWatched = isWatched;
-        this.winner = winner;
+        this.winnerId = winnerId;
     }
 
     public Match() {
 
+    }
+
+    public int getTeam1Id() {
+        return team1Id;
+    }
+
+    public String getTeam1Name() {
+        return team1Name;
+    }
+
+    public void setTeam1Name(String team1Name) {
+        this.team1Name = team1Name;
+    }
+
+    public String getTeam2Name() {
+        return team2Name;
+    }
+
+    public void setTeam2Name(String team2Name) {
+        this.team2Name = team2Name;
+    }
+
+    public String getWinnerName() {
+        return winnerName;
+    }
+
+    public void setWinnerName(String winnerName) {
+        this.winnerName = winnerName;
+    }
+
+    public void setTeam1PointsScored(Integer team1PointsScored) {
+        this.team1PointsScored = team1PointsScored;
+    }
+
+    public void setTeam2PointsScored(Integer team2PointsScored) {
+        this.team2PointsScored = team2PointsScored;
+    }
+
+    public void setWatched(boolean watched) {
+        isWatched = watched;
     }
 
     public int getMatchId() {
@@ -38,20 +81,20 @@ public class Match {
         this.matchId = matchId;
     }
 
-    public String getTeam1() {
-        return team1;
+    public int getTeam1() {
+        return team1Id;
     }
 
-    public void setTeam1(String team1) {
-        this.team1 = team1;
+    public void setTeam1Id(int team1Id) {
+        this.team1Id = team1Id;
     }
 
-    public String getTeam2() {
-        return team2;
+    public int getTeam2Id() {
+        return team2Id;
     }
 
-    public void setTeam2(String team2) {
-        this.team2 = team2;
+    public void setTeam2Id(int team2Id) {
+        this.team2Id = team2Id;
     }
 
     public int getRound() {
@@ -94,11 +137,11 @@ public class Match {
         this.isWatched = isWatched;
     }
 
-    public String getWinner() {
-        return winner;
+    public Integer getWinnerId() {
+        return winnerId;
     }
 
-    public void setWinner(String winner) {
-        this.winner = winner;
+    public void setWinnerId(Integer winner) {
+        this.winnerId = winner;
     }
 }

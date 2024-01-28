@@ -14,8 +14,8 @@
           <tr v-for="(team, index) in teams" :key="team.id">
             <td>{{ index + 1 }}</td>
             <td>{{ team.name }}</td>
+            <td>{{ team.percentage }}</td>
             <td>{{ team.points }}</td>
-            <!-- Add more data cells as needed -->
           </tr>
         </tbody>
       </table>
