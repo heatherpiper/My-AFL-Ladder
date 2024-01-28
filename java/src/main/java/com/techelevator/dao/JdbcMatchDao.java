@@ -30,12 +30,13 @@ public class JdbcMatchDao implements MatchDao {
             match.setTeam2(results.getString("team2"));
             match.setRound(results.getInt("round"));
             match.setStartTime(results.getObject("start_time", LocalDateTime.class));
-            match.setTeam1PointsScored(results.getObject("team1_points_scored", Integer.class);
+            match.setTeam1PointsScored(results.getObject("team1_points_scored", Integer.class));
             match.setTeam2PointsScored(results.getObject("team2_points_scored", Integer.class));
             match.setIsWatched(results.getBoolean("is_watched"));
             match.setWinner(results.getString("winner"));
             matches.add(match);
         }
+        return matches;
     }
 
     @Override
@@ -50,7 +51,7 @@ public class JdbcMatchDao implements MatchDao {
             match.setTeam2(results.getString("team2"));
             match.setRound(results.getInt("round"));
             match.setStartTime(results.getObject("start_time", LocalDateTime.class));
-            match.setTeam1PointsScored(results.getObject("team1_points_scored", Integer.class);
+            match.setTeam1PointsScored(results.getObject("team1_points_scored", Integer.class));
             match.setTeam2PointsScored(results.getObject("team2_points_scored", Integer.class));
             match.setIsWatched(results.getBoolean("is_watched"));
             match.setWinner(results.getString("winner"));
@@ -60,8 +61,15 @@ public class JdbcMatchDao implements MatchDao {
     }
 
     @Override
-    public void addWatchedMatch(int userId, int matchId) {
+    public void markMatchWatched(int userId, int matchId) {
         String sql = "INSERT INTO watched_matches (user_id, match_id) VALUES (? ?)";
+
+        jdbcTemplate.update(sql, userId, matchId);
+    }
+
+    @Override
+    public void markMatchUnwatched(int userId, int matchId) {
+        String sql = "DELETE FROM watched_matches WHERE user_id = ? AND match_id = ?";
 
         jdbcTemplate.update(sql, userId, matchId);
     }
@@ -81,7 +89,7 @@ public class JdbcMatchDao implements MatchDao {
             match.setTeam2(results.getString("team2"));
             match.setRound(results.getInt("round"));
             match.setStartTime(results.getObject("start_time", LocalDateTime.class));
-            match.setTeam1PointsScored(results.getObject("team1_points_scored", Integer.class);
+            match.setTeam1PointsScored(results.getObject("team1_points_scored", Integer.class));
             match.setTeam2PointsScored(results.getObject("team2_points_scored", Integer.class));
             match.setIsWatched(results.getBoolean("is_watched"));
             match.setWinner(results.getString("winner"));
@@ -106,12 +114,13 @@ public class JdbcMatchDao implements MatchDao {
             match.setTeam2(results.getString("team2"));
             match.setRound(results.getInt("round"));
             match.setStartTime(results.getObject("start_time", LocalDateTime.class));
-            match.setTeam1PointsScored(results.getObject("team1_points_scored", Integer.class);
+            match.setTeam1PointsScored(results.getObject("team1_points_scored", Integer.class));
             match.setTeam2PointsScored(results.getObject("team2_points_scored", Integer.class));
             match.setIsWatched(false);
             match.setWinner(results.getString("winner"));
 
             unwatchedMatches.add(match);
-    }
+        }
         return unwatchedMatches;
+    }
 }

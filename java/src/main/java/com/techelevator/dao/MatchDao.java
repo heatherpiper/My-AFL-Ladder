@@ -11,10 +11,14 @@ public interface MatchDao {
 
     Match getMatchById(int matchId);
 
-    void addWatchedMatch(int userId, int matchId);
+    void markMatchWatched(int userId, int matchId);
 
     List<Match> getWatchedMatches(int userId);
 
+    void markMatchUnwatched(int userId, int matchId);
+
     List<Match>getUnwatchedMatches(int userId);
+
+
 
 }

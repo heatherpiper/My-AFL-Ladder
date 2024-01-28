@@ -15,13 +15,28 @@ public class MatchController {
         this.matchDao = matchDao;
     }
 
+    public List<Match> getAllMatches() {
+        return matchDao.getAllMatches();
+    }
+
+    @GetMapping("/{matchId}")
+    public Match getMatchById(@PathVariable int matchId) {
+        return matchDao.getMatchById(matchId);
+    }
+
     @PostMapping("/watched")
-    public void markMatchAsWatched(@RequestParam int userId, @RequestParam int matchId) {
-        matchDao.addWatchedMatch(userId, matchId);
+    public void markMatchWatched(@RequestParam int userId, @RequestParam int matchId) {
+        matchDao.markMatchWatched(userId, matchId);
     }
 
     @GetMapping("/watched")
     public List<Match> getWatchedMatches(@RequestParam int userId) {
         return matchDao.getWatchedMatches(userId);
     }
+
+    @GetMapping("/unwatched")
+    public List<Match> getUnwatchedMatches(@RequestParam int userId) {
+        return matchDao.getUnwatchedMatches(userId);
+    }
+
 }
