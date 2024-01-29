@@ -15,9 +15,8 @@ public class Match {
     private LocalDateTime startTime;
     private Integer team1PointsScored;
     private Integer team2PointsScored;
-    private boolean isWatched;
 
-    public Match(int matchId, int team1Id , int team2Id, Integer winnerId, int round, LocalDateTime startTime, int venueId, Integer team1PointsScored, Integer team2PointsScored, boolean isWatched) {
+    public Match(int matchId, int team1Id , int team2Id, Integer winnerId, int round, LocalDateTime startTime, int venueId, Integer team1PointsScored, Integer team2PointsScored) {
         this.matchId = matchId;
         this.team1Id = team1Id;
         this.team2Id = team2Id;
@@ -25,7 +24,6 @@ public class Match {
         this.startTime = startTime;
         this.team1PointsScored = team1PointsScored;
         this.team2PointsScored = team2PointsScored;
-        this.isWatched = isWatched;
         this.winnerId = winnerId;
     }
 
@@ -67,10 +65,6 @@ public class Match {
 
     public void setTeam2PointsScored(Integer team2PointsScored) {
         this.team2PointsScored = team2PointsScored;
-    }
-
-    public void setWatched(boolean watched) {
-        isWatched = watched;
     }
 
     public int getMatchId() {
@@ -127,14 +121,6 @@ public class Match {
 
     public void setTeam2PointsScored(int team2PointsScored) {
         this.team2PointsScored = team2PointsScored;
-    }
-
-    public boolean isWatched() {
-        return isWatched;
-    }
-
-    public void setIsWatched(boolean isWatched) {
-        this.isWatched = isWatched;
     }
 
     public Integer getWinnerId() {

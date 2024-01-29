@@ -24,19 +24,4 @@ public class MatchController {
         return matchDao.getMatchById(matchId);
     }
 
-    @PostMapping("/watched")
-    public void markMatchWatched(@RequestParam int userId, @RequestParam int matchId) {
-        matchDao.markMatchWatched(userId, matchId);
-    }
-
-    @GetMapping("/watched")
-    public List<Match> getWatchedMatches(@RequestParam int userId) {
-        return matchDao.getWatchedMatches(userId);
-    }
-
-    @GetMapping("/unwatched")
-    public List<Match> getUnwatchedMatches(@RequestParam int userId) {
-        return matchDao.getUnwatchedMatches(userId);
-    }
-
 }
