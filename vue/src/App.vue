@@ -28,6 +28,8 @@ export default {
 
 <style>
 
-/* global styles go here*/
+body {
+background: radial-gradient(circle, rgba(0,81,156,1) 0%, rgba(3,23,69,1) 66%, rgba(0,18,43,1) 100%);
+}
 
 </style>
