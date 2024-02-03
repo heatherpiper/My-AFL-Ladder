@@ -5,10 +5,8 @@ import com.techelevator.model.Match;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.*;
 
-import javax.sql.DataSource;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,9 +61,8 @@ public class JdbcMatchDao implements MatchDao {
                 "LEFT JOIN teams t2 ON m.team2_id = t2.team_id " +
                 "LEFT JOIN teams tw ON m.winner_id = tw.team_id " +
                 "WHERE m.match_id = ?";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, matchId);
         try {
-            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, matchId);
-
             if (results.next()) {
                 Match match = new Match();
                 match.setMatchId(results.getInt("match_id"));

@@ -9,19 +9,19 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/matches")
 public class MatchController {
 
-    private MatchDao matchDao;
+    private MatchDao MatchDao;
 
     public MatchController(MatchDao matchDao) {
-        this.matchDao = matchDao;
+        this.MatchDao = matchDao;
     }
 
     public List<Match> getAllMatches() {
-        return matchDao.getAllMatches();
+        return MatchDao.getAllMatches();
     }
 
     @GetMapping("/{matchId}")
     public Match getMatchById(@PathVariable int matchId) {
-        return matchDao.getMatchById(matchId);
+        return MatchDao.getMatchById(matchId);
     }
 
 }
