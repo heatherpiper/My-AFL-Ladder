@@ -14,8 +14,8 @@ class Season2023Spider(scrapy.Spider):
             game_tables = round.xpath('following-sibling::table[1]')
             for game_table in game_tables:
                 team1, team2 = game_table.xpath('.//tr/td[1]/a/text()').getall()[:2]
-                scores = game_table.xpath('.//tr/td[3]/text()').getall()[:2]
-                score1, score2 = scores[0], scores[1]
+                score1, score2 = game_table.xpath('.//tr/td[3]/text()').getall()[:2]
+                #score1, score2 = scores[0], scores[1]
                 points_team1, points_team2 = self.determine_result(score1, score2)
                 yield {
                     'round': round_number,
