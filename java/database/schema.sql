@@ -50,5 +50,14 @@ CREATE TABLE user_team_rankings (
     FOREIGN KEY (team_id) REFERENCES teams(team_id)
 );
 
+CREATE TABLE ladder_data (
+    id SERIAL PRIMARY KEY,
+    round VARCHAR(255),
+    team VARCHAR(50),
+    games_played INT,
+    total_points INT,
+    score_differential NUMERIC
+);
+
 
 COMMIT TRANSACTION;
