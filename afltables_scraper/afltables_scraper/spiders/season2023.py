@@ -1,20 +1,21 @@
 import scrapy
 
-class AFLGamesSpider(scrapy.Spider):
-    name = 'afl_games'
-    allowed_domains = ['afltables.com']
-    start_urls = ['http://afltables.com/afl/seas/2023.html']
+class Season2023Spider(scrapy.Spider):
+    name = "season2023"
+    allowed_domains = ["afltables.com"]
+    start_urls = ["http://afltables.com/afl/seas/2023.html"]
 
     def parse(self, response):
-        # Identify each round's section
-        rounds = response.xpath('//a[starts-with(@name, "round")]')
+        # Iterate through each round's section using numeric name attribute in <a> tags
+        rounds = response.xpath('//a[@name>0]')
         for round in rounds:
-            round_number = round.xpath('@name').get()
-            # Using round anchor, navigate to game table and iterate through
-            game_tables = round.xpath('following-sibling::table[1]//table[@width="100%"]')
+            round_number = round.xpath('./@name').get()
+            # Navigate to the first <table> following the round's <a> tag
+            game_tables = round.xpath('following-sibling::table[1]')
             for game_table in game_tables:
                 team1, team2 = game_table.xpath('.//tr/td[1]/a/text()').getall()[:2]
-                score1, score2 = game_table.xpath('.//tr/td[contains(@width, "5%")]/text()').getall()[:2]
+                scores = game_table.xpath('.//tr/td[3]/text()').getall()[:2]
+                score1, score2 = scores[0], scores[1]
                 points_team1, points_team2 = self.determine_result(score1, score2)
                 yield {
                     'round': round_number,
@@ -26,7 +27,6 @@ class AFLGamesSpider(scrapy.Spider):
                     'points_team2': points_team2,
                 }
 
-    # Award 4 points to winning team or 2 points to each team in a draw
     def determine_result(self, score1, score2):
         score1 = int(score1)
         score2 = int(score2)
