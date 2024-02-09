@@ -1,0 +1,19 @@
+SSH in using gcloud in Command Line:
+gcloud compute ssh instance-1
+
+Create virtual environment: 
+python3 -m venv afltables_env
+
+Activate virtual environment:
+source afltables_env/bin/activate
+
+View Crontab file (scheduling operations on Linux):
+crontab -l 
+// Note: lowercase "L", not a "1"
+
+Edit crontab file:
+crontab -e
+
+Add new line for each cron job:
+* * * * * /afltables_scraper/afltables_scraper && /home/hpiper07/afltables_scraper/afltables_scraper/afltables_env/bin/scrapy
+// Note: The first five fields are time and date fields: minute (0-59), hour (0-23), day of the month (1-31), month (1-12), and day of the week (0-7, where both 0 and 7 mean Sunday).

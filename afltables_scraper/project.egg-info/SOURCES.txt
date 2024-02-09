@@ -1,0 +1,14 @@
+setup.py
+afltables_scraper/__init__.py
+afltables_scraper/items.py
+afltables_scraper/middlewares.py
+afltables_scraper/pipelines.py
+afltables_scraper/settings.py
+afltables_scraper/spiders/__init__.py
+afltables_scraper/spiders/ladder.py
+afltables_scraper/spiders/season2023.py
+project.egg-info/PKG-INFO
+project.egg-info/SOURCES.txt
+project.egg-info/dependency_links.txt
+project.egg-info/entry_points.txt
+project.egg-info/top_level.txt
