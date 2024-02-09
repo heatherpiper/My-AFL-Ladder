@@ -26,7 +26,6 @@ CREATE TABLE matches (
     start_time TIMESTAMP NOT NULL,
 	team1_points_scored INTEGER,
 	team2_points_scored INTEGER,
-	is_watched BOOLEAN DEFAULT FALSE,
 	winner_id INT,
 	FOREIGN KEY (team1_id) REFERENCES teams(team_id),
 	FOREIGN KEY (team2_id) REFERENCES teams(team_id),
@@ -34,20 +33,13 @@ CREATE TABLE matches (
 );
 
 CREATE TABLE watched_matches (
+    watched_id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
     match_id INT NOT NULL UNIQUE,
-    PRIMARY KEY (user_id, match_id),
+    watched BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (match_id) REFERENCES matches(match_id)
-);
-
-CREATE TABLE user_team_rankings (
-    id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    team_id INT NOT NULL,
-    points INT NOT NULL DEFAULT 0,
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
-    FOREIGN KEY (team_id) REFERENCES teams(team_id)
+    UNIQUE (user_id, match_id)
 );
 
 CREATE TABLE ladder_data (

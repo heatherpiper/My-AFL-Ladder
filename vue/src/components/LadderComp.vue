@@ -1,6 +1,6 @@
 <template>
     <div class="ladder">
-      <h2>Team Ladder</h2>
+      <h1>Team Ladder</h1>
       <table>
         <thead>
           <tr>
