@@ -1,27 +1,38 @@
 package com.techelevator.controller;
 
 import java.util.List;
-import com.techelevator.dao.MatchDao;
+
 import com.techelevator.model.Match;
+import com.techelevator.service.MatchService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/matches")
 public class MatchController {
 
-    private MatchDao MatchDao;
+    private MatchService matchService;
 
-    public MatchController(MatchDao matchDao) {
-        this.MatchDao = matchDao;
+    public MatchController(MatchService matchService) {
+        this.matchService = matchService;
     }
 
-    public List<Match> getAllMatches() {
-        return MatchDao.getAllMatches();
+    @GetMapping
+    public ResponseEntity<List<Match>> getAllMatches() {
+        List<Match> matches = matchService.getAllMatches();
+        if(matches.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(matches);
     }
 
-    @GetMapping("/{matchId}")
-    public Match getMatchById(@PathVariable int matchId) {
-        return MatchDao.getMatchById(matchId);
+   @GetMapping("/{matchId}")
+    public ResponseEntity<Match> getMatchById(@PathVariable int matchId) {
+        Match match = matchService.getMatchById(matchId);
+        if(match == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(match);
     }
 
 }

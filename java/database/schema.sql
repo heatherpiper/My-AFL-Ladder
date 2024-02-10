@@ -39,7 +39,6 @@ CREATE TABLE watched_matches (
     watched BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (match_id) REFERENCES matches(match_id)
-    UNIQUE (user_id, match_id)
 );
 
 CREATE TABLE ladder_data (

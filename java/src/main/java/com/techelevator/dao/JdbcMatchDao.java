@@ -23,7 +23,7 @@ public class JdbcMatchDao implements MatchDao {
 
     @Override
     public List<Match> getAllMatches() {
-        String sql = "SELECT m.match_id, m.round, m.start_time, m.team1_points_scored, m.team2_points_scored, " +
+        String sql = "SELECT m.match_id, m.team1_id, m.team2_id, m.round, m.start_time, m.team1_points_scored, m.team2_points_scored, " +
                 "t1.name as team1_name, t2.name as team2_name, tw.name as winner_name " +
                 "FROM matches m " +
                 "LEFT JOIN teams t1 ON m.team1_id = t1.team_id " +
