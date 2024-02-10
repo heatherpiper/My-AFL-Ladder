@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <div class="page-title">
-      <h1>My AFL Ladder</h1>
+      <h2>My AFL Ladder</h2>
     </div>
     <MatchesListComp />
     <LadderComp />
@@ -22,7 +22,5 @@ export default {
 </script>
 
 <style scoped>
-h1 {
-  font-family: 'Protest Strike', sans-serif;
-}
+
 </style>

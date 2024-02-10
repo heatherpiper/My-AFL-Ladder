@@ -18,9 +18,6 @@
 :root {
   --darker-blue: #00122b;
   --dark-blue: #031745;
-  --dark-blue-rgb: rgb(3, 23, 69);
-  --blue: #0C3F91;
-  --blue-rgb: rgb(12, 63, 145); 
   --afl-900: #03061C; /* Background primary */
   --afl-800: #031745; /* Nav secondary */
   --afl-700: #01285E; /* Nav primary */
@@ -55,8 +52,16 @@ background-attachment: fixed;
 font-family: 'Roboto', sans-serif;
 }
 
-th {
-  color: var(--afl-400);
+h1 {
+  color: var(--afl-100);
+  font-family: 'Protest Strike', sans-serif;
+  font-size: xx-large;
+}
+
+h2 {
+  color: var(--afl-100);
+  font-family: 'Protest Strike', sans-serif;
+  font-size: x-large;
 }
 
 </style>

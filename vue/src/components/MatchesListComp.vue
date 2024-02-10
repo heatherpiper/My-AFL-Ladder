@@ -1,6 +1,6 @@
 <template>
     <div>
-      <h1>Match List</h1>
+      <h1>Matches</h1>
       <ul>
         <li v-for="match in matches" :key="match.id">
           {{ match.team1 }} vs {{ match.team2 }}
@@ -31,5 +31,6 @@
 </script>
   
 <style scoped>
+
 </style>
   
