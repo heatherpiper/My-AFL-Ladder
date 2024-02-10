@@ -9,7 +9,7 @@
     </div>
   </template>
   
-  <script>
+<script>
   import axios from 'axios';
 
   export default {
@@ -28,9 +28,8 @@
         });
     },
   };
-  </script>
+</script>
   
-  <style scoped>
-  /* Add your component-specific styles here */
-  </style>
+<style scoped>
+</style>
   

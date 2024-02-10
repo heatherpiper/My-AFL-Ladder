@@ -5,31 +5,18 @@
       <router-link v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link>
     </div>
     <router-view />
-    <div class="matches-section">
-      <MatchesListComp />
-    </div>
-    <div class="ladder-section">
-      <LadderComp />
-    </div>
   </div>
 </template>
 
 <script>
-import MatchesListComp from './components/MatchesListComp';
-import LadderComp from './components/LadderComp';
 
-export default {
-  components: {
-    MatchesListComp,
-    LadderComp,
-  },
-};
 </script>
 
 
 <style>
 
 :root {
+  --darker-blue: #00122b;
   --dark-blue: #031745;
   --dark-blue-rgb: rgb(3, 23, 69);
   --blue: #0C3F91;
@@ -38,9 +25,11 @@ export default {
   --afl-800: #031745; /* Nav secondary */
   --afl-700: #01285E; /* Nav primary */
   --afl-600: #004099; /* Main brand color, accent primary */
+  --afl-550: #0e56b9; /* Main color, hover*/
   --afl-500: #046FD9; 
-  --afl-400: #1FB4FF; /* Accent secondary */
-  --afl-300: #E8001B; /* Accent tertiary */
+  --afl-450: #0e87ff;
+  --afl-400: #1FB4FF; 
+  --afl-300: #E8001B;
   --afl-200: #EDF4F7;
   --afl-100: #F2F4F7;
 
@@ -61,12 +50,9 @@ export default {
 }
 
 body {
-background: radial-gradient(circle at center, rgba(0, 64, 153, 1) 0%, rgba(3,23,69,1) 50%, rgba(3, 6, 28, 1) 90%);
+background: radial-gradient(circle at center, var(--afl-500) 0%, var(--afl-700) 60%, var(--afl-900) 100%);
 background-attachment: fixed;
-}
-
-h1 {
-  color: var(--afl-100);
+font-family: 'Roboto', sans-serif;
 }
 
 th {

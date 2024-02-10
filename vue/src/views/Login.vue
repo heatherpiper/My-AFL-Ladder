@@ -1,24 +1,21 @@
 <template>
-  <div id="login">
+  <div id="login" class="login">
     <form @submit.prevent="login">
-      <h1 >Please Sign In</h1>
+      <h1 >Please sign in</h1>
       <div role="alert" v-if="invalidCredentials">
-        Invalid username and password!
+        Invalid username or password
       </div>
-      <div role="alert" v-if="this.$route.query.registration">
-        Thank you for registering, please sign in.
-      </div>
-      <div class="form-input-group">
-        <label for="username">Username</label>
-        <input type="text" id="username" v-model="user.username" required autofocus />
+      <div role="notice" v-if="this.$route.query.registration">
+        Thank you for registering. Please sign in.
       </div>
       <div class="form-input-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" v-model="user.password" required />
+        <input type="text" id="username" placeholder="Username" v-model="user.username" required autofocus />
+      </div>
+      <div class="form-input-group">
+        <input type="password" id="password" placeholder="Password" v-model="user.password" required />
       </div>
       <button type="submit">Sign in</button>
-      <p>
-      <router-link :to="{ name: 'register' }">Need an account? Sign up.</router-link></p>
+      <p>Need an account? <router-link :to="{ name: 'register' }">Sign up.</router-link></p>
     </form>
   </div>
 </template>
@@ -62,10 +59,85 @@ export default {
 </script>
 
 <style scoped>
+
+/* Reuse the existing CSS and apply it to the #login ID */
+.login {
+    max-width: 400px;
+    margin: 40px auto; 
+    padding: 30px;
+    background-color: var(--afl-200);
+    border: 1px solid var(--afl-900);
+    border-radius: 12px; 
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+
+.login h1 {
+    color: var(--afl-600);
+    text-align: center; 
+}
+
 .form-input-group {
-  margin-bottom: 1rem;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
 }
-label {
-  margin-right: 0.5rem;
+
+/* Input styling is reused without changes */
+input[type="text"],
+input[type="password"] {
+    width: calc(100% - 20px); 
+    padding: 10px;
+    background-color: #e1e6e9;
+    border: none;
+    border-radius: 6px; 
+    color: var(--afl-900); 
+    display: block;
+    margin: auto;
 }
+
+/* Button styling reused without changes */
+button[type="submit"] {
+    width: 100%; 
+    padding: 10px;
+    background-color: var(--afl-500); 
+    border: none; 
+    border-radius: 6px; 
+    color: var(--afl-100); 
+    cursor: pointer;
+    display: block;
+    margin: 20px auto;
+    font-size: 16px;
+}
+
+button[type="submit"]:hover {
+    background-color: var(--afl-450);
+}
+
+/* Error message and paragraph styling reused without changes */
+div[role="alert"] {
+    color: #ff6b6b;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+div[role="notice"] {
+  color: var(--afl-600);
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+p {
+  text-align: center;
+  color: #8b8c8d;
+}
+
+p a, .router-link {
+  color: var(--afl-500);
+}
+
+p a:visited, .router-link:visited {
+  color: var(--color-purple);
+}
+
+
 </style>

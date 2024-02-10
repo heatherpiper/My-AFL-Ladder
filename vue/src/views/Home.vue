@@ -1,12 +1,28 @@
 <template>
   <div class="home">
-    <h1>Home</h1>
-    <p>You must be authenticated to see this</p>
+    <div class="page-title">
+      <h1>My AFL Ladder</h1>
+    </div>
+    <MatchesListComp />
+    <LadderComp />
   </div>
 </template>
 
 <script>
+import MatchesListComp from '../components/MatchesListComp';
+import LadderComp from '../components/LadderComp';
+
 export default {
-  name: "home"
+  name: "home",
+  components: {
+    MatchesListComp,
+    LadderComp,
+  },
 };
 </script>
+
+<style scoped>
+h1 {
+  font-family: 'Protest Strike', sans-serif;
+}
+</style>
