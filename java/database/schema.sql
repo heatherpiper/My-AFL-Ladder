@@ -41,7 +41,7 @@ CREATE TABLE watched_matches (
     FOREIGN KEY (match_id) REFERENCES matches(match_id)
 );
 
-CREATE TABLE ladder_data (
+CREATE TABLE ladder2023_data (
     id SERIAL PRIMARY KEY,
     round VARCHAR(255),
     team VARCHAR(50),

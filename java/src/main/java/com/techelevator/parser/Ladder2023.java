@@ -1,4 +1,4 @@
-package com.techelevator;
+package com.techelevator.parser;
 
 public class Ladder2023 {
     private String round;
