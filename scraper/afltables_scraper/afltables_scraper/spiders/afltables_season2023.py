@@ -1,8 +1,8 @@
 import scrapy
 
 
-class LadderSpider(scrapy.Spider):
-    name = "ladder"
+class AfltablesSeason2023Spider(scrapy.Spider):
+    name = "afltables_season2023"
     allowed_domains = ["afltables.com"]
     start_urls = ["https://afltables.com/afl/seas/2023.html"]
 

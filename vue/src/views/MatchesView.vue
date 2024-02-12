@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import MatchesListComp from "../components/MatchesListComp"; // Adjust the path as needed
+import MatchesListComp from "../components/MatchesListComp";
 
 export default {
   name: "MatchesView",
