@@ -43,11 +43,11 @@ CREATE TABLE watched_matches (
 
 CREATE TABLE ladder2023_data (
     id SERIAL PRIMARY KEY,
-    round VARCHAR(255),
+    round INT,
     team VARCHAR(50),
     games_played INT,
     total_points INT,
-    score_differential NUMERIC
+    score_differential DOUBLE PRECISION
 );
 
 

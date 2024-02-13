@@ -1,16 +1,16 @@
-package com.techelevator.parser;
+package com.techelevator.model;
 
-public class Ladder2023 {
-    private String round;
+public class LadderRound2023 {
+    private int round;
     private String team;
     private int gamesPlayed;
     private int totalPoints;
     private double scoreDifferential;
 
-    public Ladder2023() {
+    public LadderRound2023() {
     }
 
-    public Ladder2023(String round, String team, int gamesPlayed, int totalPoints, double scoreDifferential) {
+    public LadderRound2023(int round, String team, int gamesPlayed, int totalPoints, double scoreDifferential) {
         this.round = round;
         this.team = team;
         this.gamesPlayed = gamesPlayed;
@@ -18,7 +18,7 @@ public class Ladder2023 {
         this.scoreDifferential = scoreDifferential;
     }
 
-    public String getRound() {
+    public int getRound() {
         return round;
     }
 
@@ -38,7 +38,7 @@ public class Ladder2023 {
         return scoreDifferential;
     }
 
-    public void setRound(String round) {
+    public void setRound(int round) {
         this.round = round;
     }
 
@@ -46,15 +46,15 @@ public class Ladder2023 {
         this.team = team;
     }
 
-    public void setGamesPlayed(String gamesPlayed) {
-        this.gamesPlayed = Integer.parseInt(gamesPlayed);
+    public void setGamesPlayed(int gamesPlayed) {
+        this.gamesPlayed = gamesPlayed;
     }
 
-    public void setTotalPoint(String totalPoints) {
-        this.totalPoints = Integer.parseInt(totalPoints);
+    public void setTotalPoints(int totalPoints) {
+        this.totalPoints = totalPoints;
     }
 
-    public void setScoreDifferential(String scoreDifferential) {
-        this.scoreDifferential = Double.parseDouble(scoreDifferential);
+    public void setScoreDifferential(double scoreDifferential) {
+        this.scoreDifferential = scoreDifferential;
     }
 }
