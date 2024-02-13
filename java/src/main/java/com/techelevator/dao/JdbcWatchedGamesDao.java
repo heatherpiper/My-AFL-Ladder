@@ -24,8 +24,8 @@ public class JdbcWatchedGamesDao implements WatchedGamesDao {
         game.setYear(rs.getInt("year"));
         game.setHteam(rs.getString("hteam"));
         game.setAteam(rs.getString("ateam"));
-        game.setHscore(rs.getObject("hscore", Integer.class)); // Handle nulls
-        game.setAscore(rs.getObject("ascore", Integer.class)); // Handle nulls
+        game.setHscore(rs.getObject("hscore", Integer.class));
+        game.setAscore(rs.getObject("ascore", Integer.class));
         game.setWinner(rs.getString("winner"));
         game.setComplete(rs.getInt("complete"));
         return game;

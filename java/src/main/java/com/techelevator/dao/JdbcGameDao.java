@@ -5,6 +5,7 @@ import com.techelevator.model.Game;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
@@ -22,114 +23,38 @@ public class JdbcGameDao implements GameDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    private final RowMapper<Game> gameRowMapper = (rs, rowNum) -> {
+        Game game = new Game();
+        game.setId(rs.getInt("id"));
+        game.setRound(rs.getInt("round"));
+        game.setYear(rs.getInt("year"));
+        game.setHteam(rs.getString("hteam"));
+        game.setAteam(rs.getString("ateam"));
+        game.setHscore(rs.getObject("hscore", Integer.class));
+        game.setAscore(rs.getObject("ascore", Integer.class));
+        game.setWinner(rs.getString("winner"));
+        game.setComplete(rs.getInt("complete"));
+        return game;
+    };
+
     public List<Game> findAllGames() {
         String sql = "SELECT id, round, year, hteam, ateam, hscore, ascore, winner, complete FROM games";
-        List<Game> games = jdbcTemplate.query(sql, (rs, rowNum) -> {
-            Game game = new Game();
-            game.setId(rs.getInt("id"));
-            game.setRound(rs.getInt("round"));
-            game.setYear(rs.getInt("year"));
-            game.setHteam(rs.getString("hteam"));
-            game.setAteam(rs.getString("ateam"));
-
-            // Check for null score values
-            Integer hscore = rs.getObject("hscore", Integer.class);
-            if (hscore != null) {
-                game.setHscore(hscore);
-            }
-            Integer ascore = rs.getObject("ascore", Integer.class);
-            if (ascore != null) {
-                game.setAscore(ascore);
-            }
-
-            game.setWinner(rs.getString("winner"));
-            game.setComplete(rs.getInt("complete"));
-            return game;
-        });
-        return games;
+        return jdbcTemplate.query(sql, gameRowMapper);
     }
 
     public List<Game> findGamesByRound(int round) {
         String sql = "SELECT id, round, year, hteam, ateam, hscore, ascore, winner, complete FROM games WHERE round = ?";
-        Object[] params = new Object[]{round};
-        List<Game> games = jdbcTemplate.query(sql, params, (rs, rowNum) -> {
-            Game game = new Game();
-            game.setId(rs.getInt("id"));
-            game.setRound(rs.getInt("round"));
-            game.setYear(rs.getInt("year"));
-            game.setHteam(rs.getString("hteam"));
-            game.setAteam(rs.getString("ateam"));
-
-            Integer hscore = rs.getObject("hscore", Integer.class);
-            if (hscore != null) {
-                game.setHscore(hscore);
-            }
-            Integer ascore = rs.getObject("ascore", Integer.class);
-            if (ascore != null) {
-                game.setAscore(ascore);
-            }
-
-            game.setWinner(rs.getString("winner"));
-            game.setComplete(rs.getInt("complete"));
-            return game;
-        });
-        return games;
+        return jdbcTemplate.query(sql, gameRowMapper, round);
     }
 
     public List<Game> findCompleteGames() {
-        String sql = "SELECT id, round, year, hteam, ateam, hscore, ascore, winner, complete FROM games WHERE " +
-                "complete = 100";
-        List<Game> games = jdbcTemplate.query(sql, (rs, rowNum) -> {
-            Game game = new Game();
-            game.setId(rs.getInt("id"));
-            game.setRound(rs.getInt("round"));
-            game.setYear(rs.getInt("year"));
-            game.setHteam(rs.getString("hteam"));
-            game.setAteam(rs.getString("ateam"));
-
-            // Check for null score values
-            Integer hscore = rs.getObject("hscore", Integer.class);
-            if (hscore != null) {
-                game.setHscore(hscore);
-            }
-            Integer ascore = rs.getObject("ascore", Integer.class);
-            if (ascore != null) {
-                game.setAscore(ascore);
-            }
-
-            game.setWinner(rs.getString("winner"));
-            game.setComplete(rs.getInt("complete"));
-            return game;
-        });
-        return games;
+        String sql = "SELECT id, round, year, hteam, ateam, hscore, ascore, winner, complete FROM games WHERE complete = 100";
+        return jdbcTemplate.query(sql, gameRowMapper);
     }
 
     public List<Game> findIncompleteGames() {
-        String sql = "SELECT id, round, year, hteam, ateam, hscore, ascore, winner, complete FROM games WHERE " +
-                "complete != 100";
-        List<Game> games = jdbcTemplate.query(sql, (rs, rowNum) -> {
-            Game game = new Game();
-            game.setId(rs.getInt("id"));
-            game.setRound(rs.getInt("round"));
-            game.setYear(rs.getInt("year"));
-            game.setHteam(rs.getString("hteam"));
-            game.setAteam(rs.getString("ateam"));
-
-            // Check for null score values
-            Integer hscore = rs.getObject("hscore", Integer.class);
-            if (hscore != null) {
-                game.setHscore(hscore);
-            }
-            Integer ascore = rs.getObject("ascore", Integer.class);
-            if (ascore != null) {
-                game.setAscore(ascore);
-            }
-
-            game.setWinner(rs.getString("winner"));
-            game.setComplete(rs.getInt("complete"));
-            return game;
-        });
-        return games;
+        String sql = "SELECT id, round, year, hteam, ateam, hscore, ascore, winner, complete FROM games WHERE complete != 100";
+        return jdbcTemplate.query(sql, gameRowMapper);
     }
 
     public String findWinnerByGameId(int id) {
