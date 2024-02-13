@@ -3,15 +3,11 @@ package com.techelevator.dao;
 import com.techelevator.exception.DaoException;
 import com.techelevator.model.Game;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
-import java.sql.Array;
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -61,12 +57,9 @@ public class JdbcGameDao implements GameDao {
         String sql = "SELECT winner FROM games WHERE id = ?";
         Object[] params = new Object[]{id};
         try {
-            String winner = jdbcTemplate.queryForObject(sql, params, String.class);
-            return winner;
+            return jdbcTemplate.queryForObject(sql, params, String.class);
         } catch (EmptyResultDataAccessException e) {
             throw new DaoException("Error accessing data");
         }
-
     }
-
 }
