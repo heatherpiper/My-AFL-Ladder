@@ -2,24 +2,24 @@
 -- This script creates the database users and grants them the necessary permissions
 -- ********************************************************************************
 
-CREATE USER match_owner
-WITH PASSWORD 'finalcapstone';
+CREATE USER myfootyladder_owner
+WITH PASSWORD 'myfootyladder';
 
 GRANT ALL
 ON ALL TABLES IN SCHEMA public
-TO match_owner;
+TO myfootyladder_owner;
 
 GRANT ALL
 ON ALL SEQUENCES IN SCHEMA public
-TO match_owner;
+TO myfootyladder_owner;
 
-CREATE USER match_appuser
-WITH PASSWORD 'match-piper';
+CREATE USER myfootyladder_appuser
+WITH PASSWORD 'myfootyladder';
 
 GRANT SELECT, INSERT, UPDATE, DELETE
 ON ALL TABLES IN SCHEMA public
-TO match_appuser;
+TO myfootyladder_appuser;
 
 GRANT USAGE, SELECT
 ON ALL SEQUENCES IN SCHEMA public
-TO match_appuser;
+TO myfootyladder_appuser;
