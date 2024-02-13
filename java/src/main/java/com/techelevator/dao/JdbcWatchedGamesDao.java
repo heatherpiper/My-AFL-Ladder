@@ -31,11 +31,13 @@ public class JdbcWatchedGamesDao implements WatchedGamesDao {
         return game;
     };
 
+    @Override
     public List<Game> findWatchedGames(int userId) {
         String sql = "SELECT g.* FROM games g INNER JOIN watched_games wg ON g.id = wg.game_id WHERE wg.user_id = ?";
         return jdbcTemplate.query(sql, gameRowMapper, userId);
     }
 
+    @Override
     public List<Game> findUnwatchedGames(int userId) {
         String sql = "SELECT g.* FROM games g " +
                 "LEFT JOIN watched_games wg ON g.id = wg.game_id AND wg.user_id = ? " +
@@ -43,6 +45,7 @@ public class JdbcWatchedGamesDao implements WatchedGamesDao {
         return jdbcTemplate.query(sql, new Object[]{userId}, gameRowMapper);
     }
 
+    @Override
     public List<Game> findUnwatchedGamesByRound(int userId, int round) {
         String sql = "SELECT g.* FROM games g " +
                 "LEFT JOIN watched_games wg ON g.id = wg.game_id AND wg.user_id = ? " +
@@ -50,16 +53,19 @@ public class JdbcWatchedGamesDao implements WatchedGamesDao {
         return jdbcTemplate.query(sql, new Object[]{userId, round}, gameRowMapper);
     }
 
+    @Override
     public void addGameToWatchedList(int userId, int gameId) {
         String sql = "INSERT INTO watched_games (user_id, game_id) VALUES (?, ?)";
         jdbcTemplate.update(sql, userId, gameId);
     }
 
+    @Override
     public void removeGameFromWatchedList(int userId, int gameId) {
         String sql = "DELETE FROM watched_games (user_id, game_id) VALUES (?, ?)";
         jdbcTemplate.update(sql, userId, gameId);
     }
 
+    @Override
     public void markAllGamesWatched(int userId) {
         // check if game already exists in watched_list for user; if not, insert into watched_games
         String sql = "INSERT INTO watched_games (user_id, game_id) " +
@@ -70,11 +76,13 @@ public class JdbcWatchedGamesDao implements WatchedGamesDao {
         jdbcTemplate.update(sql, userId, userId); // pass userId twice to fill both placeholders
     }
 
+    @Override
     public void markAllGamesUnwatched(int userId) {
         String sql = "DELETE FROM watched_games WHERE user_id = ?";
         jdbcTemplate.update(sql, userId);
     }
 
+    @Override
     public void markAllGamesInRoundWatched(int userId, int round) {
         String sql = "INSERT INTO watched_games (user_id, game_id) " +
                 "SELECT ?, g.id FROM games g " +
@@ -83,6 +91,7 @@ public class JdbcWatchedGamesDao implements WatchedGamesDao {
         jdbcTemplate.update(sql, userId, round, userId);
     }
 
+    @Override
     public void markAllGamesInRoundUnwatched(int userId, int round) {
         String sql = "DELETE FROM watched_games WHERE user_id = ? AND game_id IN (" +
                 "SELECT id FROM games WHERE round = ?)";

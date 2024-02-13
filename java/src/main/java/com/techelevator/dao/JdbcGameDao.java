@@ -33,26 +33,31 @@ public class JdbcGameDao implements GameDao {
         return game;
     };
 
+    @Override
     public List<Game> findAllGames() {
         String sql = "SELECT id, round, year, hteam, ateam, hscore, ascore, winner, complete FROM games";
         return jdbcTemplate.query(sql, gameRowMapper);
     }
 
+    @Override
     public List<Game> findGamesByRound(int round) {
         String sql = "SELECT id, round, year, hteam, ateam, hscore, ascore, winner, complete FROM games WHERE round = ?";
         return jdbcTemplate.query(sql, gameRowMapper, round);
     }
 
+    @Override
     public List<Game> findCompleteGames() {
         String sql = "SELECT id, round, year, hteam, ateam, hscore, ascore, winner, complete FROM games WHERE complete = 100";
         return jdbcTemplate.query(sql, gameRowMapper);
     }
 
+    @Override
     public List<Game> findIncompleteGames() {
         String sql = "SELECT id, round, year, hteam, ateam, hscore, ascore, winner, complete FROM games WHERE complete != 100";
         return jdbcTemplate.query(sql, gameRowMapper);
     }
 
+    @Override
     public String findWinnerByGameId(int id) {
         String sql = "SELECT winner FROM games WHERE id = ?";
         Object[] params = new Object[]{id};
