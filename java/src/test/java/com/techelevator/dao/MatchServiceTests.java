@@ -1,6 +1,5 @@
 package com.techelevator.dao;
 
-import com.techelevator.dao.MatchDao;
 import com.techelevator.service.MatchService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,10 +11,10 @@ import java.util.ArrayList;
 
 import static org.mockito.Mockito.*;
 
-class MatchServiceTest {
+class GameServiceTest {
 
     @Mock
-    private MatchDao matchDao;
+    private GameDao gameDao;
 
     @InjectMocks
     private MatchService matchService;
@@ -28,10 +27,10 @@ class MatchServiceTest {
     @Test
     void getAllMatches_ShouldUseMatchDao() {
 
-        when(matchDao.getAllMatches()).thenReturn(new ArrayList<>());
+        when(gameDao.getAllMatches()).thenReturn(new ArrayList<>());
 
         matchService.getAllMatches();
 
-        verify(matchDao).getAllMatches();
+        verify(gameDao).getAllMatches();
     }
 }

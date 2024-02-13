@@ -1,6 +1,6 @@
 package com.techelevator.dao;
 
-import com.techelevator.model.Match;
+import com.techelevator.model.Game;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +18,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class JdbcMatchDaoTest {
+class JdbcGameDaoTest {
 
     @Mock
     private JdbcTemplate jdbcTemplate;
@@ -27,7 +27,7 @@ class JdbcMatchDaoTest {
     private SqlRowSet sqlRowSet;
 
     @InjectMocks
-    private JdbcMatchDao jdbcMatchDao;
+    private JdbcGameDao jdbcMatchDao;
 
     @BeforeEach
     void setUp() {
@@ -51,25 +51,25 @@ class JdbcMatchDaoTest {
     @Test
     void getAllMatches_ShouldCallJdbcTemplateAndReturnMatches() {
 
-        List<Match> matches = jdbcMatchDao.getAllMatches();
+        List<Game> games = jdbcMatchDao.getAllMatches();
 
         verify(jdbcTemplate).queryForRowSet(anyString());
-        assertNotNull(matches);
-        assertEquals(1, matches.size());
+        assertNotNull(games);
+        assertEquals(1, games.size());
 
-        Match match = matches.get(0);
-        assertNotNull(match);
-        assertEquals(1, match.getMatchId());
-        assertEquals(101, match.getTeam1Id());
-        assertEquals(102, match.getTeam2Id());
-        assertEquals("Team One", match.getTeam1Name());
-        assertEquals("Team Two", match.getTeam2Name());
-        assertEquals(Integer.valueOf(101), match.getWinnerId());
-        assertEquals("Team One", match.getWinnerName());
-        assertEquals(1, match.getRound());
-        assertNotNull(match.getStartTime());
-        assertEquals(100, match.getTeam1PointsScored());
-        assertEquals(90, match.getTeam2PointsScored());
+        Game game = games.get(0);
+        assertNotNull(game);
+        assertEquals(1, game.getMatchId());
+        assertEquals(101, game.getTeam1Id());
+        assertEquals(102, game.getTeam2Id());
+        assertEquals("Team One", game.getTeam1Name());
+        assertEquals("Team Two", game.getTeam2Name());
+        assertEquals(Integer.valueOf(101), game.getWinnerId());
+        assertEquals("Team One", game.getWinnerName());
+        assertEquals(1, game.getRound());
+        assertNotNull(game.getStartTime());
+        assertEquals(100, game.getTeam1PointsScored());
+        assertEquals(90, game.getTeam2PointsScored());
     }
 }
 

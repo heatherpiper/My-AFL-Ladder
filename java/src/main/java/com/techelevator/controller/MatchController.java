@@ -2,7 +2,7 @@ package com.techelevator.controller;
 
 import java.util.List;
 
-import com.techelevator.model.Match;
+import com.techelevator.model.Game;
 import com.techelevator.service.MatchService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +19,7 @@ public class MatchController {
     }
 
     @RequestMapping (path = "/matches", method = RequestMethod.GET)
-    public List<Match> getMatches() {
+    public List<Game> getMatches() {
         return matchService.getAllMatches();
     }
 
@@ -33,12 +33,12 @@ public class MatchController {
 //    }
 
    @GetMapping("/{matchId}")
-    public ResponseEntity<Match> getMatchById(@PathVariable int matchId) {
-        Match match = matchService.getMatchById(matchId);
-        if(match == null) {
+    public ResponseEntity<Game> getMatchById(@PathVariable int matchId) {
+        Game game = matchService.getMatchById(matchId);
+        if(game == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(match);
+        return ResponseEntity.ok(game);
     }
 
 }
