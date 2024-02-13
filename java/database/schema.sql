@@ -13,32 +13,24 @@ CREATE TABLE users (
 	CONSTRAINT PK_user PRIMARY KEY (user_id)
 );
 
-CREATE TABLE teams (
-	team_id INT PRIMARY KEY,
-	name VARCHAR(50) NOT NULL
+CREATE TABLE games (
+    id INT PRIMARY KEY,
+    round INT NOT NULL,
+    year INT NOT NULL,
+    hteam VARCHAR(255) NOT NULL,
+    ateam VARCHAR(255) NOT NULL,
+    hscore INT,
+    ascore INT,
+    winner VARCHAR(255),
+    complete INT NOT NULL
 );
 
-CREATE TABLE matches (
-    match_id SERIAL PRIMARY KEY,
-    team1_id INT NOT NULL,
-    team2_id INT NOT NULL,
-	round INTEGER NOT NULL,
-    start_time TIMESTAMP NOT NULL,
-	team1_points_scored INTEGER,
-	team2_points_scored INTEGER,
-	winner_id INT,
-	FOREIGN KEY (team1_id) REFERENCES teams(team_id),
-	FOREIGN KEY (team2_id) REFERENCES teams(team_id),
-	FOREIGN KEY (winner_id) REFERENCES teams(team_id)
-);
-
-CREATE TABLE watched_matches (
-    watched_id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    match_id INT NOT NULL UNIQUE,
-    watched BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
-    FOREIGN KEY (match_id) REFERENCES matches(match_id)
+CREATE TABLE watched_games (
+    user_id INT,
+    game_id INT,
+    PRIMARY KEY (user_id, game_id),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (game_id) REFERENCES games(id)
 );
 
 CREATE TABLE ladder2023_data (
