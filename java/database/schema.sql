@@ -33,14 +33,4 @@ CREATE TABLE watched_games (
     FOREIGN KEY (game_id) REFERENCES games(id)
 );
 
-CREATE TABLE ladder2023_data (
-    id SERIAL PRIMARY KEY,
-    round INT,
-    team VARCHAR(50),
-    games_played INT,
-    total_points INT,
-    score_differential DOUBLE PRECISION
-);
-
-
 COMMIT TRANSACTION;
