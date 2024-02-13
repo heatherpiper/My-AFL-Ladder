@@ -20,4 +20,8 @@ public interface WatchedGamesDao {
 
     void markAllGamesUnwatched(int userId);
 
+    void markAllGamesInRoundWatched(int userId, int round);
+
+    void markAllGamesInRoundUnwatched(int userId, int round);
+
 }
