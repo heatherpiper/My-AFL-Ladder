@@ -2,6 +2,7 @@ package com.techelevator.dao;
 
 import com.techelevator.exception.DaoException;
 import com.techelevator.model.Game;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -15,6 +16,7 @@ public class JdbcGameDao implements GameDao {
 
     private JdbcTemplate jdbcTemplate;
 
+    @Autowired
     public JdbcGameDao(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
@@ -63,6 +65,15 @@ public class JdbcGameDao implements GameDao {
         Object[] params = new Object[]{id};
         try {
             return jdbcTemplate.queryForObject(sql, params, String.class);
+        } catch (EmptyResultDataAccessException e) {
+            throw new DaoException("Error accessing data");
+        }
+    }
+
+    public Game fetchGameDetails(int id) {
+        String sql = "SELECT id, round, year, hteam, ateam, hscore, ascore, winner, complete FROM games WHERE id = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, new Object[]{id}, gameRowMapper);
         } catch (EmptyResultDataAccessException e) {
             throw new DaoException("Error accessing data");
         }
