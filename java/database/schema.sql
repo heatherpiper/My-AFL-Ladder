@@ -38,35 +38,16 @@ CREATE TABLE teams (
     name VARCHAR(255),
 );
 
-CREATE TABLE team_ladder (
+CREATE TABLE user_ladder (
+    user_id INT,
     team_id INT,
-    game_id INT,
-    round INT,
-    points INT DEFAULT 0,
-    total_points INT DEFAULT 0,
-    wins INT DEFAULT 0,
-    losses INT DEFAULT 0,
-    ties INT DEFAULT 0,
-    games_played INT DEFAULT 0,
+    points INT,
+    percentage INT,
+    position INT,
     PRIMARY KEY (user_id, team_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (team_id) REFERENCES teams(team_id)
 );
 
-CREATE TABLE user_team_ladder {
-    user_id INT,
-    team_id INT,
-    game_id INT,
-    round INT,
-    points INT DEFAULT 0,
-    total_points INT DEFAULT 0,
-    wins INT DEFAULT 0,
-    losses INT DEFAULT 0,
-    ties INT DEFAULT 0,
-    games_played INT DEFAULT 0,
-    PRIMARY KEY (user_id, team_id),
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
-    FOREIGN KEY (team_id) REFERENCES teams(team_id)
-};
 
 COMMIT TRANSACTION;

@@ -60,19 +60,15 @@ public class JdbcWatchedGamesDao implements WatchedGamesDao {
     }
 
     @Override
-    public void addGameToWatchedList(int userId, int gameId) {
+    public void addWatchedGame(int userId, int gameId) {
         String sql = "INSERT INTO watched_games (user_id, game_id) VALUES (?, ?)";
         jdbcTemplate.update(sql, userId, gameId);
-
-        // Add logic to update team_ladder.score and team_ladder.total_score
     }
 
     @Override
-    public void removeGameFromWatchedList(int userId, int gameId) {
+    public void removeWatchedGame(int userId, int gameId) {
         String sql = "DELETE FROM watched_games (user_id, game_id) VALUES (?, ?)";
         jdbcTemplate.update(sql, userId, gameId);
-
-        // Add logic to update team_ladder.score and team_ladder.total_score
     }
 
     @Override
@@ -84,16 +80,12 @@ public class JdbcWatchedGamesDao implements WatchedGamesDao {
                 "    SELECT 1 FROM watched_games wg " +
                 "    WHERE wg.game_id = g.id AND wg.user_id = ?)";
         jdbcTemplate.update(sql, userId, userId); // pass userId twice to fill both placeholders
-
-        // Add logic to update team_ladder.score and team_ladder.total_score
     }
 
     @Override
     public void markAllGamesUnwatched(int userId) {
         String sql = "DELETE FROM watched_games WHERE user_id = ?";
         jdbcTemplate.update(sql, userId);
-
-        // Add logic to update team_ladder.score and team_ladder.total_score
     }
 
     @Override
@@ -103,8 +95,6 @@ public class JdbcWatchedGamesDao implements WatchedGamesDao {
                 "WHERE g.round = ? AND NOT EXISTS (" +
                 "SELECT 1 FROM watched_games wg WHERE wg.game_id = g.id AND wg.user_id = ?)";
         jdbcTemplate.update(sql, userId, round, userId);
-
-        // Add logic to update team_ladder.score and team_ladder.total_score
     }
 
     @Override
@@ -112,7 +102,5 @@ public class JdbcWatchedGamesDao implements WatchedGamesDao {
         String sql = "DELETE FROM watched_games WHERE user_id = ? AND game_id IN (" +
                 "SELECT id FROM games WHERE round = ?)";
         jdbcTemplate.update(sql, userId, round);
-
-        // Add logic to update team_ladder.score and team_ladder.total_score
     }
 }

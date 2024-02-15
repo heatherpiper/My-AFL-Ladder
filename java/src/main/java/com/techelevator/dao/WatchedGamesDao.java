@@ -12,9 +12,9 @@ public interface WatchedGamesDao {
 
     List<Game> findUnwatchedGamesByRound(int userId, int round);
 
-    void addGameToWatchedList(int userId, int gameId);
+    void addWatchedGame(int userId, int gameId);
 
-    void removeGameFromWatchedList(int userId, int gameId);
+    void removeWatchedGame(int userId, int gameId);
 
     void markAllGamesWatched(int userId);
 

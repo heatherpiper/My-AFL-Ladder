@@ -1,20 +1,18 @@
 package com.techelevator.dao;
 
+import java.util.List;
+
+import com.techelevator.model.UserLadderEntry;
+
 public interface UserLadderEntryDao {
+    void addUserLadderEntry(UserLadderEntry userLadderEntry);
 
-    void addLadderEntry(int userId, int teamId, int gameId, int wins, int losses, int ties, int points, int totalPoints, int gamesPlayed);
+    void updateUserLadderEntry(UserLadderEntry userLadderEntry);
 
-    void updateLadderEntry(int userId, int teamId, int gameId, int wins, int losses, int ties, int points, int totalPoints, int gamesPlayed);
+    void deleteUserLadderEntry(int userId, int teamId);
 
-    void deleteLadderEntry(int userId, int teamId, int gameId);
+    UserLadderEntry getUserLadderEntry(int userId, int teamId);
 
-    void deleteLadderEntriesByUser(int userId);
+    List<UserLadderEntry> getAllUserLadderEntries(int userId);
 
-    void deleteLadderEntriesByUserAndGame(int userId, int gameId);
-
-    void deleteLadderEntriesByUserAndRound(int userId, int round);
-
-    void resetUserLadder(int userId);
-
-    void deleteAllLadderEntriesByUserAndRound(int userId, int round);
 }

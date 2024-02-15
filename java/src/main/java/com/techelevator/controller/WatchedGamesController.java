@@ -29,13 +29,13 @@ public class WatchedGamesController {
     @PostMapping("/watch/{gameId}")
     public void addGameToWatchedList(@PathVariable("userId") int userId,
                                                   @PathVariable("gameId") int gameId) {
-        watchedGamesDao.addGameToWatchedList(userId, gameId);
+        watchedGamesDao.addWatchedGame(userId, gameId);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/unwatch/{gameId}")
     public void removeGameFromWatchedList(@PathVariable("userId") int userId, @PathVariable("gameId") int gameId) {
-        watchedGamesDao.removeGameFromWatchedList(userId, gameId);
+        watchedGamesDao.removeWatchedGame(userId, gameId);
     }
 
     @GetMapping("/")
