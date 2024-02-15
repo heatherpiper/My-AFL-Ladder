@@ -9,15 +9,11 @@ public interface TeamLadderEntryDao {
 
     List<TeamLadderEntry> findTeamLadderForUser(int userId);
 
-//    void updatePoints(int userId, int teamId, int gameId, int points);
-//
-//    int calculateTotalPoints(int userId, int teamId);
-//
-//    TeamLadderEntry findTeamLadderEntry(int userId, int teamId, int gameId);
-//
-//    void removeTeamLadderEntry(int userId, int gameId);
+    void updatePoints(int userId, int teamId, int gameId, int points);
 
-    // Include these methods here or implement logic in WatchedGames?
+    int calculateTotalPoints(int userId, int teamId);
 
+    TeamLadderEntry findTeamLadderEntry(int userId, int teamId, int gameId);
 
+    void removePoints(int userId, int gameId);
 }
