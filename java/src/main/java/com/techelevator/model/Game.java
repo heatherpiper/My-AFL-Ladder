@@ -21,6 +21,14 @@ public class Game {
         this.ateam = ateam;
     }
 
+    public Game(int round, int year, String hteam, String ateam, int complete) {
+        this.round = round;
+        this.year = year;
+        this.hteam = hteam;
+        this.ateam = ateam;
+        this.complete = 0;
+    }
+
     public Game(int id, int round, int year, String hteam, String ateam, Integer hscore, Integer ascore, String winner,
                 int complete) {
         this.id = id;

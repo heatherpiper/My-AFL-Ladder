@@ -29,6 +29,16 @@ public class GameController {
         return ResponseEntity.ok(games);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Game> getGame(@PathVariable int id) {
+        Game game = gameDao.findGameById(id);
+        if (game == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(game);
+        }
+    }
+
     @GetMapping("/round/{round}")
     public ResponseEntity<List<Game>> getGamesByRound(@PathVariable("round") int round) {
         List<Game> games = gameDao.findGamesByRound(round);
@@ -41,6 +51,9 @@ public class GameController {
     @GetMapping("/complete")
     public ResponseEntity<List<Game>> getCompleteGames() {
         List<Game> games = gameDao.findCompleteGames();
+        if (games == null) {
+            games = new ArrayList<>();
+        }
         return ResponseEntity.ok(games);
     }
 }

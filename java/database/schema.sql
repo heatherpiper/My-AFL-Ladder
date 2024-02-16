@@ -1,9 +1,10 @@
 BEGIN TRANSACTION;
 
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS games;
+DROP TABLE IF EXISTS watched_games;
 DROP TABLE IF EXISTS teams;
-DROP TABLE IF EXISTS matches;
-DROP TABLE IF EXISTS user_team_rankings;
+DROP TABLE IF EXISTS user_ladder;
 
 CREATE TABLE users (
 	user_id SERIAL,
@@ -35,7 +36,7 @@ CREATE TABLE watched_games (
 
 CREATE TABLE teams (
     team_id INT PRIMARY KEY,
-    name VARCHAR(255),
+    name VARCHAR(255)
 );
 
 CREATE TABLE user_ladder (

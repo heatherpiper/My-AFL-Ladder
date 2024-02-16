@@ -1,6 +1,5 @@
-package com;
+package com.techelevator.controller;
 
-import com.techelevator.controller.WatchedGamesController;
 import com.techelevator.dao.WatchedGamesDao;
 import com.techelevator.exception.DaoException;
 import com.techelevator.model.Game;
