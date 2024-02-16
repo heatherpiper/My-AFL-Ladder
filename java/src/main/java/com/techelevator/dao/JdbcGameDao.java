@@ -16,7 +16,6 @@ public class JdbcGameDao implements GameDao {
 
     private JdbcTemplate jdbcTemplate;
 
-    @Autowired
     public JdbcGameDao(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }

@@ -2,7 +2,6 @@ package com.techelevator.dao;
 
 import com.techelevator.exception.DaoException;
 import com.techelevator.model.Team;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -15,9 +14,8 @@ public class JdbcTeamDao implements TeamDao {
 
     private JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    public JdbcTeamDao(DataSource my_footy_ladder) {
-        this.jdbcTemplate = new JdbcTemplate(my_footy_ladder);
+    public JdbcTeamDao(DataSource dataSource) {
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
     @Override

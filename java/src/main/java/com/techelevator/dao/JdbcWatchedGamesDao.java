@@ -1,7 +1,6 @@
 package com.techelevator.dao;
 
 import com.techelevator.model.Game;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
@@ -14,13 +13,8 @@ public class JdbcWatchedGamesDao implements WatchedGamesDao {
 
     private JdbcTemplate jdbcTemplate;
 
-    private JdbcGameDao jdbcGameDao;
-
-    private JdbcTeamDao jdbcTeamDao;
-
-    @Autowired
-    public JdbcWatchedGamesDao(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public JdbcWatchedGamesDao(DataSource dataSource) {
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
     private final RowMapper<Game> gameRowMapper = (rs, rowNum) -> {

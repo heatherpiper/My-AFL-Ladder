@@ -1,14 +1,17 @@
 package com.techelevator.controller;
 
-import com.techelevator.dao.UserDao;
 import com.techelevator.dao.WatchedGamesDao;
+import com.techelevator.exception.DaoException;
 import com.techelevator.model.Game;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,15 +23,13 @@ public class WatchedGamesController {
 
     private final WatchedGamesDao watchedGamesDao;
 
-    @Autowired
     public WatchedGamesController(WatchedGamesDao watchedGamesDao) {
         this.watchedGamesDao = watchedGamesDao;
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     @PostMapping("/watch/{gameId}")
-    public void addGameToWatchedList(@PathVariable("userId") int userId,
-                                                  @PathVariable("gameId") int gameId) {
+    public void addGameToWatchedList(@PathVariable("userId") int userId, @PathVariable("gameId") int gameId) {
         watchedGamesDao.addWatchedGame(userId, gameId);
     }
 
@@ -56,7 +57,7 @@ public class WatchedGamesController {
         return ResponseEntity.ok(games);
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     @PostMapping("/watch/all")
     public void markAllGamesWatched(@PathVariable("userId") int userId) {
         watchedGamesDao.markAllGamesWatched(userId);
@@ -66,6 +67,26 @@ public class WatchedGamesController {
     @DeleteMapping("/unwatch/all")
     public void markAllGamesUnwatched(@PathVariable("userId") int userId) {
         watchedGamesDao.markAllGamesUnwatched(userId);
+    }
+
+    @ExceptionHandler({SQLException.class, DataAccessException.class})
+    public ResponseEntity<Object> handleDatabaseException(Exception e) {
+        Logger logger = LoggerFactory.getLogger(WatchedGamesController.class);
+        logger.error("Database error: ", e);
+
+        String errorMessage = "An error occurred while processing your request. Please try again later.";
+
+        return new ResponseEntity<>(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler({DaoException.class})
+    public ResponseEntity<Object> handleDaoException(DaoException e) {
+        Logger logger = LoggerFactory.getLogger(WatchedGamesController.class);
+        logger.error("DAO error: ", e);
+
+        String errorMessage = "An error occurred while processing your request. Please try again later.";
+
+        return new ResponseEntity<>(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
 
