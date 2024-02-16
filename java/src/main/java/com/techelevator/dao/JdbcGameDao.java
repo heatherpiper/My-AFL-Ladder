@@ -86,4 +86,13 @@ public class JdbcGameDao implements GameDao {
             throw new DaoException("Error accessing data");
         }
     }
+
+    @Override
+    public void saveAll(List<Game> games) {
+        String sql = "INSERT INTO games (id, round, year, hteam, ateam, hscore, ascore, winner, complete) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        for (Game game : games) {
+            jdbcTemplate.update(sql, game.getId(), game.getRound(), game.getYear(), game.getHteam(), game.getAteam(), game.getHscore(), game.getAscore(), game.getWinner(), game.getComplete());
+        }
+    }
 }

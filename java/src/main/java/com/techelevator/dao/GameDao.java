@@ -3,8 +3,9 @@ package com.techelevator.dao;
 import com.techelevator.model.Game;
 
 import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface GameDao {
+public interface GameDao extends JpaRepository<Game, Integer>{
 
     Game findGameById(int id);
 
@@ -17,5 +18,7 @@ public interface GameDao {
     List<Game> findIncompleteGames();
 
     String findWinnerByGameId(int id);
+
+    void saveAll(List<Game> games);
 
 }

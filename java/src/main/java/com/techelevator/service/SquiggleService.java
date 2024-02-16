@@ -11,9 +11,12 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.techelevator.dao.GameDao;
+
 public class SquiggleService {
 
     private final HttpClient httpClient;
+    private GameDao gameDao;
 
     public SquiggleService() {
         this.httpClient = HttpClient.newHttpClient();
@@ -24,12 +27,16 @@ public class SquiggleService {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .header("Accept", "application/json")
-                .header("User-Agent", "My Footy Ladder (github.com/heatherpiper/myfootyladder)")
+                .header("User-Agent", "My AFL Ladder (github.com/heatherpiper/myAFLladder)")
                 .build();
 
         try {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            return parseGames(response.body());
+            List<Game> games = parseGames(response.body());
+
+            gameDao.saveAll(games);
+            return games;
+
         } catch (Exception e) {
             e.printStackTrace();
             return List.of();
