@@ -1,14 +1,35 @@
 package com.techelevator.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Game {
+    @JsonProperty("id")
     private int id;
+
+    @JsonProperty("round")
     private int round;
+
+    @JsonProperty("year")
     private int year;
+
+    @JsonProperty("hteam")
     private String hteam;
+
+    @JsonProperty("ateam")
     private String ateam;
+
+    @JsonProperty("hscore")
     private Integer hscore; // Use Integer to allow for null values
+
+    @JsonProperty("ascore")
     private Integer ascore; // Use Integer to allow for null values
+
+    @JsonProperty("winner")
     private String winner;
+
+    @JsonProperty("complete")
     private int complete; // percentage of gameplay completed
 
     public Game() {
