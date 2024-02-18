@@ -8,18 +8,22 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.Year;
 import java.util.Comparator;
 
 import com.techelevator.dao.GameDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SquiggleService {
 
     private final HttpClient httpClient;
+
+    @Autowired
     private GameDao gameDao;
 
     public SquiggleService() {
@@ -38,7 +42,9 @@ public class SquiggleService {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             List<Game> games = parseGames(response.body());
 
-            gameDao.saveAll(games);
+            if (!games.isEmpty()) {
+                gameDao.saveAll(games);
+            }
             return games;
 
         } catch (Exception e) {
@@ -59,7 +65,9 @@ public class SquiggleService {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             List<Game> games = parseGames(response.body());
 
-            gameDao.saveAll(games);
+            if (!games.isEmpty()) {
+                gameDao.saveAll(games);
+            }
             return games;
 
         } catch (Exception e) {
@@ -69,8 +77,18 @@ public class SquiggleService {
     }
 
     public int getMostRecentlyPlayedRound() {
-        int currentYear = Year.now().getValue();
-        List<Game> games = fetchGamesForYear(currentYear);
+        // Make sure current season has started before fetching games; if not, fetch previous season
+        LocalDate currentDate = LocalDate.now();
+        LocalDate march7 = LocalDate.of(currentDate.getYear(), 3, 7);
+        int yearToFetch;
+
+        if (!currentDate.isBefore(march7)) {
+            yearToFetch = currentDate.getYear();
+        } else {
+            yearToFetch = currentDate.getYear() - 1;
+        }
+
+        List<Game> games = fetchGamesForYear(yearToFetch);
         
         if (games.isEmpty()) {
             return -1;
@@ -78,7 +96,7 @@ public class SquiggleService {
 
         games.sort(Comparator.comparing(Game::getRound));
 
-        int mostRecentlyPlayedRound = games.get(games.size() -1).getRound();
+        int mostRecentlyPlayedRound = games.get(games.size() - 1).getRound();
         return mostRecentlyPlayedRound;
     }
     

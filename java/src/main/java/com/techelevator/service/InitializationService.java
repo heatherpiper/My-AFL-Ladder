@@ -18,4 +18,5 @@ public class InitializationService {
         int round = squiggleService.getMostRecentlyPlayedRound();
 
         squiggleService.fetchGamesForRound(year, round);
-    }}
+    }
+}
