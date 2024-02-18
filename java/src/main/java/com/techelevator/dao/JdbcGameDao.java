@@ -92,7 +92,17 @@ public class JdbcGameDao implements GameDao {
 
     @Override
     public void saveAll(List<Game> games) {
-        String sql = "INSERT INTO games (id, round, year, hteam, ateam, hscore, ascore, winner, complete) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO games (id, round, year, hteam, ateam, hscore, ascore, winner, complete) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)" +
+                "ON CONFLICT (id) DO UPDATE SET " +
+                "round = EXCLUDED.round, " +
+                "year = EXCLUDED.year, " +
+                "hteam = EXCLUDED.hteam, " +
+                "ateam = EXCLUDED.ateam, " +
+                "hscore = EXCLUDED.hscore, " +
+                "ascore = EXCLUDED.ascore, " +
+                "winner = EXCLUDED.winner, " +
+                "complete = EXCLUDED.complete;";
 
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
