@@ -11,11 +11,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(team, index) in teams" :key="team.id">
+        <tr v-for="(teamLadder, index) in teamLadder" :key="teamLadder.id">
           <td>{{ index + 1 }}</td>
-          <td>{{ team.name }}</td>
-          <td>{{ team.percentage }}</td>
-          <td>{{ team.points }}</td>
+          <td>{{ teamLadder.name }}</td>
+          <td>{{ teamLadder.percentage }}</td>
+          <td>{{ teamLadder.points }}</td>
         </tr>
       </tbody>
     </table>
@@ -25,22 +25,24 @@
 <script>
 export default {
   name: 'LadderComp',
+  props: ['userId'],
   data() {
     return {
-      teams: []
-    };
-  },
-  mounted() {
-    // Fetch the teams data when the component is mounted
-    this.fetchTeams();
+      teamLadder: []
+    }
   },
   methods: {
-    fetchTeams() {
-      // Placeholder for fetching teams data
-      // this.teams = fetchedData;
+    fetchTeamLadder() {
+      fetch(`http://localhost:8080/ladder/${this.$store.state.user.id}`)
+      .then(response => response.json())
+      .then(data => this.teamLadder = data)
+      .catch(error => console.error('Error: ', error));
     }
+  },
+  created() {
+    this.fetchTeamLadder();
   }
-};
+}
 </script>
 
 <style>

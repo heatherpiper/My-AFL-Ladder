@@ -3,11 +3,13 @@ package com.techelevator.dao;
 import com.techelevator.model.UserLadderEntry;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class JdbcUserLadderEntryDao implements UserLadderEntryDao {
 
     private JdbcTemplate jdbcTemplate;
@@ -53,6 +55,21 @@ public class JdbcUserLadderEntryDao implements UserLadderEntryDao {
             userLadderEntries.add(mapRowToUserLadder(results));
         }
         return userLadderEntries;
+    }
+
+    @Override
+    public List<UserLadderEntry> findMostRecentLadderEntriesByTeam(int userId) {
+        List<UserLadderEntry> teamLadder = new ArrayList<>();
+        // Select most recent entry for each team, then order by points descending
+        String sql = "SELECT u.* FROM user_ladder u " +
+                "JOIN (SELECT teamId, MAX(id) as maxId FROM user_ladder WHERE userId = ? GROUP BY teamId) m " +
+                "ON u.teamId = m.teamId AND u.id = m.maxId " +
+                "ORDER BY u.points DESC";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
+        while(results.next()) {
+            teamLadder.add(mapRowToUserLadder(results));
+        }
+        return teamLadder;
     }
 
     private UserLadderEntry mapRowToUserLadder(SqlRowSet row) {

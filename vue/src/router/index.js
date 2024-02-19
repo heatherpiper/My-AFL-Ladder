@@ -56,14 +56,20 @@ const router = new Router({
       }
     },
     {
-      path: 'games',
+      path: '/games',
       name: 'games',
       component: GameListComp,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
-      path: 'games/:id',
+      path: '/games/:id',
       name: 'game',
       component: GameDetailsComp,
+      meta: {
+        requiresAuth: true
+      }
     }
   ]
 })
