@@ -13,18 +13,18 @@
   import axios from 'axios';
 
   export default {
-    name: "matches",
+    name: "games",
     data() {
       return {
-        matches: [],
+        games: [],
       };
     },
     mounted() {
-        axios.get('/matches').then(response => {
-            this.matches = response.data;
+        axios.get('/games').then(response => {
+            this.games = response.data;
         })
         .catch(error => {
-            console.error('Error fetching matches:', error);
+            console.error('Error fetching games:', error);
         });
     },
   };

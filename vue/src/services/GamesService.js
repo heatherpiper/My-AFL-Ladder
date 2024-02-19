@@ -1,11 +1,11 @@
 import axios from 'axios';
 
 export default {
-    getAllMatches() {
+    getAllGames() {
         return axios.get('/matches/');
     },
 
-    getMatchById(matchId) {
-        return axios.get(`/matches/${matchId}`);
+    getMatchById(gameId) {
+        return axios.get(`/matches/${gameId}`);
     }
 }

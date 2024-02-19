@@ -3,19 +3,19 @@
     <div class="page-title">
       <h2>My AFL Ladder</h2>
     </div>
-    <MatchesListComp />
+    <GamesListComp />
     <LadderComp />
   </div>
 </template>
 
 <script>
-import MatchesListComp from '../components/MatchesListComp';
+import GamesListComp from '../components/GamesListComp';
 import LadderComp from '../components/LadderComp';
 
 export default {
   name: "home",
   components: {
-    MatchesListComp,
+    GamesListComp,
     LadderComp,
   },
 };

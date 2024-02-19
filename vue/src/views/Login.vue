@@ -60,7 +60,6 @@ export default {
 
 <style scoped>
 
-/* Reuse the existing CSS and apply it to the #login ID */
 .login {
     max-width: 400px;
     margin: 40px auto; 
@@ -82,7 +81,6 @@ export default {
     justify-content: center;
 }
 
-/* Input styling is reused without changes */
 input[type="text"],
 input[type="password"] {
     width: calc(100% - 20px); 
@@ -95,7 +93,6 @@ input[type="password"] {
     margin: auto;
 }
 
-/* Button styling reused without changes */
 button[type="submit"] {
     width: 100%; 
     padding: 10px;
@@ -113,7 +110,6 @@ button[type="submit"]:hover {
     background-color: var(--afl-450);
 }
 
-/* Error message and paragraph styling reused without changes */
 div[role="alert"] {
     color: #ff6b6b;
     margin-bottom: 15px;
