@@ -1,17 +1,17 @@
 <template>
   <div>
     <h1>Games View</h1>
-    <GamesListComp />
+    <GameListComp />
   </div>
 </template>
 
 <script>
-import GamesListComp from "../components/GamesListComp";
+import GameListComp from "../components/GameListComp";
 
 export default {
   name: "GamesView",
   components: {
-    GamesListComp
+    GameListComp
   }
 };
 </script>

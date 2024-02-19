@@ -1,16 +1,16 @@
 <template>
     <div>
-      <h1>Matches</h1>
+      <h1>Games</h1>
       <ul>
-        <li v-for="match in matches" :key="match.id">
-          {{ match.team1 }} vs {{ match.team2 }}
+        <li v-for="game in games" :key="game.id">
+          {{ game.hteam }} vs {{ game.ateam }}
         </li>
       </ul>
     </div>
   </template>
   
 <script>
-  import axios from 'axios';
+  import GameService from '../services/GameService';
 
   export default {
     name: "games",
@@ -20,7 +20,8 @@
       };
     },
     mounted() {
-        axios.get('/games').then(response => {
+        GameService.getAllGames('/games').then(response => {
+            console.log(response.data);
             this.games = response.data;
         })
         .catch(error => {

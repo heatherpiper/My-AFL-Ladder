@@ -23,14 +23,14 @@ public class GameController {
         this.gameDao = gameDao;
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<List<Game>> getAllGames() {
         List<Game> games = gameDao.findAllGames();
         return ResponseEntity.ok(games);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Game> getGame(@PathVariable int id) {
+    public ResponseEntity<Game> getGameById(@PathVariable("id") int id) {
         Game game = gameDao.findGameById(id);
         if (game == null) {
             return ResponseEntity.notFound().build();
@@ -42,18 +42,18 @@ public class GameController {
     @GetMapping("/round/{round}")
     public ResponseEntity<List<Game>> getGamesByRound(@PathVariable("round") int round) {
         List<Game> games = gameDao.findGamesByRound(round);
-        if (games.isEmpty()) {
-            return ResponseEntity.ok().body(new ArrayList<>()); // return empty array if not found
-        }
         return ResponseEntity.ok(games);
     }
 
     @GetMapping("/complete")
     public ResponseEntity<List<Game>> getCompleteGames() {
         List<Game> games = gameDao.findCompleteGames();
-        if (games == null) {
-            games = new ArrayList<>();
-        }
+        return ResponseEntity.ok(games);
+    }
+
+    @GetMapping("/incomplete")
+    public ResponseEntity<List<Game>> getIncompleteGames() {
+        List<Game> games = gameDao.findIncompleteGames();
         return ResponseEntity.ok(games);
     }
 }
