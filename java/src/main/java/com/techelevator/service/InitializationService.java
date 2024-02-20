@@ -3,6 +3,7 @@ package com.techelevator.service;
 import javax.annotation.PostConstruct;
 import java.time.Year;
 
+import com.techelevator.model.YearAndRound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +15,8 @@ public class InitializationService {
 
     @PostConstruct
     public void init() {
-        int year = Year.now().getValue();
-        int round = squiggleService.getMostRecentlyPlayedRound();
+        int currentYear = Year.now().getValue();
 
-        squiggleService.fetchGamesForRound(year, round);
+        squiggleService.fetchGamesUpToMostRecentRound(currentYear);
     }
 }
