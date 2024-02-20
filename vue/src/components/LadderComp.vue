@@ -23,6 +23,8 @@
 </template>
 
 <script>
+import LadderService from '../services/LadderService';
+
 export default {
   name: 'LadderComp',
   props: ['userId'],
@@ -31,22 +33,14 @@ export default {
       teamLadder: []
     }
   },
-  methods: {
-    fetchTeamLadder() {
-      fetch(`http://localhost:8080/ladder/${this.$store.state.user.id}`)
-      .then(response => response.json())
+  created() {
+    LadderService.getLadder()
       .then(data => this.teamLadder = data)
       .catch(error => console.error('Error: ', error));
-    }
-  },
-  created() {
-    this.fetchTeamLadder();
   }
 }
 </script>
 
 <style>
-
-
 </style>
   
