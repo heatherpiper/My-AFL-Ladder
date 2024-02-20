@@ -88,30 +88,28 @@ public class SquiggleService {
                     .header("User-Agent", "My AFL Ladder (github.com/heatherpiper/My-AFL-Ladder)")
                     .build();
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            JSONArray gamesArray = new JSONArray(response.body());
+            String responseBody = response.body();
 
-            //Determine highest completed round
-            int highestCompletedRound = 0;
-            for (int i = 0; i < gamesArray.length(); i++) {
-                JSONObject game = gamesArray.getJSONObject(i);
-                int round = game.getInt("round");
-                int complete = game.getInt("complete");
-                if (complete == 100 && round > highestCompletedRound) {
-                    highestCompletedRound = round;
+            List<Game> games = parseGames(responseBody);
+
+            // Determine the highest completed round
+            int highestCompletedRound = games.stream()
+                    .filter(game -> game.getComplete() == 100)
+                    .mapToInt(Game::getRound)
+                    .max()
+                    .orElse(0);
+
+            if (highestCompletedRound == 0 && year > LocalDate.now().getYear() - 2) {
+                // If no games from current year are completed, try previous year
+                return fetchGamesUpToMostRecentRound(year - 1);
+            } else {
+                for (int round = 1; round <= highestCompletedRound; round++) {
+                    allGames.addAll(fetchGamesForYearAndRound(year, round));
                 }
             }
-            // If no rounds are complete, fetch games from previous year (only)
-            if (highestCompletedRound == 0 && year > LocalDate.now().getYear() - 2) {
-                return fetchGamesUpToMostRecentRound(year -1);
-            }
-
-            // Fetch games for each round up to highest completed round, add games to list
-            for (int round = 1; round <= highestCompletedRound; round++) {
-                allGames.addAll(fetchGamesForYearAndRound(year, round));
-            }
-
         } catch (Exception e) {
             e.printStackTrace();
+
         }
         return allGames;
     }

@@ -5,6 +5,7 @@ import java.time.Year;
 
 import com.techelevator.model.YearAndRound;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,7 +17,11 @@ public class InitializationService {
     @PostConstruct
     public void init() {
         int currentYear = Year.now().getValue();
+        fetchGamesAsync(currentYear);
+    }
 
-        squiggleService.fetchGamesUpToMostRecentRound(currentYear);
+    @Async
+    public void fetchGamesAsync(int year) {
+        squiggleService.fetchGamesUpToMostRecentRound(year);
     }
 }
