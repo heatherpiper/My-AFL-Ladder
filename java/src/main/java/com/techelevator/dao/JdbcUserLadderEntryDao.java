@@ -57,20 +57,21 @@ public class JdbcUserLadderEntryDao implements UserLadderEntryDao {
         return userLadderEntries;
     }
 
-    @Override
-    public List<UserLadderEntry> findMostRecentLadderEntriesByTeam(int userId) {
-        List<UserLadderEntry> teamLadder = new ArrayList<>();
-        // Select most recent entry for each team, then order by points descending
-        String sql = "SELECT u.* FROM user_ladder u " +
-                "JOIN (SELECT teamId, MAX(id) as maxId FROM user_ladder WHERE userId = ? GROUP BY teamId) m " +
-                "ON u.teamId = m.teamId AND u.id = m.maxId " +
-                "ORDER BY u.points DESC";
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
-        while(results.next()) {
-            teamLadder.add(mapRowToUserLadder(results));
-        }
-        return teamLadder;
-    }
+    // TODO: Fix the SQL statement in this method, probably need to add a ladder_id column to the user_ladder table
+//    @Override
+//    public List<UserLadderEntry> findMostRecentLadderEntriesByTeam(int userId) {
+//        List<UserLadderEntry> teamLadder = new ArrayList<>();
+//        // Select most recent entry for each team, then order by points descending
+//        String sql = "SELECT u.* FROM user_ladder u " +
+//                "JOIN (SELECT team_id, MAX(id) as max_id FROM user_ladder WHERE user_id = ? GROUP BY team_id) m " +
+//                "ON u.team_id = m.team_id AND u.id = m.max_id " +
+//                "ORDER BY u.points DESC";
+//        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
+//        while(results.next()) {
+//            teamLadder.add(mapRowToUserLadder(results));
+//        }
+//        return teamLadder;
+//    }
 
     private UserLadderEntry mapRowToUserLadder(SqlRowSet row) {
         UserLadderEntry userLadder = new UserLadderEntry(row.getInt("user_id"), row.getInt("team_id"), row.getInt("points"), row.getInt("percentage"), row.getInt("position"));
