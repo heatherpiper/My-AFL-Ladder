@@ -1,15 +1,21 @@
 package com.techelevator.model;
 
 public class WatchedGames {
+    private int watchedGameId;
     private int userId;
     private int gameId;
 
     public WatchedGames() {
     }
 
-    public WatchedGames(int userId, int gameId) {
+    public WatchedGames(int watchedGameId, int userId, int gameId) {
+        this.watchedGameId = watchedGameId;
         this.userId = userId;
         this.gameId = gameId;
+    }
+
+    public int getWatchedGameId() {
+        return watchedGameId;
     }
 
     public int getUserId() {
@@ -18,6 +24,10 @@ public class WatchedGames {
 
     public int getGameId() {
         return gameId;
+    }
+
+    public void setWatchedGameId(int watchedGameId) {
+        this.watchedGameId = watchedGameId;
     }
 
     public void setUserId(int userId) {

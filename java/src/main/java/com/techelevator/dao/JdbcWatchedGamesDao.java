@@ -61,7 +61,7 @@ public class JdbcWatchedGamesDao implements WatchedGamesDao {
 
     @Override
     public void removeWatchedGame(int userId, int gameId) {
-        String sql = "DELETE FROM watched_games (user_id, game_id) VALUES (?, ?)";
+        String sql = "DELETE FROM watched_games WHERE user_id = ? AND game_id = ?";
         jdbcTemplate.update(sql, userId, gameId);
     }
 

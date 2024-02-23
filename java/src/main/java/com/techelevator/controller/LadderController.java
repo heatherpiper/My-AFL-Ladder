@@ -20,9 +20,9 @@ public class LadderController {
         this.userLadderEntryDao = userLadderEntryDao;
     }
 
-//    @GetMapping("/{userId}")
-//    public ResponseEntity<List<UserLadderEntry>> getMostRecentLadderEntriesByTeam(@PathVariable("userId") int userId) {
-//        List<UserLadderEntry> userLadderEntries = userLadderEntryDao.findMostRecentLadderEntriesByTeam(userId);
-//        return ResponseEntity.ok(userLadderEntries);
-//    }
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<UserLadderEntry>> getMostRecentLadderEntriesByTeam(@PathVariable("userId") int userId) {
+        List<UserLadderEntry> userLadderEntries = userLadderEntryDao.findMostRecentLadderEntryForEachTeam(userId);
+        return ResponseEntity.ok(userLadderEntries);
+    }
 }

@@ -1,6 +1,7 @@
 package com.techelevator.dao;
 
 import com.techelevator.model.UserLadderEntry;
+import org.springframework.data.relational.core.sql.SQL;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
@@ -20,8 +21,9 @@ public class JdbcUserLadderEntryDao implements UserLadderEntryDao {
 
     @Override
     public void addUserLadderEntry(UserLadderEntry userLadderEntry) {
-        String sql = "INSERT INTO user_ladder (user_id, team_id, points, percentage, position) VALUES (?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, userLadderEntry.getUserId(), userLadderEntry.getTeamId(), userLadderEntry.getPoints(), userLadderEntry.getPercentage(), userLadderEntry.getPosition());
+        String sql = "INSERT INTO user_ladder (user_id, team_id, points, percentage, position, team_name) VALUES (?, " +
+                "?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, userLadderEntry.getUserId(), userLadderEntry.getTeamId(), userLadderEntry.getPoints(), userLadderEntry.getPercentage(), userLadderEntry.getPosition(), userLadderEntry.getTeamName());
     }
 
     @Override
@@ -57,24 +59,31 @@ public class JdbcUserLadderEntryDao implements UserLadderEntryDao {
         return userLadderEntries;
     }
 
-    // TODO: Fix the SQL statement in this method, probably need to add a ladder_id column to the user_ladder table
-//    @Override
-//    public List<UserLadderEntry> findMostRecentLadderEntriesByTeam(int userId) {
-//        List<UserLadderEntry> teamLadder = new ArrayList<>();
-//        // Select most recent entry for each team, then order by points descending
-//        String sql = "SELECT u.* FROM user_ladder u " +
-//                "JOIN (SELECT team_id, MAX(id) as max_id FROM user_ladder WHERE user_id = ? GROUP BY team_id) m " +
-//                "ON u.team_id = m.team_id AND u.id = m.max_id " +
-//                "ORDER BY u.points DESC";
-//        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
-//        while(results.next()) {
-//            teamLadder.add(mapRowToUserLadder(results));
-//        }
-//        return teamLadder;
-//    }
+    @Override
+    public List<UserLadderEntry> findMostRecentLadderEntryForEachTeam(int userId) {
+        List<UserLadderEntry> teamLadder = new ArrayList<>();
+        // Select most recent entry for each team, then order by points descending
+        String sql = "SELECT u.*, t.name AS team_name "
+                + "FROM user_ladder u "
+                + "JOIN ("
+                + "    SELECT team_id, MAX(user_ladder_id) AS max_user_ladder_id "
+                + "    FROM user_ladder "
+                + "    WHERE user_id = ? "
+                + "    GROUP BY team_id"
+                + ") m ON u.team_id = m.team_id AND u.user_ladder_id = m.max_user_ladder_id "
+                + "JOIN teams t ON u.team_id = t.team_id "
+                + "ORDER BY u.points DESC";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
+        while(results.next()) {
+            teamLadder.add(mapRowToUserLadder(results));
+        }
+        return teamLadder;
+    }
 
     private UserLadderEntry mapRowToUserLadder(SqlRowSet row) {
-        UserLadderEntry userLadder = new UserLadderEntry(row.getInt("user_id"), row.getInt("team_id"), row.getInt("points"), row.getInt("percentage"), row.getInt("position"));
+        UserLadderEntry userLadder = new UserLadderEntry(row.getInt("user_ladder_id"), row.getInt("user_id"),
+                row.getInt("team_id"), row.getInt("points"), row.getInt("percentage"), row.getInt("position"),
+                row.getString("team_name"));
         return userLadder;
     }
 }

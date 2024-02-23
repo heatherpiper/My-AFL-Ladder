@@ -27,9 +27,9 @@ CREATE TABLE games (
 );
 
 CREATE TABLE watched_games (
+    watched_game_id SERIAL PRIMARY KEY,
     user_id INT,
     game_id INT,
-    PRIMARY KEY (user_id, game_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (game_id) REFERENCES games(id)
 );
@@ -40,12 +40,12 @@ CREATE TABLE teams (
 );
 
 CREATE TABLE user_ladder (
+    user_ladder_id SERIAL PRIMARY KEY,
     user_id INT,
     team_id INT,
     points INT,
     percentage INT,
     position INT,
-    PRIMARY KEY (user_id, team_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (team_id) REFERENCES teams(team_id)
 );

@@ -1,22 +1,34 @@
 package com.techelevator.model;
 
 public class UserLadderEntry {
-
+    private int userLadderEntryId;
     private int userId;
     private int teamId;
     private int points;
     private int percentage;
     private int position;
+    private String teamName;
 
-    public UserLadderEntry(int userId, int teamId, int points, int percentage, int position) {
+    public UserLadderEntry(int userLadderEntryId, int userId, int teamId, int points, int percentage, int position,
+                           String teamName) {
+        this.userLadderEntryId = userLadderEntryId;
         this.userId = userId;
         this.teamId = teamId;
         this.points = points;
         this.percentage = percentage;
         this.position = position;
+        this.teamName = teamName;
     }
 
     public UserLadderEntry() {
+    }
+
+    public int getUserLadderEntryId() {
+        return userLadderEntryId;
+    }
+
+    public void setUserLadderEntryId(int userLadderEntryId) {
+        this.userLadderEntryId = userLadderEntryId;
     }
 
     public int getUserId() {
@@ -57,5 +69,13 @@ public class UserLadderEntry {
 
     public void setPosition(int position) {
         this.position = position;
+    }
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
     }
 }
