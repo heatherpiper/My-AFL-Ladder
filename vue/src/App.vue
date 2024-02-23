@@ -47,9 +47,9 @@
 }
 
 body {
-background: radial-gradient(circle at center, var(--afl-500) 0%, var(--afl-700) 60%, var(--afl-900) 100%);
-background-attachment: fixed;
-font-family: 'Roboto', sans-serif;
+  background: radial-gradient(circle at center, var(--afl-500) 0%, var(--afl-700) 60%, var(--afl-900) 100%);
+  background-attachment: fixed;
+  font-family: 'Roboto', sans-serif;
 }
 
 h1 {

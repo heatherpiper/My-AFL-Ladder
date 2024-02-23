@@ -3,8 +3,10 @@
     <div class="page-title">
       <h2>My AFL Ladder</h2>
     </div>
-    <GameListComp />
-    <LadderComp :userId="userId" />
+    <div class="home-container">
+      <GameListComp class="half-width"/>
+      <LadderComp :userId="userId" class="half-width"/>
+    </div>
   </div>
 </template>
 
@@ -32,5 +34,12 @@ export default {
 </script>
 
 <style scoped>
+.home-container {
+  display: flex;
+  justify-content: space-between;
+}
 
+.half-width {
+  width: 50%;
+}
 </style>
