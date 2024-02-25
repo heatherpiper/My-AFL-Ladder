@@ -35,7 +35,7 @@ export default {
   },
   created() {
     LadderService.getLadder()
-      .then(data => this.teamLadder = data)
+      .then(response => this.teamLadder = response.data)
       .catch(error => console.error('Error: ', error));
   }
 }

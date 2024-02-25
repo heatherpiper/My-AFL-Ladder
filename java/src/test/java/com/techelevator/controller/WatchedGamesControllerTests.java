@@ -74,7 +74,7 @@ public class WatchedGamesControllerTests {
     
         when(dao.findWatchedGames(userId)).thenReturn(watchedGames);
     
-        ResponseEntity<List<Game>> response = controller.findWatchedGames(userId);
+        ResponseEntity<List<Game>> response = controller.getWatchedGames(userId);
     
         assertEquals(watchedGames, response.getBody());
     }
@@ -85,7 +85,7 @@ public class WatchedGamesControllerTests {
 
         when(dao.findWatchedGames(userId)).thenReturn(new ArrayList<>());
 
-        ResponseEntity<List<Game>> response = controller.findWatchedGames(userId);
+        ResponseEntity<List<Game>> response = controller.getWatchedGames(userId);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(new ArrayList<>(), response.getBody());
@@ -100,7 +100,7 @@ public class WatchedGamesControllerTests {
 
         when(dao.findWatchedGames(userId)).thenReturn(games);
 
-        ResponseEntity<List<Game>> response = controller.findWatchedGames(userId);
+        ResponseEntity<List<Game>> response = controller.getWatchedGames(userId);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(games, response.getBody());
@@ -112,7 +112,7 @@ public class WatchedGamesControllerTests {
 
         when(dao.findUnwatchedGames(userId)).thenReturn(new ArrayList<>());
 
-        ResponseEntity<List<Game>> response = controller.findUnwatchedGames(userId);
+        ResponseEntity<List<Game>> response = controller.getUnwatchedGames(userId);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(new ArrayList<>(), response.getBody());
@@ -127,7 +127,7 @@ public class WatchedGamesControllerTests {
 
         when(dao.findUnwatchedGames(userId)).thenReturn(games);
 
-        ResponseEntity<List<Game>> response = controller.findUnwatchedGames(userId);
+        ResponseEntity<List<Game>> response = controller.getUnwatchedGames(userId);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(games, response.getBody());

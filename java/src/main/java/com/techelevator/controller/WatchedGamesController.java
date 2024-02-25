@@ -40,7 +40,7 @@ public class WatchedGamesController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<Game>> findWatchedGames(@PathVariable("userId") int userId) {
+    public ResponseEntity<List<Game>> getWatchedGames(@PathVariable("userId") int userId) {
         List<Game> games = watchedGamesDao.findWatchedGames(userId);
         if (games.isEmpty()) {
             return ResponseEntity.ok().body(new ArrayList<>()); // return empty array if there are no watched games
@@ -49,7 +49,7 @@ public class WatchedGamesController {
     }
 
     @GetMapping("/unwatched")
-    public ResponseEntity<List<Game>> findUnwatchedGames(@PathVariable("userId") int userId) {
+    public ResponseEntity<List<Game>> getUnwatchedGames(@PathVariable("userId") int userId) {
         List<Game> games = watchedGamesDao.findUnwatchedGames(userId);
         if (games.isEmpty()) {
             return ResponseEntity.ok().body(new ArrayList<>()); // return empty array if there are no unwatched games
