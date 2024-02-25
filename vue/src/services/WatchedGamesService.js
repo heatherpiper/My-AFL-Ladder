@@ -12,11 +12,11 @@ export default {
     },
 
     getWatchedGames(userId) {
-        return axios.get(`${API_URL}/users/${userId}`);
+        return axios.get(`${API_URL}/users/${userId}/watched-games`);
     },
 
     getUnwatchedGames(userId) {
-        return axios.get(`${API_URL}/users/${userId}/unwatched`);
+        return axios.get(`${API_URL}/users/${userId}/watched-games/unwatched`);
     },
 
     markAllGamesWatched(userId) {

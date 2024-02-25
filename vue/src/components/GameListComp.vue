@@ -1,10 +1,21 @@
 <template>
   <div class="game-list">
     <h1>Games</h1>
-    <div class="games-container">
-      <div class="game-card" v-for="game in games" :key="game.id">
+    <div class="tabs">
+      <button :class="{ active: activeTab === 'unwatched' }" @click="activeTab = 'unwatched'">Unwatched</button>
+      <button :class="{ active: activeTab === 'watched' }" @click="activeTab = 'watched'">Watched</button>
+    </div>
+    <div class="games-container" v-if="activeTab === 'unwatched'">
+      <div class="game-card" v-for="game in unwatchedGames" :key="game.id">
         {{ game.hteam }} vs {{ game.ateam }}
         <input type="checkbox" :id="'watched-' + game.id" @change="markAsWatched(game.id, $event)">
+        <label :for="'watched-' + game.id">Watched</label>
+      </div>
+    </div>
+    <div class="games-container" v-if="activeTab === 'watched'">
+      <div class="game-card" v-for="game in watchedGames" :key="game.id">
+        {{ game.hteam }} vs {{ game.ateam }}
+        <input type="checkbox" :id="'watched-' + game.id" @change="markAsWatched(game.id, $event)" checked>
         <label :for="'watched-' + game.id">Watched</label>
       </div>
     </div>
@@ -13,17 +24,38 @@
 
   
 <script>
-  import GameService from '../services/GameService';
   import WatchedGamesService from '../services/WatchedGamesService';
 
   export default {
     name: "GameListComp",
     data() {
       return {
-        games: [],
+        unwatchedGames: [],
+        watchedGames: [],
+        activeTab: 'unwatched',
       };
     },
     methods: {
+      fetchWatchedGames() {
+        const userId = this.$store.state.user.id;
+        WatchedGamesService.getWatchedGames(userId)
+          .then(response => {
+            this.watchedGames = response.data;
+          })
+          .catch(error => {
+            console.error('Error fetching watched games:', error);
+          });
+      },
+      fetchUnwatchedGames() {
+        const userId = this.$store.state.user.id;
+        WatchedGamesService.getUnwatchedGames(userId)
+          .then(response => {
+            this.unwatchedGames = response.data;
+          })
+          .catch(error => {
+            console.error('Error fetching unwatched games:', error);
+          });
+      },
       markAsWatched(gameId, event) {
         const userId = this.$store.state.user.id;
         if (userId) {
@@ -31,7 +63,11 @@
             WatchedGamesService.addGameToWatchedList(userId, gameId)
               .then(() => {
                 console.log('Game marked as watched');
-                // update UI to reflect the game is watched
+                const gameIndex = this.unwatchedGames.findIndex(game => game.id === gameId);
+                if (gameIndex !== -1) {
+                  const [game] = this.unwatchedGames.splice(gameIndex, 1);
+                  this.watchedGames.push(game);
+                }
               })
               .catch(error => {
                 console.error('Error marking game as watched:', error);
@@ -40,7 +76,11 @@
             WatchedGamesService.removeGameFromWatchedList(userId, gameId)
               .then(() => {
                 console.log('Game marked as unwatched');
-                // update UI to reflect the game is unwatched
+                const gameIndex = this.watchedGames.findIndex(game => game.id === gameId);
+                if (gameIndex !== -1) {
+                  const [game] = this.watchedGames.splice(gameIndex, 1);
+                  this.unwatchedGames.push(game);
+                }
               })
               .catch(error => {
                 console.error('Error marking game as unwatched:', error);
@@ -52,14 +92,9 @@
       }
     },
     mounted() {
-        GameService.getAllGames('/games').then(response => {
-            console.log(response.data);
-            this.games = response.data;
-        })
-        .catch(error => {
-            console.error('Error fetching games:', error);
-        });
-    },
+        this.fetchWatchedGames();
+        this.fetchUnwatchedGames();
+    }
   };
 </script>
   
@@ -84,6 +119,10 @@
   padding: 16px;
   background-color: #03061C;
   border-radius: 8px;
+}
+
+.active {
+  background-color: aqua;
 }
 </style>
   
