@@ -17,7 +17,7 @@
   import WatchedGamesService from '../services/WatchedGamesService';
 
   export default {
-    name: "games",
+    name: "GameListComp",
     data() {
       return {
         games: [],
@@ -26,16 +26,28 @@
     methods: {
       markAsWatched(gameId, event) {
         const userId = this.$store.state.user.id;
-        if (userId && event.target.checked) {
-          WatchedGamesService.addGameToWatchedList(userId, gameId)
-            .then(() => {
-              console.log('Game marked as watched');
-            })
-            .catch(error => {
-              console.error('Error marking game as watched:', error);
-            });
+        if (userId) {
+          if (event.target.checked) {
+            WatchedGamesService.addGameToWatchedList(userId, gameId)
+              .then(() => {
+                console.log('Game marked as watched');
+                // update UI to reflect the game is watched
+              })
+              .catch(error => {
+                console.error('Error marking game as watched:', error);
+              });
+          } else {
+            WatchedGamesService.removeGameFromWatchedList(userId, gameId)
+              .then(() => {
+                console.log('Game marked as unwatched');
+                // update UI to reflect the game is unwatched
+              })
+              .catch(error => {
+                console.error('Error marking game as unwatched:', error);
+              });
+          }
         } else {
-          console.error('User ID is undefined or checkbox is not checked.');
+          console.error('User ID is undefined.');
         }
       }
     },
