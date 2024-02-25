@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.techelevator.model.User;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class JdbcUserDao implements UserDao {

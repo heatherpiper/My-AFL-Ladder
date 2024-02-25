@@ -35,8 +35,8 @@ CREATE TABLE watched_games (
 );
 
 CREATE TABLE teams (
-    team_id INT PRIMARY KEY,
-    name VARCHAR(255)
+    team_id INT PRIMARY KEY UNIQUE,
+    name VARCHAR(255) UNIQUE
 );
 
 CREATE TABLE user_ladder (
@@ -46,8 +46,10 @@ CREATE TABLE user_ladder (
     points INT,
     percentage INT,
     position INT,
+    team_name VARCHAR(255),
     FOREIGN KEY (user_id) REFERENCES users(user_id),
-    FOREIGN KEY (team_id) REFERENCES teams(team_id)
+    FOREIGN KEY (team_id) REFERENCES teams(team_id),
+    FOREIGN KEY (team_name) REFERENCES teams(name)
 );
 
 
