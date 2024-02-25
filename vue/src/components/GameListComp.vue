@@ -11,10 +11,17 @@
       </div>
       <div class="games-container">
         <div class="game-card" v-for="game in currentGames" :key="game.id">
-          {{ game.hteam }} vs {{ game.ateam }}
-          <input type="checkbox" v-if="showCheckboxes" :id="`${activeTab}-${game.id}`" @change="selectGame(game.id, $event)">
-          <label v-if="showCheckboxes" :for="`${activeTab}-${game.id}`">{{ activeTab === 'unwatched' ? 'Watched' : 'Unwatched' }}</label>
+          <div class="vs-container">
+            <span class="vs-text">vs</span>
+            <div class="team-name">{{ game.hteam }}</div>
+            <div class="team-name">{{ game.ateam }}</div>
+          </div>
+          <div v-if="showCheckboxes" class="game-checkbox">
+            <input type="checkbox" :id="`${activeTab}-${game.id}`" @change="selectGame(game.id, $event)">
+            <label :for="`${activeTab}-${game.id}`">{{ activeTab === 'unwatched' ? 'Watched' : 'Unwatched' }}</label>
         </div>
+      </div>
+
       </div>
       <button v-if="showCheckboxes" @click="confirmSelection">Confirm</button>
     </div>
@@ -150,27 +157,102 @@ export default {
 .game-list {
   max-width: 100%;
   padding: 16px;
+  color: var(--afl-900);
+}
+
+.tabs {
+  margin-bottom: 20px;
+  display: flex;
+}
+
+button {
+  background-color: var(--afl-200); /* Lighter theme background */
+  color: var(--afl-600); /* Accent primary for text */
+  border: 1px solid var(--afl-600); /* Border to match accent primary */
+  padding: 10px 20px;
+  margin: 0 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  border-radius: 6px;
+}
+
+button:hover, button.active {
+  background-color: var(--afl-500);
+  color: var(--afl-100);
 }
 
 .games-container {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Creates a 2-column layout */
-  grid-gap: 16px; /* Space between cards */
-  max-height: calc(3 * 120px); /* Adjust based on your card size */
-  overflow-y: auto; /* Enables vertical scrolling */
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  justify-content: center;
+  grid-gap: 16px; 
+  max-height: calc(3 * 120px); 
+  overflow-y: auto; 
   padding: 8px;
 }
 
 .game-card {
-  color: #fff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  padding: 16px;
-  background-color: #03061C;
+  background-color: var(--afl-200);
+  border: 1px solid var(--afl-400);
   border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: var(--afl-900);
 }
 
-.active {
-  background-color: aqua;
+.vs-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative;
+  padding-left: 30px
 }
+
+.vs-text {
+  position: absolute;
+  left: 0px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-weight: bold;
+  color: var(--afl-600);
+}
+
+.team-name {
+  width: 100%;
+  text-align: left;
+  margin: 4px 0;
+}
+
+.game-checkbox {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+}
+
+input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+.mark-as-toggle {
+  cursor: pointer;
+  background-color: var(--afl-500);
+  color: var(--afl-100);
+  margin: 20px 0;
+  padding: 10px;
+  text-align: center;
+  border-radius: 6px;
+  transition: background-color 0.3s ease
+}
+
+.mark-as-toggle:hover {
+  background-color: var(--afl-450);
+}
+
+@media (max-width: 768px) {
+  .games-container {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+}
+
 </style>
   
