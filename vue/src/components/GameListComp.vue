@@ -2,22 +2,32 @@
   <div class="game-list">
     <h1>Games</h1>
     <div class="tabs">
-      <button :class="{ active: activeTab === 'unwatched' }" @click="activeTab = 'unwatched'">Unwatched</button>
-      <button :class="{ active: activeTab === 'watched' }" @click="activeTab = 'watched'">Watched</button>
+      <button :class="{ active: activeTab === 'unwatched' }" @click="activeTab = 'unwatched'; showCheckboxes = false">Unwatched</button>
+      <button :class="{ active: activeTab === 'watched' }" @click="activeTab = 'watched'; showCheckboxes = false">Watched</button>
     </div>
-    <div class="games-container" v-if="activeTab === 'unwatched'">
-      <div class="game-card" v-for="game in unwatchedGames" :key="game.id">
-        {{ game.hteam }} vs {{ game.ateam }}
-        <input type="checkbox" :id="'watched-' + game.id" @change="markAsWatched(game.id, $event)">
-        <label :for="'watched-' + game.id">Watched</label>
+    <div v-if="activeTab === 'unwatched'">
+      <div @click="showCheckboxesUnwatched = !showCheckboxesUnwatched" class="mark-as-watched">
+        Mark games as watched
       </div>
+      <div class="games-container">
+        <div class="game-card" v-for="game in unwatchedGames" :key="game.id">
+          {{ game.hteam }} vs {{ game.ateam }}
+          <input type="checkbox" v-if="showCheckboxesUnwatched" :id="'watched-' + game.id" @change="selectGame(game.id, $event)">
+          <label v-if="showCheckboxesUnwatched" :for="'watched-' + game.id">Watched</label>
+        </div>
+      </div>
+      <button v-if="showCheckboxesUnwatched" @click="confirmWatched">Confirm</button>
     </div>
     <div class="games-container" v-if="activeTab === 'watched'">
+      <div @click="toggleCheckboxesForWatched" class="mark-as-unwatched">
+        Mark games as unwatched
+      </div>
       <div class="game-card" v-for="game in watchedGames" :key="game.id">
         {{ game.hteam }} vs {{ game.ateam }}
-        <input type="checkbox" :id="'watched-' + game.id" @change="markAsWatched(game.id, $event)" checked>
-        <label :for="'watched-' + game.id">Watched</label>
+        <input type="checkbox" v-if="showCheckboxesWatched" :id="'unwatched-' + game.id" @change="selectGame(game.id, $event)">
+        <label v-if="showCheckboxesWatched" :for="'unwatched-' + game.id">Unwatched</label>
       </div>
+      <button v-if="showCheckboxesWatched" @click="confirmUnwatched">Confirm</button>
     </div>
   </div>
 </template>
@@ -33,9 +43,60 @@
         unwatchedGames: [],
         watchedGames: [],
         activeTab: 'unwatched',
+        showCheckboxesUnwatched: false,
+        showCheckboxesWatched: false,
+        selectedGamesForUnwatched: new Set(),
+        selectedGamesForWatched: new Set(),
       };
     },
     methods: {
+      toggleCheckboxesForWatched() {
+        this.showCheckboxesWatched = !this.showCheckboxesWatched;
+      },
+      selectGame(gameId, event) {
+        const targetSet = this.activeTab === 'unwatched' ? this.selectedGamesForUnwatched : this.selectedGamesForWatched;
+        if (event.target.checked) {
+          targetSet.add(gameId);
+        } else {
+          targetSet.delete(gameId);
+        }
+      },
+      confirmWatched() {
+        const userId = this.$store.state.user.id;
+        Array.from(this.selectedGamesForUnwatched).forEach(gameId => {
+          WatchedGamesService.addGameToWatchedList(userId, gameId)
+            .then(() => {
+              const gameIndex = this.unwatchedGames.findIndex(game => game.id === gameId);
+              if (gameIndex !== -1) {
+                const [game] = this.unwatchedGames.splice(gameIndex, 1);
+                this.watchedGames.push(game);
+              }
+            })
+            .catch(error => {
+              console.error('Error marking game as watched:', error);
+            });
+        });
+        this.selectedGamesForUnwatched.clear(); 
+        this.showCheckboxesUnwatched = false;
+      },
+      confirmUnwatched() {
+        const userId = this.$store.state.user.id;
+        Array.from(this.selectedGamesForWatched).forEach(gameId => {
+          WatchedGamesService.removeGameFromWatchedList(userId, gameId)
+            .then(() => {
+              const gameIndex = this.watchedGames.findIndex(game => game.id === gameId);
+              if (gameIndex !== -1) {
+                const [game] = this.watchedGames.splice(gameIndex, 1);
+                this.unwatchedGames.push(game);
+              }
+            })
+            .catch(error => {
+              console.error('Error marking game as unwatched:', error);
+            });
+        });
+        this.selectedGamesForWatched.clear();
+        this.showCheckboxesWatched = false;
+      },
       fetchWatchedGames() {
         const userId = this.$store.state.user.id;
         WatchedGamesService.getWatchedGames(userId)
