@@ -14,6 +14,4 @@ public interface UserLadderEntryDao {
     UserLadderEntry getUserLadderEntry(int userId, int teamId);
 
     List<UserLadderEntry> getAllUserLadderEntries(int userId);
-
-    List<UserLadderEntry> findMostRecentLadderEntryForEachTeam(int userId);
 }

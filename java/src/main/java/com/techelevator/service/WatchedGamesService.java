@@ -1,6 +1,7 @@
 package com.techelevator.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import com.techelevator.model.UserLadderEntry;
 import com.techelevator.dao.JdbcWatchedGamesDao;
 import com.techelevator.dao.JdbcUserLadderEntryDao;
 
+@Service
 public class WatchedGamesService {
 
     private final JdbcWatchedGamesDao watchedGamesDao;

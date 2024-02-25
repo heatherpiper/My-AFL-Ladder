@@ -40,13 +40,18 @@ CREATE TABLE teams (
 );
 
 CREATE TABLE user_ladder (
-    user_ladder_id SERIAL PRIMARY KEY,
     user_id INT,
     team_id INT,
     points INT,
-    percentage INT,
+    percentage DOUBLE PRECISION,
     position INT,
     team_name VARCHAR(255),
+    wins INT,
+    losses INT,
+    draws INT,
+    points_for INT,
+    points_against INT,
+    PRIMARY KEY (user_id, team_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (team_id) REFERENCES teams(team_id),
     FOREIGN KEY (team_name) REFERENCES teams(name)

@@ -21,7 +21,7 @@ public class LadderController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<List<UserLadderEntry>> getMostRecentLadderEntriesByTeam(@PathVariable("userId") int userId) {
+    public ResponseEntity<List<UserLadderEntry>> getMostRecentLadderEntryForEachTeam(@PathVariable("userId") int userId) {
         List<UserLadderEntry> userLadderEntries = userLadderEntryDao.findMostRecentLadderEntryForEachTeam(userId);
         return ResponseEntity.ok(userLadderEntries);
     }
