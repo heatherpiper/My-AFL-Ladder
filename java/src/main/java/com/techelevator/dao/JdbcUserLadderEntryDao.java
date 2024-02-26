@@ -1,7 +1,6 @@
 package com.techelevator.dao;
 
 import com.techelevator.model.UserLadderEntry;
-import org.springframework.data.relational.core.sql.SQL;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;

@@ -11,7 +11,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(teamLadder, index) in teamLadder" :key="teamLadder.id">
+        <tr v-for="(teamLadder, index) in teamLadder" :key="teamLadder.teamId">
           <td>{{ index + 1 }}</td>
           <td>{{ teamLadder.name }}</td>
           <td>{{ teamLadder.percentage }}</td>
@@ -30,13 +30,24 @@ export default {
   props: ['userId'],
   data() {
     return {
-      teamLadder: []
-    }
+      teamLadder: [],
+      error: null,
+    };
   },
   created() {
-    LadderService.getLadder()
-      .then(response => this.teamLadder = response.data)
-      .catch(error => console.error('Error: ', error));
+    this.fetchLadder();
+  },
+  methods: {
+    fetchLadder() {
+      LadderService.getLadder(this.userId)
+        .then(response => {
+          this.teamLadder = response.data;
+        })
+        .catch(error => {
+          this.error = error;
+          console.error('Error fetching ladder data:', error);
+        });
+    }
   }
 }
 </script>

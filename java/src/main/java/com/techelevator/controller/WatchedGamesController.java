@@ -39,7 +39,7 @@ public class WatchedGamesController {
         watchedGamesDao.removeWatchedGame(userId, gameId);
     }
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<Game>> getWatchedGames(@PathVariable("userId") int userId) {
         List<Game> games = watchedGamesDao.findWatchedGames(userId);
         if (games.isEmpty()) {

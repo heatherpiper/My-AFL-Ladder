@@ -91,64 +91,64 @@ export default {
       this.fetchUnwatchedGames();
       this.fetchWatchedGames();
     },
-      fetchWatchedGames() {
-        const userId = this.$store.state.user.id;
-        WatchedGamesService.getWatchedGames(userId)
-          .then(response => {
-            this.watchedGames = response.data;
-          })
-          .catch(error => {
-            console.error('Error fetching watched games:', error);
-          });
-      },
-      fetchUnwatchedGames() {
-        const userId = this.$store.state.user.id;
-        WatchedGamesService.getUnwatchedGames(userId)
-          .then(response => {
-            this.unwatchedGames = response.data;
-          })
-          .catch(error => {
-            console.error('Error fetching unwatched games:', error);
-          });
-      },
-      markAsWatched(gameId, event) {
-        const userId = this.$store.state.user.id;
-        if (userId) {
-          if (event.target.checked) {
-            WatchedGamesService.addGameToWatchedList(userId, gameId)
-              .then(() => {
-                console.log('Game marked as watched');
-                const gameIndex = this.unwatchedGames.findIndex(game => game.id === gameId);
-                if (gameIndex !== -1) {
-                  const [game] = this.unwatchedGames.splice(gameIndex, 1);
-                  this.watchedGames.push(game);
-                }
-              })
-              .catch(error => {
-                console.error('Error marking game as watched:', error);
-              });
-          } else {
-            WatchedGamesService.removeGameFromWatchedList(userId, gameId)
-              .then(() => {
-                console.log('Game marked as unwatched');
-                const gameIndex = this.watchedGames.findIndex(game => game.id === gameId);
-                if (gameIndex !== -1) {
-                  const [game] = this.watchedGames.splice(gameIndex, 1);
-                  this.unwatchedGames.push(game);
-                }
-              })
-              .catch(error => {
-                console.error('Error marking game as unwatched:', error);
-              });
-          }
-        } else {
-          console.error('User ID is undefined.');
-        }
-      }
+    fetchWatchedGames() {
+      const userId = this.$store.state.user.id;
+      WatchedGamesService.getWatchedGames(userId)
+        .then(response => {
+          this.watchedGames = response.data;
+        })
+        .catch(error => {
+          console.error('Error fetching watched games:', error);
+        });
     },
-    mounted() {
-        this.fetchWatchedGames();
-        this.fetchUnwatchedGames();
+    fetchUnwatchedGames() {
+      const userId = this.$store.state.user.id;
+      WatchedGamesService.getUnwatchedGames(userId)
+        .then(response => {
+          this.unwatchedGames = response.data;
+        })
+        .catch(error => {
+          console.error('Error fetching unwatched games:', error);
+        });
+    },
+    markAsWatched(gameId, event) {
+      const userId = this.$store.state.user.id;
+      if (userId) {
+        if (event.target.checked) {
+          WatchedGamesService.addGameToWatchedList(userId, gameId)
+            .then(() => {
+              console.log('Game marked as watched');
+              const gameIndex = this.unwatchedGames.findIndex(game => game.id === gameId);
+              if (gameIndex !== -1) {
+                const [game] = this.unwatchedGames.splice(gameIndex, 1);
+                this.watchedGames.push(game);
+              }
+            })
+            .catch(error => {
+              console.error('Error marking game as watched:', error);
+            });
+        } else {
+          WatchedGamesService.removeGameFromWatchedList(userId, gameId)
+            .then(() => {
+              console.log('Game marked as unwatched');
+              const gameIndex = this.watchedGames.findIndex(game => game.id === gameId);
+              if (gameIndex !== -1) {
+                const [game] = this.watchedGames.splice(gameIndex, 1);
+                this.unwatchedGames.push(game);
+              }
+            })
+            .catch(error => {
+              console.error('Error marking game as unwatched:', error);
+            });
+        }
+      } else {
+        console.error('User ID is undefined.');
+      }
+    }
+  },
+  mounted() {
+      this.fetchWatchedGames();
+      this.fetchUnwatchedGames();
     }
   };
 </script>
