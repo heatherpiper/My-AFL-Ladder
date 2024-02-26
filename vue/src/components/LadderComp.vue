@@ -11,11 +11,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(teamLadder, index) in teamLadder" :key="teamLadder.teamId">
+        <tr v-for="(ladderEntry, index) in teamLadder" :key="ladderEntry.teamId">
           <td>{{ index + 1 }}</td>
-          <td>{{ teamLadder.name }}</td>
-          <td>{{ teamLadder.percentage }}</td>
-          <td>{{ teamLadder.points }}</td>
+          <td>{{ ladderEntry.teamName }}</td>
+          <td>{{ ladderEntry.percentage }}</td>
+          <td>{{ ladderEntry.points }}</td>
         </tr>
       </tbody>
     </table>

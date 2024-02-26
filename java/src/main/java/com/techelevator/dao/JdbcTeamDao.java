@@ -40,6 +40,16 @@ public class JdbcTeamDao implements TeamDao {
     }
 
     @Override
+    public String findTeamNameById(int teamId) {
+        String sql = "SELECT name FROM teams WHERE team_id = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, new Object[]{teamId}, String.class);
+        } catch (EmptyResultDataAccessException e) {
+            throw new DaoException("Error Accessing data");
+        }
+    }
+
+    @Override
     public List<Team> findAllTeams() {
         String sql = "SELECT team_id, name FROM teams";
         return jdbcTemplate.query(sql, (rs, rowNum) -> {

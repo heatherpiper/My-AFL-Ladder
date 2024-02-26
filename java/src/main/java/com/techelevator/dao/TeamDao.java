@@ -10,5 +10,7 @@ public interface TeamDao {
 
     int findTeamIdByName(String name);
 
+    String findTeamNameById(int teamId);
+
     List<Team> findAllTeams();
 }
