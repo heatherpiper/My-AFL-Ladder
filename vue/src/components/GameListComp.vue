@@ -70,6 +70,8 @@ export default {
         serviceMethod(this.$store.state.user.id, gameId)
           .then(() => {
             this.moveGameBetweenLists(gameId, operation);
+            console.log('Emitting gameStatusChanged event for gameId:', gameId);
+            this.$emit('gameStatusChanged', { gameId: gameId, operation: operation });
           })
           .catch(error => {
             console.error(`Error marking game as ${operation === 'add' ? 'watched' : 'unwatched'}:`, error);

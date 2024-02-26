@@ -4,8 +4,8 @@
       <h2>My AFL Ladder</h2>
     </div>
     <div class="home-container">
-      <GameListComp class="half-width"/>
-      <LadderComp :userId="userId" class="half-width"/>
+      <GameListComp @gameStatusChanged="handleGameStatusChanged" class="half-width"/>
+      <LadderComp :userId="userId" ref="ladderComponent" class="half-width"/>
     </div>
   </div>
 </template>
@@ -28,6 +28,16 @@ export default {
   data() {
     return {
       teamLadder: []
+    }
+  },
+  methods: {
+    handleGameStatusChanged() {
+      console.log(this.$refs);
+      if (this.$refs.ladderComponent) {
+        this.$refs.ladderComponent.fetchLadder();
+      } else {
+        console.log('Ladder component is not accessible.');
+      }
     }
   }
 };

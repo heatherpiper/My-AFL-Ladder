@@ -35,7 +35,7 @@ public class WatchedGamesService {
     public void calculatePosition(int userId) {
         List<UserLadderEntry> entries = userLadderEntryDao.getAllUserLadderEntries(userId);
 
-        Collections.sort(entries, Comparator.comparing(UserLadderEntry::getPoints).thenComparing(UserLadderEntry::getPercentage).reversed());
+        entries.sort(Comparator.comparing(UserLadderEntry::getPoints).thenComparing(UserLadderEntry::getPercentage).reversed());
 
         for (int i = 0; i < entries.size(); i++) {
             UserLadderEntry entry = entries.get(i);
@@ -43,6 +43,27 @@ public class WatchedGamesService {
             userLadderEntryDao.updateUserLadderEntry(entry);
         }
 
+    }
+
+    @Transactional
+    public void markGameAsUnwatchedAndUpdateLadder(int userId, int gameId) {
+        watchedGamesDao.removeWatchedGame(userId, gameId);
+
+        Game game = gameDao.findGameById(gameId);
+
+        String winner = game.getWinner();
+        boolean isDraw = winner.equals("draw");
+        int hteamPointsReversed = isDraw ? -2 : winner.equals(game.getHteam()) ? -4 : 0;
+        int ateamPointsReversed = isDraw ? -2 : winner.equals(game.getAteam()) ? -4 : 0;
+
+        // Reverse update ladder for home team
+        updateTeamLadder(userId, game.getHteam(), hteamPointsReversed, -game.getHscore(), -game.getAscore());
+
+        // Reverse update ladder for away team
+        updateTeamLadder(userId, game.getAteam(), ateamPointsReversed, -game.getAscore(), -game.getHscore());
+
+        // Recalculate position
+        calculatePosition(userId);
     }
 
     @Transactional
@@ -76,6 +97,7 @@ public class WatchedGamesService {
         entry.setPoints(entry.getPoints() + points);
         entry.setPointsFor(entry.getPointsFor() + pointsForThisGame);
         entry.setPointsAgainst(entry.getPointsAgainst() + pointsAgainstThisGame);
+
         // Calculate and set the new percentage
         entry.setPercentage(calculatePercentage(entry.getPointsFor(), entry.getPointsAgainst()));
 

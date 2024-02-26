@@ -41,6 +41,7 @@ export default {
     fetchLadder() {
       LadderService.getLadder(this.userId)
         .then(response => {
+          console.log('Fetched ladder data:', response.data)
           this.teamLadder = response.data;
         })
         .catch(error => {

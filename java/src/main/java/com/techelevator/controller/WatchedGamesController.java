@@ -3,6 +3,7 @@ package com.techelevator.controller;
 import com.techelevator.dao.WatchedGamesDao;
 import com.techelevator.exception.DaoException;
 import com.techelevator.model.Game;
+import com.techelevator.service.WatchedGamesService;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,21 +23,24 @@ import java.util.List;
 public class WatchedGamesController {
 
     private final WatchedGamesDao watchedGamesDao;
+    private final WatchedGamesService watchedGamesService;
 
-    public WatchedGamesController(WatchedGamesDao watchedGamesDao) {
+    public WatchedGamesController(WatchedGamesDao watchedGamesDao, WatchedGamesService watchedGamesService) {
         this.watchedGamesDao = watchedGamesDao;
+        this.watchedGamesService = watchedGamesService;
+
     }
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/watch/{gameId}")
     public void addGameToWatchedList(@PathVariable("userId") int userId, @PathVariable("gameId") int gameId) {
-        watchedGamesDao.addWatchedGame(userId, gameId);
+        watchedGamesService.markGameAsWatchedAndUpdateLadder(userId, gameId);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/unwatch/{gameId}")
     public void removeGameFromWatchedList(@PathVariable("userId") int userId, @PathVariable("gameId") int gameId) {
-        watchedGamesDao.removeWatchedGame(userId, gameId);
+        watchedGamesService.markGameAsUnwatchedAndUpdateLadder(userId, gameId);
     }
 
     @GetMapping
