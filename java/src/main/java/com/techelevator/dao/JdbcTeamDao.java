@@ -31,7 +31,7 @@ public class JdbcTeamDao implements TeamDao {
 
     @Override
     public int findTeamIdByName(String name) {
-        String sql = "SELECT id FROM teams WHERE name = ?";
+        String sql = "SELECT team_id FROM teams WHERE name = ?";
         try {
             return jdbcTemplate.queryForObject(sql, new Object[]{name}, Integer.class);
         } catch (EmptyResultDataAccessException e) {
