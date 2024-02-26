@@ -24,7 +24,8 @@ public class WatchedGamesService {
     private final JdbcTeamDao teamDao;
 
     @Autowired
-    public WatchedGamesService(JdbcWatchedGamesDao watchedGamesDao, JdbcUserLadderEntryDao userLadderEntryDao, JdbcGameDao gameDao, JdbcTeamDao teamDao) {
+    public WatchedGamesService(JdbcWatchedGamesDao watchedGamesDao,
+                               JdbcUserLadderEntryDao userLadderEntryDao, JdbcGameDao gameDao, JdbcTeamDao teamDao) {
         this.watchedGamesDao = watchedGamesDao;
         this.userLadderEntryDao = userLadderEntryDao;
         this.gameDao = gameDao;
@@ -45,45 +46,52 @@ public class WatchedGamesService {
     }
 
     @Transactional
-    public void markGameAsWatched(int userId, int gameId) {
+    public void markGameAsWatchedAndUpdateLadder(int userId, int gameId) {
         watchedGamesDao.addWatchedGame(userId, gameId);
 
         Game game = gameDao.findGameById(gameId);
 
-        // Determine points earned by each team
-        int hteamPoints;
-        int ateamPoints;
-        if (game.getHscore() > game.getAscore()) {
-            hteamPoints = 4;
-            ateamPoints = 0;
-        } else if (game.getHscore() < game.getAscore()) {
-            hteamPoints = 0;
-            ateamPoints = 4;
-        } else {
-            hteamPoints = 2;
-            ateamPoints = 2;
-        }
-        
-        int hteamId = teamDao.findTeamIdByName(game.getHteam());
-        int ateamId = teamDao.findTeamIdByName(game.getAteam());
+        String winner = game.getWinner();
+        boolean isDraw = winner.equals("draw");
+        int hteamPoints = isDraw ? 2 : winner.equals(game.getHteam()) ? 4 : 0;
+        int ateamPoints = isDraw ? 2 : winner.equals(game.getAteam()) ? 4 : 0;
 
-        // Create UserLadderEntry objects for each team
-        UserLadderEntry hteamEntry = new UserLadderEntry();
-        hteamEntry.setUserId(userId);
-        hteamEntry.setTeamId(hteamId);
-        hteamEntry.setPoints(hteamPoints);
+        // Update ladder for home team
+        updateTeamLadder(userId, game.getHteam(), hteamPoints, game.getHscore(), game.getAscore());
 
-        UserLadderEntry ateamEntry = new UserLadderEntry();
-        ateamEntry.setUserId(userId);
-        ateamEntry.setTeamId(ateamId);
-        ateamEntry.setPoints(ateamPoints);
-
-        // Update user_ladder table in the database
-        userLadderEntryDao.updateUserLadderEntry(ateamEntry);
-        userLadderEntryDao.updateUserLadderEntry(hteamEntry);
+        // Update ladder for away team
+        updateTeamLadder(userId, game.getAteam(), ateamPoints, game.getAscore(), game.getHscore());
 
         // Recalculate position
         calculatePosition(userId);
     }
-    
+
+    private void updateTeamLadder(int userId, String teamName, int points, int pointsForThisGame,
+                                  int pointsAgainstThisGame) {
+        int teamId = teamDao.findTeamIdByName(teamName);
+        UserLadderEntry entry = userLadderEntryDao.getUserLadderEntry(userId, teamId);
+
+
+        // Update the ladder entry based on points scored in game
+        entry.setPoints(entry.getPoints() + points);
+        entry.setPointsFor(entry.getPointsFor() + pointsForThisGame);
+        entry.setPointsAgainst(entry.getPointsAgainst() + pointsAgainstThisGame);
+        // Calculate and set the new percentage
+        entry.setPercentage(calculatePercentage(entry.getPointsFor(), entry.getPointsAgainst()));
+
+        // Update wins, losses, draws based on the points awarded
+        if (points == 4) {
+            entry.setWins(entry.getWins() + 1);
+        } else if (points == 0) {
+            entry.setLosses(entry.getLosses() + 1);
+        } else if (points == 2) {
+            entry.setDraws(entry.getDraws() + 1);
+        }
+
+        userLadderEntryDao.updateUserLadderEntry(entry);
+    }
+
+    private double calculatePercentage(int pointsFor, int pointsAgainst) {
+        return pointsAgainst == 0 ? 100.0 : ((double) pointsFor / pointsAgainst) * 100;
+    }
 }
