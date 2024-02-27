@@ -49,19 +49,14 @@
 body {
   background: radial-gradient(circle at center, var(--afl-500) 0%, var(--afl-700) 60%, var(--afl-900) 100%);
   background-attachment: fixed;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 h1 {
-  color: var(--afl-100);
-  font-family: 'Protest Strike', sans-serif;
-  font-size: xx-large;
-}
-
-h2 {
-  color: var(--afl-100);
-  font-family: 'Protest Strike', sans-serif;
-  font-size: x-large;
+  font-family: 'League Gothic', sans-serif;
+  font-size: xxx-large;
+  color: var(--afl-200);
+  text-shadow: 1px 1px 2px var(--afl-900);
 }
 
 </style>

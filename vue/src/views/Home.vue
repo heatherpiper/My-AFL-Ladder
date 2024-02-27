@@ -1,7 +1,9 @@
 <template>
   <div class="home">
     <div class="page-title">
-      <h2>My AFL Ladder</h2>
+      <h2>
+        LATER LADDER
+      </h2>
     </div>
     <div class="home-container">
       <GameListComp @gameStatusChanged="handleGameStatusChanged" class="half-width"/>
@@ -51,5 +53,14 @@ export default {
 
 .half-width {
   width: 50%;
+}
+
+h2 {
+  color: var(--afl-200);
+  text-shadow: 1px 1px 2px var(--afl-900);
+  font-family: 'League Gothic', sans-serif;
+  font-size: xx-large;
+  line-height: 0.2;
+  padding-left: 16px;
 }
 </style>

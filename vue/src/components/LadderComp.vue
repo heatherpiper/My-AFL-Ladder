@@ -1,24 +1,42 @@
 <template>
   <div class="ladder">
-    <h1>Current Ladder</h1>
-    <table>
-      <thead>
-        <tr>
-          <th>Rank</th>
-          <th>Team</th>
-          <th>Percentage</th>
-          <th>Points</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(ladderEntry, index) in teamLadder" :key="ladderEntry.teamId">
-          <td>{{ index + 1 }}</td>
-          <td>{{ ladderEntry.teamName }}</td>
-          <td>{{ ladderEntry.percentage }}</td>
-          <td>{{ ladderEntry.points }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <h1>LADDER</h1>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>
+              <div class="header-rank"></div>
+            </th>
+            <th>
+              <div class="header-team">Team</div>
+            </th>
+            <th>
+              <div class="header-percentage">%</div>
+            </th>
+            <th>
+              <div class="header-points">Points</div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(ladderEntry, index) in teamLadder" :key="ladderEntry.teamId">
+            <td>
+              <div class="team-rank">{{ index + 1 }}</div>
+            </td>
+            <td>
+              <div class="team-name">{{ ladderEntry.teamName }}</div>
+            </td>
+            <td>
+              <div class="percentage">{{ ladderEntry.percentage }}</div>
+            </td>
+            <td>
+              <div class="points">{{ ladderEntry.points }}</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -53,6 +71,74 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+
+h1 {
+  padding-left: 10px;
+}
+
+.table-container {
+  background-color: var(--afl-800);
+  margin: 10px;
+  border-radius: 8px;
+  padding: 10px;
+  overflow: hidden;
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+}
+
+thead th {
+  color: var(--afl-200);
+  text-align: left;
+  background-color: var(--afl-800);
+  padding: 0.8rem;
+  text-transform: uppercase;
+}
+
+tbody tr {
+  margin: 0;
+  padding: 0;
+  background-color: var(--afl-700);
+  color: var(--afl-200);
+  line-height: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+}
+
+td {
+  padding: 1rem;
+}
+
+td:not(:last-child) {
+  border-right: none;
+}
+
+.team-rank{
+  font-weight: 900;
+  background-color: var(--afl-500);
+  border-radius: 8px;
+  padding: 0.2rem;
+  text-align: center;
+  margin: 2px;
+}
+
+.team-name {
+  font-weight: 900;
+}
+
+.percentage {
+  text-align: left;
+}
+
+.points {
+  font-weight: 900;
+  text-align: center;
+}
+
 </style>
   

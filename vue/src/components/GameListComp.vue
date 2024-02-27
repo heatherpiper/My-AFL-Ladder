@@ -1,40 +1,41 @@
 <template>
   <div class="game-list">
-    <h1>Games</h1>
-    <div class="tabs">
-      <button :class="{ active: activeTab === 'unwatched' }" @click="setActiveTab('unwatched')">Unwatched</button>
-      <button :class="{ active: activeTab === 'watched' }" @click="setActiveTab('watched')">Watched</button>
-    </div>
-    <div v-if="activeTab">
-      <div @click="toggleCheckboxes" class="mark-as-toggle">
-        Mark games as {{ activeTab === 'unwatched' ? 'watched' : 'unwatched' }}
+    <h1>GAMES</h1>
+    <div class="tabbed-content">
+      <div class="tabs">
+        <button :class="{ active: activeTab === 'unwatched' }" @click="setActiveTab('unwatched')">Unwatched</button>
+        <button :class="{ active: activeTab === 'watched' }" @click="setActiveTab('watched')">Watched</button>
       </div>
-
-      <div class="round-selection">
-        <select v-model="currentRound">
-          <option disabled value="">Select Round</option>
-          <option v-for="round in rounds" :key="round" :value="round">
-            Round {{ round }}
-          </option>
-        </select>
-      </div>
-
-      <div class="games-container">
-        <div class="game-card" v-for="game in currentRoundGames" :key="game.id">
-          <div class="vs-container">
-            <span class="vs-text">vs</span>
-            <div class="round">Round {{ game.round }}</div>
-            <div class="team-name">{{ game.hteam }}</div>
-            <div class="team-name">{{ game.ateam }}</div>
-          </div>
-          <div v-if="showCheckboxes" class="game-checkbox">
-            <input type="checkbox" :id="`${activeTab}-${game.id}`" @change="selectGame(game.id, $event)">
-            <label :for="`${activeTab}-${game.id}`">{{ activeTab === 'unwatched' ? 'Watched' : 'Unwatched' }}</label>
+      <div v-if="activeTab">
+        <div @click="toggleCheckboxes" class="mark-as-toggle">
+          Mark games as {{ activeTab === 'unwatched' ? 'watched' : 'unwatched' }}
         </div>
-      </div>
 
+        <div class="round-selection">
+          <select v-model="currentRound">
+            <option disabled value="">Select Round</option>
+            <option v-for="round in rounds" :key="round" :value="round">
+              Round {{ round }}
+            </option>
+          </select>
+        </div>
+
+        <div class="games-container">
+          <div class="game-card" v-for="game in currentRoundGames" :key="game.id">
+            <div class="vs-container">
+              <span class="vs-text">vs</span>
+              <div class="team-name">{{ game.hteam }}</div>
+              <div class="team-name">{{ game.ateam }}</div>
+            </div>
+            <div v-if="showCheckboxes" class="game-checkbox">
+              <input type="checkbox" :id="`${activeTab}-${game.id}`" @change="selectGame(game.id, $event)">
+              <label :for="`${activeTab}-${game.id}`">{{ activeTab === 'unwatched' ? 'Watched' : 'Unwatched' }}</label>
+          </div>
+        </div>
+
+        </div>
+        <button v-if="showCheckboxes" @click="confirmSelection" class="confirm-button">Confirm</button>
       </div>
-      <button v-if="showCheckboxes" @click="confirmSelection">Confirm</button>
     </div>
   </div>
 </template>
@@ -197,25 +198,40 @@ export default {
   color: var(--afl-900);
 }
 
-.tabs {
-  margin-bottom: 20px;
-  display: flex;
+.tabbed-content {
+  background-color: var(--afl-800);
+  padding: 10px;
+  border-radius: 8px;
 }
 
 button {
-  background-color: var(--afl-200); /* Lighter theme background */
-  color: var(--afl-600); /* Accent primary for text */
-  border: 1px solid var(--afl-600); /* Border to match accent primary */
+  background-color: var(--afl-600);
+  color: var(--afl-200);
+  border: 1px solid var(--afl-900);
   padding: 10px 20px;
   margin: 0 8px;
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease;
   border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: medium;
 }
 
 button:hover, button.active {
   background-color: var(--afl-500);
   color: var(--afl-100);
+}
+
+.tabs button {
+  border-radius: 6px 6px 0 0;
+}
+
+select {
+  margin-left: 10px;
+  padding: 10px;
+  border: 1px solid var(--afl-900);
+  border-radius: 6px;
+  font-size: medium;
 }
 
 .games-container {
@@ -224,17 +240,15 @@ button:hover, button.active {
   justify-content: center;
   grid-gap: 16px; 
   max-height: calc(3 * 120px); 
-  overflow-y: auto; 
   padding: 8px;
 }
 
 .game-card {
-  background-color: var(--afl-200);
-  border: 1px solid var(--afl-400);
+  background-color: var(--afl-600);
   border-radius: 8px;
   padding: 16px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  color: var(--afl-900);
+  color: var(--afl-200);
 }
 
 .vs-container {
@@ -251,13 +265,14 @@ button:hover, button.active {
   top: 50%;
   transform: translateY(-50%);
   font-weight: bold;
-  color: var(--afl-600);
+  color: var(--afl-400);
 }
 
 .team-name {
   width: 100%;
   text-align: left;
   margin: 4px 0;
+  font-weight: 900;
 }
 
 .game-checkbox {
