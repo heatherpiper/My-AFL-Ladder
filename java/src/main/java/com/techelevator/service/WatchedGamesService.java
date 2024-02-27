@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Collections;
 import java.util.Comparator;
@@ -126,6 +128,12 @@ public class WatchedGamesService {
     }
 
     private double calculatePercentage(int pointsFor, int pointsAgainst) {
-        return pointsAgainst == 0 ? 100.0 : ((double) pointsFor / pointsAgainst) * 100;
+        if (pointsAgainst == 0) {
+            return 100.0;
+        } else {
+            double percentage = ((double) pointsFor / pointsAgainst) * 100;
+            BigDecimal bd = new BigDecimal(percentage).setScale(2, RoundingMode.HALF_UP);
+            return bd.doubleValue();
+        }
     }
 }
