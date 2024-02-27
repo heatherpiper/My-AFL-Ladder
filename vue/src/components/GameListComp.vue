@@ -9,8 +9,18 @@
       <div @click="toggleCheckboxes" class="mark-as-toggle">
         Mark games as {{ activeTab === 'unwatched' ? 'watched' : 'unwatched' }}
       </div>
+
+      <div class="round-selection">
+        <select v-model="currentRound">
+          <option disabled value="">Select Round</option>
+          <option v-for="round in rounds" :key="round" :value="round">
+            Round {{ round }}
+          </option>
+        </select>
+      </div>
+
       <div class="games-container">
-        <div class="game-card" v-for="game in currentGames" :key="game.id">
+        <div class="game-card" v-for="game in currentRoundGames" :key="game.id">
           <div class="vs-container">
             <span class="vs-text">vs</span>
             <div class="round">Round {{ game.round }}</div>
@@ -42,14 +52,34 @@ export default {
       activeTab: 'unwatched',
       showCheckboxes: false,
       selectedGames: new Set(),
+      currentRound: '',
     };
   },
   computed: {
+    rounds() {
+      const rounds = this.currentGames.map(game => game.round);
+      return Array.from(new Set(rounds)).sort((a, b) => a - b); // Remove duplicate round numbers and sort them ascending
+    },
+    gamesByRound() {
+      return this.rounds.reduce((round_object, round) => {
+        round_object[round] = this.currentGames.filter(game => game.round === round); // Create an object with round numbers as keys and games for each round as values
+        return round_object;
+      }, {});
+    },
+    currentRoundGames() {
+      if(!this.currentRound) {
+        return []; // Return empty array if currentRound is not set
+      }
+      return this.gamesByRound[this.currentRound] || []; // Return games for the current round (or an empty array)
+    },
     currentGames() {
       return this.activeTab === 'unwatched' ? this.unwatchedGames : this.watchedGames;
     }
   },
   methods: {
+    setActiveRound(round) {
+      this.currentRound = round;
+    },
     setActiveTab(tab) {
       this.activeTab = tab;
       this.showCheckboxes = false; // Reset checkboxes visibility when tab changes
@@ -150,8 +180,12 @@ export default {
     }
   },
   mounted() {
-      this.fetchWatchedGames();
-      this.fetchUnwatchedGames();
+      this.fetchGames();
+      this.$nextTick(() => {
+        if (this.rounds.length > 0) {
+          this.setActiveRound(this.rounds[0]);
+        }
+      });
     }
   };
 </script>
