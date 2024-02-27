@@ -51,9 +51,9 @@ public class WatchedGamesService {
         Game game = gameDao.findGameById(gameId);
 
         String winner = game.getWinner();
-        boolean isDraw = winner.equals("draw");
-        int hteamPointsReversed = isDraw ? -2 : winner.equals(game.getHteam()) ? -4 : 0;
-        int ateamPointsReversed = isDraw ? -2 : winner.equals(game.getAteam()) ? -4 : 0;
+        boolean isDraw = game.getWinner() == null;
+        int hteamPointsReversed = isDraw ? -2 : game.getWinner().equals(game.getHteam()) ? -4 : 0;
+        int ateamPointsReversed = isDraw ? -2 : game.getWinner().equals(game.getAteam()) ? -4 : 0;
 
         // Reverse update ladder for home team
         updateTeamLadder(userId, game.getHteam(), hteamPointsReversed, -game.getHscore(), -game.getAscore());
@@ -72,9 +72,9 @@ public class WatchedGamesService {
         Game game = gameDao.findGameById(gameId);
 
         String winner = game.getWinner();
-        boolean isDraw = winner.equals("draw");
-        int hteamPoints = isDraw ? 2 : winner.equals(game.getHteam()) ? 4 : 0;
-        int ateamPoints = isDraw ? 2 : winner.equals(game.getAteam()) ? 4 : 0;
+        boolean isDraw = game.getWinner() == null;
+        int hteamPoints = isDraw ? 2 : game.getWinner().equals(game.getHteam()) ? 4 : 0;
+        int ateamPoints = isDraw ? 2 : game.getWinner().equals(game.getAteam()) ? 4 : 0;
 
         // Update ladder for home team
         updateTeamLadder(userId, game.getHteam(), hteamPoints, game.getHscore(), game.getAscore());
