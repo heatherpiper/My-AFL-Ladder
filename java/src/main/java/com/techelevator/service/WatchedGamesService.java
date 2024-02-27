@@ -32,17 +32,16 @@ public class WatchedGamesService {
         this.teamDao = teamDao;
     }
 
-    public void calculatePosition(int userId) {
-        List<UserLadderEntry> entries = userLadderEntryDao.getAllUserLadderEntries(userId);
-
-        entries.sort(Comparator.comparing(UserLadderEntry::getPoints).thenComparing(UserLadderEntry::getPercentage).reversed());
-
-        for (int i = 0; i < entries.size(); i++) {
-            UserLadderEntry entry = entries.get(i);
-            entry.setPosition(i + 1);
-            userLadderEntryDao.updateUserLadderEntry(entry);
+    public void markGamesAsWatchedSequentially(int userId, List<Integer> gameIds) {
+        for (Integer gameId : gameIds) {
+            markGameAsWatchedAndUpdateLadder(userId, gameId);
         }
+    }
 
+    public void markGamesAsUnwatchedSequentially(int userId, List<Integer> gameIds) {
+        for (Integer gameId : gameIds) {
+            markGameAsUnwatchedAndUpdateLadder(userId, gameId);
+        }
     }
 
     @Transactional
@@ -111,6 +110,19 @@ public class WatchedGamesService {
         }
 
         userLadderEntryDao.updateUserLadderEntry(entry);
+    }
+
+    public void calculatePosition(int userId) {
+        List<UserLadderEntry> entries = userLadderEntryDao.getAllUserLadderEntries(userId);
+
+        entries.sort(Comparator.comparing(UserLadderEntry::getPoints).thenComparing(UserLadderEntry::getPercentage).reversed());
+
+        for (int i = 0; i < entries.size(); i++) {
+            UserLadderEntry entry = entries.get(i);
+            entry.setPosition(i + 1);
+            userLadderEntryDao.updateUserLadderEntry(entry);
+        }
+
     }
 
     private double calculatePercentage(int pointsFor, int pointsAgainst) {

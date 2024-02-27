@@ -3,6 +3,7 @@ package com.techelevator.controller;
 import com.techelevator.dao.WatchedGamesDao;
 import com.techelevator.exception.DaoException;
 import com.techelevator.model.Game;
+import com.techelevator.model.GameWatchRequest;
 import com.techelevator.service.WatchedGamesService;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -28,19 +29,18 @@ public class WatchedGamesController {
     public WatchedGamesController(WatchedGamesDao watchedGamesDao, WatchedGamesService watchedGamesService) {
         this.watchedGamesDao = watchedGamesDao;
         this.watchedGamesService = watchedGamesService;
-
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/watch/{gameId}")
-    public void addGameToWatchedList(@PathVariable("userId") int userId, @PathVariable("gameId") int gameId) {
-        watchedGamesService.markGameAsWatchedAndUpdateLadder(userId, gameId);
+    @PostMapping("/watch")
+    public void addGamesToWatchedList(@PathVariable("userId") int userId, @RequestBody GameWatchRequest request) {
+        watchedGamesService.markGamesAsWatchedSequentially(userId, request.getGameIds());
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/unwatch/{gameId}")
-    public void removeGameFromWatchedList(@PathVariable("userId") int userId, @PathVariable("gameId") int gameId) {
-        watchedGamesService.markGameAsUnwatchedAndUpdateLadder(userId, gameId);
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/unwatch")
+    public void removeGamesFromWatchedList(@PathVariable("userId") int userId, @RequestBody GameWatchRequest request) {
+        watchedGamesService.markGamesAsUnwatchedSequentially(userId, request.getGameIds());
     }
 
     @GetMapping
@@ -59,18 +59,6 @@ public class WatchedGamesController {
             return ResponseEntity.ok().body(new ArrayList<>()); // return empty array if there are no unwatched games
         }
         return ResponseEntity.ok(games);
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/watch/all")
-    public void markAllGamesWatched(@PathVariable("userId") int userId) {
-        watchedGamesDao.markAllGamesWatched(userId);
-    }
-
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/unwatch/all")
-    public void markAllGamesUnwatched(@PathVariable("userId") int userId) {
-        watchedGamesDao.markAllGamesUnwatched(userId);
     }
 
     @ExceptionHandler({SQLException.class, DataAccessException.class})

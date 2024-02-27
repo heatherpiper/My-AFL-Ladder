@@ -21,7 +21,7 @@ public class UserService {
             defaultEntry.setUserId(userId);
             defaultEntry.setTeamId(teamId);
             defaultEntry.setPoints(0);
-            defaultEntry.setPercentage(0);
+            defaultEntry.setPercentage(100);
             defaultEntry.setPosition(0);
 
             String teamName = jdbcTeamDao.findTeamNameById(teamId);

@@ -13,6 +13,7 @@
         <div class="game-card" v-for="game in currentGames" :key="game.id">
           <div class="vs-container">
             <span class="vs-text">vs</span>
+            <div class="round">Round {{ game.round }}</div>
             <div class="team-name">{{ game.hteam }}</div>
             <div class="team-name">{{ game.ateam }}</div>
           </div>
@@ -66,7 +67,7 @@ export default {
     confirmSelection() {
       const operation = this.activeTab === 'unwatched' ? 'add' : 'remove';
       Array.from(this.selectedGames).forEach(gameId => {
-        const serviceMethod = operation === 'add' ? WatchedGamesService.addGameToWatchedList : WatchedGamesService.removeGameFromWatchedList;
+        const serviceMethod = operation === 'add' ? WatchedGamesService.addGamesToWatchedList : WatchedGamesService.removeGamesFromWatchedList;
         serviceMethod(this.$store.state.user.id, gameId)
           .then(() => {
             this.moveGameBetweenLists(gameId, operation);
@@ -117,7 +118,7 @@ export default {
       const userId = this.$store.state.user.id;
       if (userId) {
         if (event.target.checked) {
-          WatchedGamesService.addGameToWatchedList(userId, gameId)
+          WatchedGamesService.addGamesToWatchedList(userId, gameId)
             .then(() => {
               console.log('Game marked as watched');
               const gameIndex = this.unwatchedGames.findIndex(game => game.id === gameId);
@@ -130,7 +131,7 @@ export default {
               console.error('Error marking game as watched:', error);
             });
         } else {
-          WatchedGamesService.removeGameFromWatchedList(userId, gameId)
+          WatchedGamesService.removeGamesFromWatchedList(userId, gameId)
             .then(() => {
               console.log('Game marked as unwatched');
               const gameIndex = this.watchedGames.findIndex(game => game.id === gameId);
