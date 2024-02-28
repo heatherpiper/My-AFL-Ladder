@@ -74,59 +74,61 @@ export default {
 <style scoped>
 
 .register {
-    max-width: 400px;
-    margin: 40px auto; 
-    padding: 30px;
-    background-color: var(--afl-200);
-    border: 1px solid var(--afl-900);
-    border-radius: 12px; 
-    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+  max-width: 400px;
+  margin: 40px auto; 
+  padding: 30px;
+  background-color: var(--afl-200);
+  border: 1px solid var(--afl-900);
+  border-radius: 12px; 
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
 
 .register h1 {
-    color: var(--afl-600);
-    text-align: center; 
+  font-family: 'Inter', sans-serif;
+  color: var(--afl-600);
+  text-align: center;
+  font-size: xx-large;
 }
 
 .form-input-group {
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: center;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
 }
 
 input[type="text"],
 input[type="password"] {
-    width: calc(100% - 20px); 
-    padding: 10px;
-    background-color: #e1e6e9;
-    border: none;
-    border-radius: 6px; 
-    color: var(--afl-900); 
-    display: block;
-    margin: auto;
+  width: calc(100% - 20px); 
+  padding: 10px;
+  background-color: #e1e6e9;
+  border: none;
+  border-radius: 6px; 
+  color: var(--afl-900); 
+  display: block;
+  margin: auto;
 }
 
 button[type="submit"] {
-    width: 100%; 
-    padding: 10px;
-    background-color: var(--afl-500); 
-    border: none; 
-    border-radius: 6px; 
-    color: var(--afl-100); 
-    cursor: pointer;
-    display: block;
-    margin: 20px auto;
-    font-size: 16px;
+  width: 100%; 
+  padding: 10px;
+  background-color: var(--afl-500); 
+  border: none; 
+  border-radius: 6px; 
+  color: var(--afl-100); 
+  cursor: pointer;
+  display: block;
+  margin: 20px auto;
+  font-size: 16px;
 }
 
 button[type="submit"]:hover {
-    background-color: var(--afl-450);
+  background-color: var(--afl-450);
 }
 
 div[role="alert"] {
-    color: #ff6b6b;
-    margin-bottom: 15px;
-    text-align: center;
+  color: #ff6b6b;
+  margin-bottom: 15px;
+  text-align: center;
 }
 
 p {

@@ -192,6 +192,15 @@ export default {
 </script>
   
 <style scoped>
+
+h1 {
+  font-family: 'League Gothic', sans-serif;
+  font-size: xxx-large;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--afl-200);
+  text-shadow: 1px 1px 2px var(--afl-900);
+}
 .game-list {
   max-width: 100%;
   padding: 16px;
@@ -239,7 +248,6 @@ select {
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   justify-content: center;
   grid-gap: 16px; 
-  max-height: calc(3 * 120px); 
   padding: 8px;
 }
 

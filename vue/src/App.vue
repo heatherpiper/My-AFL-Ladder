@@ -1,8 +1,12 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link v-bind:to="{ name: 'home' }">Home</router-link>&nbsp;|&nbsp;
-      <router-link v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link>
+    <div id="nav" class="nav-bar">
+      <h1 class="page-title">Later Ladder</h1>
+      <div class="nav-links">
+        <router-link class="nav-link" v-bind:to="{ name: 'home' }">Home</router-link>
+        <div class="separator">&nbsp;|&nbsp;</div>
+        <router-link class="nav-link" v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link>
+      </div>
     </div>
     <router-view />
   </div>
@@ -16,8 +20,6 @@
 <style>
 
 :root {
-  --darker-blue: #00122b;
-  --dark-blue: #031745;
   --afl-900: #03061C; /* Background primary */
   --afl-800: #031745; /* Nav secondary */
   --afl-700: #01285E; /* Nav primary */
@@ -29,21 +31,6 @@
   --afl-300: #E8001B;
   --afl-200: #EDF4F7;
   --afl-100: #F2F4F7;
-
-  --color-orange-dark: rgb(228, 99, 0);
-  --color-orange: rgb(248, 137, 7);
-  --color-orange-light: rgb(255, 186, 71);
-  --color-yellow-dark: rgb(199, 141, 0);
-  --color-yellow: rgb(255, 189, 12);
-  --color-yellow-light: rgb(255 239 81);
-  --color-green-dark: rgb(0, 135, 0);
-  --color-green: rgb(22, 176, 25);
-  --color-green-light: rgb(104, 235, 99);
-  --color-purple-dark: rgb(99, 0, 189);
-  --color-purple: rgb(153 63 241);
-  --color-purple-light: rgb(207 113 255);
-  --color-teal: #00cdc2;
-
 }
 
 body {
@@ -52,11 +39,48 @@ body {
   font-family: 'Inter', sans-serif;
 }
 
-h1 {
+.nav-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--afl-800);
+  padding: 0.66rem 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: right;
+  margin-bottom: 20px;
+}
+
+.page-title {
   font-family: 'League Gothic', sans-serif;
-  font-size: xxx-large;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   color: var(--afl-200);
-  text-shadow: 1px 1px 2px var(--afl-900);
+  margin: 0;
+  padding: 0 10px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-link {
+  color: var(--afl-200);
+  text-decoration: none;
+  margin: 0 15px;
+  font-size: large;
+  text-transform: uppercase;
+  position: relative;
+}
+
+.nav-link:visited {
+  color: var(--afl-200);
+}
+
+.separator {
+  color: var(--afl-500);
 }
 
 </style>

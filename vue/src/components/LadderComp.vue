@@ -1,6 +1,6 @@
 <template>
   <div class="ladder">
-    <h1>LADDER</h1>
+    <h1>Ladder</h1>
     <div class="table-container">
       <table>
         <thead>
@@ -72,8 +72,13 @@ export default {
 </script>
 
 <style scoped>
-
 h1 {
+  font-family: 'League Gothic', sans-serif;
+  font-size: xxx-large;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--afl-200);
+  text-shadow: 1px 1px 2px var(--afl-900);
   padding-left: 10px;
 }
 
@@ -86,8 +91,7 @@ h1 {
 }
 
 table {
-  border-collapse: separate;
-  border-spacing: 0;
+  border-collapse: collapse;
   width: 100%;
 }
 
