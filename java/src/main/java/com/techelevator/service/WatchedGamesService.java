@@ -1,45 +1,71 @@
 package com.techelevator.service;
 
+import com.techelevator.dao.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Comparator;
 
 import com.techelevator.model.Game;
-import com.techelevator.dao.JdbcGameDao;
-import com.techelevator.dao.JdbcTeamDao;
 import com.techelevator.model.UserLadderEntry;
-import com.techelevator.dao.JdbcWatchedGamesDao;
-import com.techelevator.dao.JdbcUserLadderEntryDao;
 
 @Service
 public class WatchedGamesService {
 
     private final JdbcWatchedGamesDao watchedGamesDao;
     private final JdbcUserLadderEntryDao userLadderEntryDao;
+    private final JdbcUserDao userDao;
     private final JdbcGameDao gameDao;
     private final JdbcTeamDao teamDao;
 
     @Autowired
     public WatchedGamesService(JdbcWatchedGamesDao watchedGamesDao,
-                               JdbcUserLadderEntryDao userLadderEntryDao, JdbcGameDao gameDao, JdbcTeamDao teamDao) {
+                               JdbcUserLadderEntryDao userLadderEntryDao, JdbcUserDao userDao, JdbcGameDao gameDao, JdbcTeamDao teamDao) {
         this.watchedGamesDao = watchedGamesDao;
         this.userLadderEntryDao = userLadderEntryDao;
+        this.userDao = userDao;
         this.gameDao = gameDao;
         this.teamDao = teamDao;
     }
 
     public void markGamesAsWatchedSequentially(int userId, List<Integer> gameIds) {
+        // Validate user ID
+        if (userId <= 0 || !userDao.userExists(userId)) {
+            throw new IllegalArgumentException("User does not exist");
+        }
+        //Check for empty gameIds list
+        if (gameIds == null || gameIds.isEmpty()) {
+            throw new IllegalArgumentException("Game IDs list cannot be empty or null");
+        }
+        // Make sure gameIds list does not contain duplicates
+        if (gameIds.size() != new HashSet<>(gameIds).size()) {
+            throw new IllegalArgumentException("Game IDs list cannot contain duplicates");
+        }
+
         for (Integer gameId : gameIds) {
             markGameAsWatchedAndUpdateLadder(userId, gameId);
         }
     }
 
     public void markGamesAsUnwatchedSequentially(int userId, List<Integer> gameIds) {
+        // Validate user ID
+        if (userId <= 0 || !userDao.userExists(userId)) {
+            throw new IllegalArgumentException("User does not exist");
+        }
+        // Check for empty gameIds list
+        if (gameIds == null || gameIds.isEmpty()) {
+            throw new IllegalArgumentException("Game IDs list cannot be empty or null");
+        }
+        // Make sure gameIds list does not contain duplicates
+        if (gameIds.size() != new HashSet<>(gameIds).size()) {
+            throw new IllegalArgumentException("Game IDs list cannot contain duplicates");
+        }
+
         for (Integer gameId : gameIds) {
             markGameAsUnwatchedAndUpdateLadder(userId, gameId);
         }
@@ -47,9 +73,25 @@ public class WatchedGamesService {
 
     @Transactional
     public void markGameAsUnwatchedAndUpdateLadder(int userId, int gameId) {
-        watchedGamesDao.removeWatchedGame(userId, gameId);
+        // Validate user ID
+        boolean userExists = userDao.userExists(userId);
+        if (userId <= 0 || !userExists) {
+            throw new IllegalArgumentException("User does not exist");
+        }
 
+        // Validate game ID, make sure game exist
         Game game = gameDao.findGameById(gameId);
+        if (game == null) {
+            throw new IllegalArgumentException("Game does not exist");
+        }
+
+        // Check if game is already marked as unwatched
+        boolean isAlreadyUnwatched = !watchedGamesDao.isGameWatched(userId, gameId);
+        if (isAlreadyUnwatched) {
+            throw new IllegalStateException("Game is already marked as unwatched");
+        }
+
+        watchedGamesDao.removeWatchedGame(userId, gameId);
 
         String winner = game.getWinner();
         boolean isDraw = game.getWinner() == null;
@@ -68,9 +110,25 @@ public class WatchedGamesService {
 
     @Transactional
     public void markGameAsWatchedAndUpdateLadder(int userId, int gameId) {
-        watchedGamesDao.addWatchedGame(userId, gameId);
+        // Validate user ID
+        boolean userExists = userDao.userExists(userId);
+        if (userId <= 0 || !userExists) {
+            throw new IllegalArgumentException("User does not exist");
+        }
 
+        // Validate game ID, make sure game exists
         Game game = gameDao.findGameById(gameId);
+        if (game == null) {
+            throw new IllegalArgumentException("Game does not exist");
+        }
+
+        // Check if game is already marked as watched
+        boolean isAlreadyWatched = watchedGamesDao.isGameWatched(userId, gameId);
+        if (isAlreadyWatched) {
+            throw new IllegalStateException("Game is already marked as watched");
+        }
+
+        watchedGamesDao.addWatchedGame(userId, gameId);
 
         String winner = game.getWinner();
         boolean isDraw = game.getWinner() == null;
@@ -89,9 +147,17 @@ public class WatchedGamesService {
 
     private void updateTeamLadder(int userId, String teamName, int points, int pointsForThisGame,
                                   int pointsAgainstThisGame) {
+        // Validate team name
         int teamId = teamDao.findTeamIdByName(teamName);
-        UserLadderEntry entry = userLadderEntryDao.getUserLadderEntry(userId, teamId);
+        if (teamId <= 0) {
+            throw new IllegalArgumentException("Invalid team name");
+        }
 
+        // Check that a ladder entry exists for the given user and team
+        UserLadderEntry entry = userLadderEntryDao.getUserLadderEntry(userId, teamId);
+        if (entry == null) {
+            throw new IllegalArgumentException("Ladder entry does not exist for the given user and team");
+        }
 
         // Update the ladder entry based on points scored in game
         entry.setPoints(entry.getPoints() + points);

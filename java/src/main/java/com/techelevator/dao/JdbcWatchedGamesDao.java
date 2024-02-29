@@ -97,4 +97,11 @@ public class JdbcWatchedGamesDao implements WatchedGamesDao {
                 "SELECT id FROM games WHERE round = ?)";
         jdbcTemplate.update(sql, userId, round);
     }
+
+    @Override
+    public boolean isGameWatched(int userId, int gameId) {
+        String sql = "SELECT COUNT(*) FROM watched_games WHERE user_id = ? AND game_id = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, new Object[]{userId, gameId}, Integer.class);
+        return count != null && count > 0;
+    }
 }

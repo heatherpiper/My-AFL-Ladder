@@ -13,4 +13,6 @@ public interface TeamDao {
     String findTeamNameById(int teamId);
 
     List<Team> findAllTeams();
+
+    int saveTeam(String teamName);
 }

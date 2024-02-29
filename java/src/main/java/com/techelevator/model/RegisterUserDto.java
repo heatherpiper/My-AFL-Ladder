@@ -18,6 +18,16 @@ public class RegisterUserDto {
     @NotEmpty(message = "Please select a role for this user.")
     private String role;
 
+    public RegisterUserDto() {
+    }
+
+    public RegisterUserDto(String username, String password, String confirmPassword, String role) {
+        this.username = username;
+        this.password = password;
+        this.confirmPassword = confirmPassword;
+        this.role = role;
+    }
+
     public String getUsername() {
         return username;
     }

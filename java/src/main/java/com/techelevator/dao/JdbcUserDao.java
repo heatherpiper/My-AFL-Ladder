@@ -16,7 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.techelevator.model.User;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class JdbcUserDao implements UserDao {
@@ -95,6 +94,12 @@ public class JdbcUserDao implements UserDao {
             throw new DaoException("Data integrity violation", e);
         }
         return newUser;
+    }
+
+    @Override
+    public boolean userExists(int userId) {
+        User user = getUserById(userId);
+        return user != null;
     }
 
     private User mapRowToUser(SqlRowSet rs) {

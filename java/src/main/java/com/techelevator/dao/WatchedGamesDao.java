@@ -24,4 +24,6 @@ public interface WatchedGamesDao {
 
     void markAllGamesInRoundUnwatched(int userId, int round);
 
+    boolean isGameWatched(int userId, int gameId);
+
 }

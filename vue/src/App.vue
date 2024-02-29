@@ -20,12 +20,12 @@
 <style>
 
 :root {
-  --afl-900: #03061C; /* Background primary */
-  --afl-800: #031745; /* Nav secondary */
-  --afl-700: #01285E; /* Nav primary */
-  --afl-600: #004099; /* Main brand color, accent primary */
-  --afl-550: #0e56b9; /* Main color, hover*/
-  --afl-500: #046FD9; 
+  --afl-900: #03061C;
+  --afl-800: #031745;
+  --afl-700: #01285E;
+  --afl-600: #004099;
+  --afl-550: #0e56b9;
+  --afl-500: #046FD9;
   --afl-450: #0e87ff;
   --afl-400: #1FB4FF; 
   --afl-300: #E8001B;

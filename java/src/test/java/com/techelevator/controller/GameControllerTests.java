@@ -83,7 +83,7 @@ class GameControllerTests {
         Game expectedGame = new Game(1, 1, 2024, "Home Team", "Away Team", 100, 50, "Home Team", 100);
         when(gameDao.findGameById(1)).thenReturn(expectedGame);
 
-        ResponseEntity<Game> response = gameController.getGame(1);
+        ResponseEntity<Game> response = gameController.getGameById(1);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedGame, response.getBody());
@@ -93,7 +93,7 @@ class GameControllerTests {
     void getGame_ReturnsNotFoundWhenGameDoesNotExist() {
         when(gameDao.findGameById(1)).thenReturn(null);
 
-        ResponseEntity<Game> response = gameController.getGame(1);
+        ResponseEntity<Game> response = gameController.getGameById(1);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
