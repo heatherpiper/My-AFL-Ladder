@@ -99,7 +99,7 @@ export default {
      */
     currentRoundGames() {
       if(!this.currentRound) {
-        return []; // Return empty array if currentRound is not set
+        return [];
       }
       return this.gamesByRound[this.currentRound] || []; 
     },
@@ -120,12 +120,12 @@ export default {
       this.currentRound = round;
     },
     /**
-     * Set the active tab
+     * Set the active tab, reset checkbox visibility
      * @param {String} tab The tab to set as active, either 'unwatched' or 'watched'
      */
     setActiveTab(tab) {
       this.activeTab = tab;
-      this.showCheckboxes = false; // Reset checkboxes visibility when tab changes
+      this.showCheckboxes = false;
     },
     /**
      * Toggle the visibility of checkboxes for marking games as watched/unwatched
