@@ -48,46 +48,96 @@ export default {
   name: "GameListComp",
   data() {
     return {
+      /**
+       * The games that the user has not watched yet
+       */
       unwatchedGames: [],
+      /**
+       * The games that the user has already watched
+       */
       watchedGames: [],
+      /**
+       * The currently active tab (unwatched or watched)
+       */
       activeTab: 'unwatched',
+      /**
+       * Whether to show checkboxes for marking games as watched/unwatched
+       */
       showCheckboxes: false,
+      /**
+       * The games that the user has selected to mark as watched/unwatched
+       */
       selectedGames: new Set(),
+      /**
+       * The round number that the user has selected
+       */
       currentRound: '',
     };
   },
   computed: {
+    /**
+     * The round numbers for available games, filtered for duplicates and sorted
+     * @returns {Array} An array of round numbers
+     */
     rounds() {
       const rounds = this.currentGames.map(game => game.round);
-      return Array.from(new Set(rounds)).sort((a, b) => a - b); // Remove duplicate round numbers and sort them ascending
+      return Array.from(new Set(rounds)).sort((a, b) => a - b); 
     },
+    /**
+     * The games grouped by round number
+     * @returns {Object} An object with round numbers as keys and games for each round as values
+     */
     gamesByRound() {
       return this.rounds.reduce((round_object, round) => {
         round_object[round] = this.currentGames.filter(game => game.round === round); // Create an object with round numbers as keys and games for each round as values
         return round_object;
       }, {});
     },
+    /**
+     * The games for the currently selected round
+     * @returns {Array} An array of games for the current round, returns an empty array if currentRound is not set
+     */
     currentRoundGames() {
       if(!this.currentRound) {
         return []; // Return empty array if currentRound is not set
       }
-      return this.gamesByRound[this.currentRound] || []; // Return games for the current round (or an empty array)
+      return this.gamesByRound[this.currentRound] || []; 
     },
+    /**
+     * The games for the currently active tab
+     * @returns {Array} An array of games for the active tab, either unwatched or watched
+     */
     currentGames() {
       return this.activeTab === 'unwatched' ? this.unwatchedGames : this.watchedGames;
     }
   },
   methods: {
+    /**
+     * Set the active round number
+     * @param {String} round The round number to set as active
+     */
     setActiveRound(round) {
       this.currentRound = round;
     },
+    /**
+     * Set the active tab
+     * @param {String} tab The tab to set as active, either 'unwatched' or 'watched'
+     */
     setActiveTab(tab) {
       this.activeTab = tab;
       this.showCheckboxes = false; // Reset checkboxes visibility when tab changes
     },
+    /**
+     * Toggle the visibility of checkboxes for marking games as watched/unwatched
+     */
     toggleCheckboxes() {
       this.showCheckboxes = !this.showCheckboxes;
     },
+    /**
+     * Select a game to mark as watched/unwatched
+     * @param {String} gameId The ID of the game to select
+     * @param {Event} event The event object
+     */
     selectGame(gameId, event) {
       if (event.target.checked) {
         this.selectedGames.add(gameId);
@@ -95,6 +145,9 @@ export default {
         this.selectedGames.delete(gameId);
       }
     },
+    /**
+     * Mark the selected games as watched/unwatched
+     */
     confirmSelection() {
       const operation = this.activeTab === 'unwatched' ? 'add' : 'remove';
       Array.from(this.selectedGames).forEach(gameId => {
@@ -112,6 +165,11 @@ export default {
       this.selectedGames.clear();
       this.showCheckboxes = false;
     },
+    /**
+     * Move a game between the watched and unwatched lists
+     * @param {String} gameId The ID of the game to move
+     * @param {String} operation The operation to perform, either 'add' or 'remove'
+     */
     moveGameBetweenLists(gameId, operation) {
       const sourceList = operation === 'add' ? this.unwatchedGames : this.watchedGames;
       const targetList = operation === 'add' ? this.watchedGames : this.unwatchedGames;
@@ -121,10 +179,16 @@ export default {
         targetList.push(game);
       }
     },
+    /**
+     * Fetch the games for the unwatched and watched tabs
+     */
     fetchGames() {
       this.fetchUnwatchedGames();
       this.fetchWatchedGames();
     },
+    /**
+     * Fetch the games that the user has watched
+     */
     fetchWatchedGames() {
       const userId = this.$store.state.user.id;
       WatchedGamesService.getWatchedGames(userId)
@@ -135,6 +199,9 @@ export default {
           console.error('Error fetching watched games:', error);
         });
     },
+    /**
+     * Fetch the games that the user has not watched yet
+     */
     fetchUnwatchedGames() {
       const userId = this.$store.state.user.id;
       WatchedGamesService.getUnwatchedGames(userId)
@@ -145,6 +212,11 @@ export default {
           console.error('Error fetching unwatched games:', error);
         });
     },
+    /**
+     * Mark a game as watched or unwatched
+     * @param {String} gameId The ID of the game to mark
+     * @param {Event} event The event object
+     */
     markAsWatched(gameId, event) {
       const userId = this.$store.state.user.id;
       if (userId) {
@@ -181,7 +253,9 @@ export default {
     }
   },
   mounted() {
+    // Fetch games when the component is mounted
       this.fetchGames();
+    // Set the active round when the component is mounted
       this.$nextTick(() => {
         if (this.rounds.length > 0) {
           this.setActiveRound(this.rounds[0]);

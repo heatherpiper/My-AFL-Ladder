@@ -41,10 +41,18 @@
 </template>
 
 <script>
+/**
+ * LadderComp component
+ * @component
+ */
 import LadderService from '../services/LadderService';
 
 export default {
   name: 'LadderComp',
+  /**
+   * Props
+   * @prop {number} userId - The user id
+   */
   props: ['userId'],
   data() {
     return {
@@ -56,6 +64,9 @@ export default {
     this.fetchLadder();
   },
   methods: {
+    /**
+     * Fetch ladder data from the server
+     */
     fetchLadder() {
       LadderService.getLadder(this.userId)
         .then(response => {
