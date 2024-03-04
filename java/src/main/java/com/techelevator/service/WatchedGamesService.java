@@ -201,4 +201,25 @@ public class WatchedGamesService {
             return bd.doubleValue();
         }
     }
+
+    public void resetUserLadderAndMarkAllGamesUnwatched(int userId) {
+        boolean userExists = userDao.userExists(userId);
+        if (userId <= 0 || !userExists) {
+            throw new IllegalArgumentException("User does not exist");
+        }
+
+        List<UserLadderEntry> entries = userLadderEntryDao.getAllUserLadderEntries(userId);
+        for (UserLadderEntry entry : entries) {
+            entry.setPoints(0);
+            entry.setPercentage(100);
+            entry.setPosition(0);
+            entry.setWins(0);
+            entry.setLosses(0);
+            entry.setDraws(0);
+            entry.setPointsFor(0);
+            entry.setPointsAgainst(0);
+            userLadderEntryDao.updateUserLadderEntry(entry);
+        }
+        watchedGamesDao.markAllGamesUnwatched(userId);
+    }
 }
