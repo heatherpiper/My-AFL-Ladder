@@ -218,6 +218,7 @@ export default {
      * @param {Event} event The event object
      */
     markAsWatched(gameId, event) {
+      console.log(`Marking game with ID: ${gameId} as watched`);
       const userId = this.$store.state.user.id;
       if (userId) {
         if (event.target.checked) {
@@ -250,6 +251,8 @@ export default {
       } else {
         console.error('User ID is undefined.');
       }
+      console.log(`Unwatched games: ${JSON.stringify(this.unwatchedGames)}`);
+      console.log(`Watched games: ${JSON.stringify(this.watchedGames)}`);
     }
   },
   mounted() {
