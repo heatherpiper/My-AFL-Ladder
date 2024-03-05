@@ -5,6 +5,7 @@ import com.techelevator.exception.DaoException;
 import com.techelevator.model.Game;
 import com.techelevator.model.GameWatchRequest;
 import com.techelevator.service.WatchedGamesService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,13 +34,13 @@ public class WatchedGamesController {
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/watch")
-    public void addGamesToWatchedList(@PathVariable("userId") int userId, @RequestBody GameWatchRequest request) {
+    public void addGamesToWatchedList(@PathVariable("userId") int userId, @RequestBody @NotNull GameWatchRequest request) {
         watchedGamesService.markGamesAsWatchedSequentially(userId, request.getGameIds());
     }
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/unwatch")
-    public void removeGamesFromWatchedList(@PathVariable("userId") int userId, @RequestBody GameWatchRequest request) {
+    public void removeGamesFromWatchedList(@PathVariable("userId") int userId, @RequestBody @NotNull GameWatchRequest request) {
         watchedGamesService.markGamesAsUnwatchedSequentially(userId, request.getGameIds());
     }
 

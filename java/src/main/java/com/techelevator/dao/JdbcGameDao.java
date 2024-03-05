@@ -22,6 +22,10 @@ public class JdbcGameDao implements GameDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    public JdbcGameDao(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
     private final RowMapper<Game> gameRowMapper = (rs, rowNum) -> {
         Game game = new Game();
         game.setId(rs.getInt("id"));
