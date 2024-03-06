@@ -2,6 +2,7 @@ package com.techelevator.dao;
 
 import com.techelevator.exception.DaoException;
 import com.techelevator.model.Game;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,6 +19,7 @@ public class JdbcGameDao implements GameDao {
 
     private JdbcTemplate jdbcTemplate;
 
+    @Autowired
     public JdbcGameDao(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
