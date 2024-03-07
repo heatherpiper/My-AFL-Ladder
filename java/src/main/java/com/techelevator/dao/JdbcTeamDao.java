@@ -29,7 +29,7 @@ public class JdbcTeamDao implements TeamDao {
 
     @Override
     public Team findTeamById(int teamId) {
-        String sql = "SELECT team_id, name FROM teams WHERE id = ?";
+        String sql = "SELECT team_id, name FROM teams WHERE team_id = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{teamId}, (rs, rowNum) -> {
             Team team = new Team();
             team.setTeamId(rs.getInt("team_id"));
