@@ -40,14 +40,14 @@ public class JdbcWatchedGamesDaoTests extends BaseDaoTests {
     }
 
     @Test
-    public void findUnwatchedGamesByRound_ShouldReturnExpectedGames() throws Exception {
+    public void findUnwatchedGamesByRound_ShouldReturnExpectedGames() {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         jdbcTemplate.update("INSERT INTO games (id, round, year, hteam, ateam, hscore, ascore, winner, complete)" +
                 " VALUES " +
                 "(?, ?, ?, ?, ?, ?, ?, ?, ?)", 1, 1, 2023, "Team A", "Team B", 100, 90, "Team A", 100);
 
         int userId = 1;
-        int round = 2;
+        int round = 1;
 
         List<Game> unwatchedGames = watchedGamesDao.findUnwatchedGamesByRound(userId, round);
 
@@ -97,21 +97,33 @@ public class JdbcWatchedGamesDaoTests extends BaseDaoTests {
     public void markAllGamesInRoundUnwatched_ShouldMarkAllGamesInRoundAsUnwatched() {
         int userId = 1;
         int round = 1;
+        int gameId = 1;
+        watchedGamesDao.markAllGamesInRoundWatched(userId, round);
 
         watchedGamesDao.markAllGamesInRoundUnwatched(userId, round);
 
-        List<Game> unwatchedGames = watchedGamesDao.findUnwatchedGamesByRound(userId, round);
-        assertFalse(unwatchedGames.isEmpty());
+        boolean isWatched = watchedGamesDao.isGameWatched(userId, gameId);
+        assertFalse(isWatched);
     }
 
     @Test
     public void isGameWatched_ShouldReturnTrueIfGameIsWatched() {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         int userId = 1;
         int gameId = 1;
+
+        jdbcTemplate.update("INSERT INTO games (id, round, year, hteam, ateam, hscore, ascore, winner, complete) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                gameId, 1, 2023, "Team A", "Team B", 100, 90, "Team A", 100);
+
+        jdbcTemplate.update("INSERT INTO watched_games (user_id, game_id) VALUES (?, ?)",
+                userId, gameId);
 
         boolean isWatched = watchedGamesDao.isGameWatched(userId, gameId);
 
         assertTrue(isWatched);
+
+        jdbcTemplate.update("DELETE FROM watched_games WHERE user_id = ? AND game_id = ?", userId, gameId);
+        jdbcTemplate.update("DELETE FROM games where id = ?", gameId);
     }
 }
 
