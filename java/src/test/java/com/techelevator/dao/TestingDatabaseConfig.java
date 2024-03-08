@@ -5,8 +5,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -56,13 +58,23 @@ public class TestingDatabaseConfig {
         dataSource.setUrl(String.format("jdbc:postgresql://%s:%s/%s", DB_HOST, DB_PORT, DB_NAME));
         dataSource.setUsername(DB_USER);
         dataSource.setPassword(DB_PASSWORD);
-        dataSource.setAutoCommit(false); //So we can rollback after each test.
+        dataSource.setAutoCommit(false); //So we can perform rollback after each test.
 
         ScriptUtils.executeSqlScript(dataSource.getConnection(), new FileSystemResource("database/schema.sql"));
         ScriptUtils.executeSqlScript(dataSource.getConnection(), new ClassPathResource("test-data.sql"));
 
         ds = dataSource;
         return ds;
+    }
+
+    @Bean
+    public JdbcWatchedGamesDao watchedGamesDao(DataSource dataSource) {
+        return new JdbcWatchedGamesDao(dataSource);
+    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager() throws SQLException{
+        return new DataSourceTransactionManager(dataSource());
     }
 
     @PreDestroy

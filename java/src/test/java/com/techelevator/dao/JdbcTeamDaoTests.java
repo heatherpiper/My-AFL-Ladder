@@ -27,7 +27,10 @@ public class JdbcTeamDaoTests extends BaseDaoTests {
     @Test
     public void findTeamById_ShouldReturnCorrectTeam() {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        int teamId = jdbcTemplate.update("INSERT INTO teams (team_id, name) VALUES (?, ?)", 1, "Team A");
+
+        int teamId = 1;
+        jdbcTemplate.update("INSERT INTO teams (team_id, name) VALUES (?, ?) ON CONFLICT (team_id) DO NOTHING", teamId,
+                "Team A");
 
         Team team = jdbcTeamDao.findTeamById(teamId);
 
