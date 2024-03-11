@@ -2,24 +2,24 @@
 -- This script creates the database users and grants them the necessary permissions
 -- ********************************************************************************
 
-CREATE USER myfootyladder_owner
-WITH PASSWORD 'myfootyladder';
+CREATE USER laterladder_owner
+WITH PASSWORD 'laterladder';
 
 GRANT ALL
 ON ALL TABLES IN SCHEMA public
-TO myfootyladder_owner;
+TO laterladder_owner;
 
 GRANT ALL
 ON ALL SEQUENCES IN SCHEMA public
-TO myfootyladder_owner;
+TO laterladder_owner;
 
-CREATE USER myfootyladder_appuser
-WITH PASSWORD 'myfootyladder';
+CREATE USER laterladder_appuser
+WITH PASSWORD 'laterladder';
 
 GRANT SELECT, INSERT, UPDATE, DELETE
 ON ALL TABLES IN SCHEMA public
-TO myfootyladder_appuser;
+TO laterladder_appuser;
 
 GRANT USAGE, SELECT
 ON ALL SEQUENCES IN SCHEMA public
-TO myfootyladder_appuser;
+TO laterladder_appuser;
