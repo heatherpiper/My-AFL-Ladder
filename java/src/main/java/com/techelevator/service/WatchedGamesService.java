@@ -40,21 +40,9 @@ public class WatchedGamesService {
 
     public void markGamesAsWatchedSequentially(int userId, List<Integer> gameIds) {
         logger.info("Starting to mark games as watched sequentially for user {}, gameIds: {}", userId, gameIds);
-        // Validate user ID
-        if (userId <= 0 || !userDao.userExists(userId)) {
-            logger.warn("Attempt to mark games watched with invalid userId: {}", userId);
-            throw new IllegalArgumentException("User does not exist");
-        }
-        //Check for empty gameIds list
-        if (gameIds == null || gameIds.isEmpty()) {
-            logger.warn("Attempt to mark games watched for userId: {} with empty or null gameIds list", userId);
-            throw new IllegalArgumentException("Game IDs list cannot be empty or null");
-        }
-        // Make sure gameIds list does not contain duplicates
-        if (gameIds.size() != new HashSet<>(gameIds).size()) {
-            logger.warn("Attempt to mark games watched for userId: {} with duplicate gameIds: {}", userId, gameIds);
-            throw new IllegalArgumentException("Game IDs list cannot contain duplicates");
-        }
+
+        // Validate user ID and game IDs
+        validateUserAndGameIds(userId, gameIds);
 
         // Mark games as watched and update ladder sequentially
         for (Integer gameId : gameIds) {
@@ -65,21 +53,9 @@ public class WatchedGamesService {
 
     public void markGamesAsUnwatchedSequentially(int userId, List<Integer> gameIds) {
         logger.info("Starting to mark games as unwatched sequentially for user {}, gameIds: {}", userId, gameIds);
-        // Validate user ID
-        if (userId <= 0 || !userDao.userExists(userId)) {
-            logger.warn("Attempt to mark games unwatched with invalid userId: {}", userId);
-            throw new IllegalArgumentException("User does not exist");
-        }
-        // Check for empty gameIds list
-        if (gameIds == null || gameIds.isEmpty()) {
-            logger.warn("Attempt to mark games unwatched for userId: {} with empty or null gameIds list", userId);
-            throw new IllegalArgumentException("Game IDs list cannot be empty or null");
-        }
-        // Make sure gameIds list does not contain duplicates
-        if (gameIds.size() != new HashSet<>(gameIds).size()) {
-            logger.warn("Attempt to mark games unwatched for userId: {} with duplicate gameIds: {}", userId, gameIds);
-            throw new IllegalArgumentException("Game IDs list cannot contain duplicates");
-        }
+
+        // Validate user ID and game IDs
+        validateUserAndGameIds(userId, gameIds);
 
         // Mark games as unwatched and update ladder sequentially
         for (Integer gameId : gameIds) {
@@ -91,30 +67,13 @@ public class WatchedGamesService {
     @Transactional
     public void markGameAsUnwatchedAndUpdateLadder(int userId, int gameId) {
         try {
-            // Validate user ID
-            boolean userExists = userDao.userExists(userId);
-            if (userId <= 0 || !userExists) {
-                logger.warn("Attempt to mark games unwatched with invalid userId: {}", userId);
-                throw new IllegalArgumentException("User does not exist");
-            }
-
-            // Validate game ID, make sure game exist
-            Game game = gameDao.findGameById(gameId);
-            if (game == null) {
-                throw new IllegalArgumentException("Game does not exist");
-            }
-
-            // Check if game is already marked as unwatched
-            boolean isAlreadyUnwatched = !watchedGamesDao.isGameWatched(userId, gameId);
-            if (isAlreadyUnwatched) {
-                throw new IllegalStateException("Game is already marked as unwatched");
-            }
+            // Validate game existence
+            Game game = validateGameExistence(gameId);
 
             // Mark game as unwatched
             watchedGamesDao.removeWatchedGame(userId, gameId);
 
             // Check if game was a draw or if there was a winner; calculate points for home and away teams
-            String winner = game.getWinner();
             boolean isDraw = game.getWinner() == null;
             int hteamPointsReversed = isDraw ? -2 : game.getWinner().equals(game.getHteam()) ? -4 : 0;
             int ateamPointsReversed = isDraw ? -2 : game.getWinner().equals(game.getAteam()) ? -4 : 0;
@@ -143,24 +102,8 @@ public class WatchedGamesService {
     @Transactional
     public void markGameAsWatchedAndUpdateLadder(int userId, int gameId) {
         try {
-            // Validate user ID
-            boolean userExists = userDao.userExists(userId);
-            if (userId <= 0 || !userExists) {
-                logger.warn("Attempt to mark games watched with invalid userId: {}", userId);
-                throw new IllegalArgumentException("User does not exist");
-            }
-
-            // Validate game ID
-            Game game = gameDao.findGameById(gameId);
-            if (game == null) {
-                throw new IllegalArgumentException("Game does not exist");
-            }
-
-            // Check if game is already marked as watched
-            boolean isAlreadyWatched = watchedGamesDao.isGameWatched(userId, gameId);
-            if (isAlreadyWatched) {
-                throw new IllegalStateException("Game is already marked as watched");
-            }
+            // Validate game existence
+            Game game = validateGameExistence(gameId);
 
             // Mark game as watched
             try {
@@ -171,7 +114,6 @@ public class WatchedGamesService {
             }
 
             // Check if game was a draw or if there was a winner; calculate points for home and away teams
-            String winner = game.getWinner();
             boolean isDraw = game.getWinner() == null;
             int hteamPoints = isDraw ? 2 : game.getWinner().equals(game.getHteam()) ? 4 : 0;
             int ateamPoints = isDraw ? 2 : game.getWinner().equals(game.getAteam()) ? 4 : 0;
@@ -230,6 +172,30 @@ public class WatchedGamesService {
 
         // Update the ladder entry in the database
         userLadderEntryDao.updateUserLadderEntry(entry);
+    }
+
+    private void validateUserAndGameIds(int userId, List<Integer> gameIds) {
+        if (userId <= 0 || !userDao.userExists(userId)) {
+            logger.warn("Invalid userId: {}", userId);
+            throw new IllegalArgumentException("User does not exist");
+        }
+        if (gameIds == null || gameIds.isEmpty()) {
+            logger.warn("Empty or null gameIds list for userId: {}", userId);
+            throw new IllegalArgumentException("Game IDs list cannot be empty or null");
+        }
+        if (gameIds.size() != new HashSet<>(gameIds).size()) {
+            logger.warn("Duplicate gameIds for userId: {}", userId);
+            throw new IllegalArgumentException("Game IDs list cannot contain duplicates");
+        }
+    }
+
+    private Game validateGameExistence(int gameId) {
+        Game game = gameDao.findGameById(gameId);
+        if (game == null) {
+            logger.error("Game does not exist for gameId: {}", gameId);
+            throw new IllegalArgumentException("Game does not exist");
+        }
+        return game;
     }
 
     public void calculatePosition(int userId) {
