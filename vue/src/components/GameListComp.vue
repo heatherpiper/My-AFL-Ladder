@@ -33,9 +33,6 @@
         </div>
 
         </div>
-        <button v-if="selectedGames.length > 0" @click="confirmSelection" class="confirm-button">
-          Confirm as {{  activeTab === 'unwatched' ? 'watched' : 'unwatched' }}
-        </button>
       </div>
     </div>
   </div>
@@ -73,7 +70,14 @@ export default {
        * Whether to show the confirm button for marking games as watched/unwatched
        */
       showConfirmButton: false,
+      /**
+       * Whether to show the hover effect for the action button
+       */
       hover: null,
+      /**
+       * The games that are currently being processed as watched/unwatched
+       */
+      processingGames: [],
     };
   },
   computed: {
@@ -123,12 +127,12 @@ export default {
       const isSelected = this.selectedGames.includes(gameId);
       const isHovering = this.hover === gameId;
 
-      if(this.activeTab === 'watched') {
-        if(isHovering && !isSelected) return '/remove-hover.svg';
-        return isSelected ? '/remove-filled.svg' : '/remove-greyed.svg'
+      if(this.activeTab === 'unwatched') {
+        if (isHovering && !isSelected) return '/checkmark-filled.svg';
+        return isSelected ? '/checkmark-filled.svg' : 'checkmark-greyed.svg'
       } else {
-        if (isHovering && !isSelected) return '/checkmark-hover.svg';
-        return isSelected ? '/checkmark-filled.svg' : '/checkmark-greyed.svg';
+        if (isHovering && !isSelected) return '/remove-filled.svg';
+        return isSelected ? '/remove-filled.svg' : '/remove-greyed.svg'
       }
     },
     /**
@@ -152,33 +156,29 @@ export default {
      * @param {Event} event The event object
      */
     selectGame(gameId) {
-      const index = this.selectedGames.indexOf(gameId);
-      if (index > -1) {
-        // If game is already selected, remove it from array to prevent duplicates
-        this.selectedGames.splice(index, 1)
-      } else {
-        // If game is not selected, add it to the array
-        this.selectedGames.push(gameId);
-      }
-    },
-    /**
-     * Mark the selected games as watched/unwatched
-     */
-    confirmSelection() {
-      const operation = this.activeTab === 'unwatched' ? 'add' : 'remove';
-      Array.from(this.selectedGames).forEach(gameId => {
-        const serviceMethod = operation === 'add' ? WatchedGamesService.addGamesToWatchedList : WatchedGamesService.removeGamesFromWatchedList;
-        serviceMethod(this.$store.state.user.id, gameId)
-          .then(() => {
-            this.moveGameBetweenLists(gameId, operation);
-            console.log('Emitting gameStatusChanged event for gameId:', gameId);
-            this.$emit('gameStatusChanged', { gameId: gameId, operation: operation });
-          })
-          .catch(error => {
-            console.error(`Error marking game as ${operation === 'add' ? 'watched' : 'unwatched'}:`, error);
-          });
+      this.processingGames.push(gameId);
+
+      this.$nextTick(() => {
+        setTimeout(() => {
+          const operation = this.activeTab === 'unwatched' ? 'add' : 'remove';
+          const serviceMethod = operation === 'add' ? WatchedGamesService.addGamesToWatchedList : WatchedGamesService.removeGamesFromWatchedList;
+
+          serviceMethod(this.$store.state.user.id, gameId)
+            .then(() => {
+              this.moveGameBetweenLists(gameId, operation);
+              this.$emit('gameStatusChanged', { gameId: gameId, operation: operation });
+            })
+            .catch(error => {
+              console.error(`Error marking game as ${operation === 'add' ? 'watched' : 'unwatched'}:`, error);
+            })
+            .finally(() => {
+              const index = this.processingGames.indexOf(gameId);
+              if (index > -1) {
+                this.processingGames.splice(index, 1);
+              }
+            });
+        }, 500);
       });
-      this.selectedGames.clear();
     },
     /**
      * Move a game between the watched and unwatched lists
