@@ -24,11 +24,11 @@
               <div class="team-name">{{ game.hteam }}</div>
               <div class="team-name">{{ game.ateam }}</div>
             </div>
-            <div class="checkmark-container" 
+            <div class="image-container" 
               @click.stop="selectGame(game.id)"
-              @mouseenter="hoverCheckmark = game.id"
-              @mouseleave="hoverCheckmark = null">
-              <img :src="getCheckmarkSrc(game.id)" alt="Checkmark">
+              @mouseover="hover = game.id"
+              @mouseleave="hover = null">
+              <img :src="getImageSrc(game.id)" alt="Action button">
             </div>
         </div>
 
@@ -73,7 +73,7 @@ export default {
        * Whether to show the confirm button for marking games as watched/unwatched
        */
       showConfirmButton: false,
-      hoverCheckmark: null,
+      hover: null,
     };
   },
   computed: {
@@ -114,15 +114,21 @@ export default {
     }
   },
   methods: {
-    getCheckmarkSrc(gameId) {
+    /**
+     * Get the image source for the action button
+     * @param {String} gameId The ID of the game
+     * @returns {String} The image source for the action button
+     */
+    getImageSrc(gameId) {
       const isSelected = this.selectedGames.includes(gameId);
-      const isHovered = this.hoverCheckmark === gameId;
-      if (isHovered && !isSelected) {
-        return '/checkmark-hover.svg';
-      } else if (isSelected) {
-        return '/checkmark-green.svg';
+      const isHovering = this.hover === gameId;
+
+      if(this.activeTab === 'watched') {
+        if(isHovering && !isSelected) return '/remove-hover.svg';
+        return isSelected ? '/remove-filled.svg' : '/remove-greyed.svg'
       } else {
-        return '/checkmark-greyed.svg'
+        if (isHovering && !isSelected) return '/checkmark-hover.svg';
+        return isSelected ? '/checkmark-filled.svg' : '/checkmark-greyed.svg';
       }
     },
     /**
@@ -396,7 +402,7 @@ button:hover, button.active {
   font-weight: 900;
 }
 
-.checkmark-container {
+.image-container {
   position: absolute;
   bottom: 10px;
   right: 10px;
