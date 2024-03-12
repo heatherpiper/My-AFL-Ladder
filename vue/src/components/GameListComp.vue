@@ -17,26 +17,23 @@
         </div>
       </div>
       <div v-if="activeTab">
-
-        <div @click="toggleCheckboxes" class="mark-as-toggle">
-          Mark games as {{ activeTab === 'unwatched' ? 'watched' : 'unwatched' }}
-        </div>
-
         <div class="games-container">
-          <div class="game-card" v-for="game in currentRoundGames" :key="game.id">
+          <div class="game-card" v-for="game in currentRoundGames" :key="game.id" @click="selectGame(game.id)">
             <div class="vs-container">
               <span class="vs-text">vs</span>
               <div class="team-name">{{ game.hteam }}</div>
               <div class="team-name">{{ game.ateam }}</div>
             </div>
-            <div v-if="showCheckboxes" class="game-checkbox">
-              <input type="checkbox" :id="`${activeTab}-${game.id}`" @change="selectGame(game.id, $event)">
-              <label :for="`${activeTab}-${game.id}`">{{ activeTab === 'unwatched' ? 'Watched' : 'Unwatched' }}</label>
-          </div>
+            <div class="checkmark-container">
+              <img v-if="selectedGames.has(game.id)" src="/green-checkmark.svg" alt="Selected">
+              <img v-else src="/blue-checkmark.svg" alt="Not selected">
+            </div>
         </div>
 
         </div>
-        <button v-if="showCheckboxes" @click="confirmSelection" class="confirm-button">Confirm</button>
+        <button v-if="selectedGames.size > 0" @click="confirmSelection" class="confirm-button">
+          Confirm as {{  activeTab === 'unwatched' ? 'watched' : 'unwatched' }}
+        </button>
       </div>
     </div>
   </div>
@@ -63,10 +60,6 @@ export default {
        */
       activeTab: 'unwatched',
       /**
-       * Whether to show checkboxes for marking games as watched/unwatched
-       */
-      showCheckboxes: false,
-      /**
        * The games that the user has selected to mark as watched/unwatched
        */
       selectedGames: new Set(),
@@ -74,6 +67,10 @@ export default {
        * The round number that the user has selected
        */
       currentRound: '',
+      /**
+       * Whether to show the confirm button for marking games as watched/unwatched
+       */
+      showConfirmButton: false,
     };
   },
   computed: {
@@ -86,7 +83,7 @@ export default {
       return Array.from(new Set(rounds)).sort((a, b) => a - b); 
     },
     /**
-     * The games grouped by round number
+     * Games grouped by round number
      * @returns {Object} An object with round numbers as keys and games for each round as values
      */
     gamesByRound() {
@@ -130,22 +127,18 @@ export default {
       this.showCheckboxes = false;
     },
     /**
-     * Toggle the visibility of checkboxes for marking games as watched/unwatched
-     */
-    toggleCheckboxes() {
-      this.showCheckboxes = !this.showCheckboxes;
-    },
-    /**
      * Select a game to mark as watched/unwatched
      * @param {String} gameId The ID of the game to select
      * @param {Event} event The event object
      */
-    selectGame(gameId, event) {
-      if (event.target.checked) {
-        this.selectedGames.add(gameId);
-      } else {
+    selectGame(gameId) {
+      if (this.selectedGames.has(gameId)) {
         this.selectedGames.delete(gameId);
+      } else {
+        this.selectedGames.add(gameId);
       }
+      this.showConfirmButton = this.selectedGames.size > 0;
+      this.$forceUpdate();
     },
     /**
      * Mark the selected games as watched/unwatched
@@ -165,7 +158,6 @@ export default {
           });
       });
       this.selectedGames.clear();
-      this.showCheckboxes = false;
     },
     /**
      * Move a game between the watched and unwatched lists
@@ -324,6 +316,15 @@ button:hover, button.active {
   border-radius: 8px 8px 0 0;
 }
 
+.confirm-button {
+  background-color: var(--afl-500);
+  color: var(--afl-100)
+}
+
+.confirm-button:hover {
+  background-color: var(--afl-400);
+}
+
 .round-selection select {
   background-color: var(--afl-200);
   color: var(--afl-900);
@@ -344,6 +345,7 @@ button:hover, button.active {
 }
 
 .game-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -352,7 +354,7 @@ button:hover, button.active {
   padding: 16px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   color: var(--afl-200);
-  min-height: 7em;
+  min-height: 5em;
 }
 
 .vs-container {
@@ -379,35 +381,12 @@ button:hover, button.active {
   font-weight: 900;
 }
 
-.game-checkbox {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  margin-top: 8px;
-}
-
-.game-checkbox label {
-  padding-left: 0.5em;
-}
-
-input[type="checkbox"] {
-  margin-right: 5px;
-}
-
-.mark-as-toggle {
-  cursor: pointer;
-  background-color: var(--afl-500);
-  color: var(--afl-100);
-  margin: 20px 0;
-  padding: 10px;
-  text-align: center;
-  border-radius: 6px;
-  transition: background-color 0.3s ease
-}
-
-.mark-as-toggle:hover {
-  background-color: var(--afl-450);
+.checkmark-container {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 42px;
+  height: 42px;
 }
 
 @media (max-width: 768px) {
