@@ -1,6 +1,6 @@
 <template>
   <div class="ladder">
-    <h1>Ladder</h1>
+    <h1>Team Ladder</h1>
     <div class="table-container">
       <table>
         <thead>
@@ -90,7 +90,11 @@ h1 {
   letter-spacing: 2px;
   color: var(--afl-200);
   text-shadow: 1px 1px 2px var(--afl-900);
-  padding-left: 10px;
+  background-color: var(--afl-800);
+  width: 80%;
+  margin: auto;
+  padding-left: 16px;
+  border-radius: 8px;
 }
 
 .table-container {
@@ -116,7 +120,7 @@ thead th {
 }
 
 tbody tr {
-  background-color: var(--afl-700);
+  background-color: var(--afl-600);
   color: var(--afl-200);
   line-height: 1rem;
 }
@@ -131,8 +135,8 @@ td:not(:last-child) {
 
 .team-rank{
   font-weight: 900;
-  background-color: var(--afl-500);
-  border: 2px solid var(--afl-500);
+  background-color: var(--afl-800);
+  border: 2px solid var(--afl-800);
   border-radius: 8px;
   text-align: center;
   margin-left: 0.5rem;
@@ -145,7 +149,7 @@ td:not(:last-child) {
 }
 
 .highlight-rank {
-  border: 2px solid var(--afl-400);
+  border: 2px solid var(--afl-500);
 }
 
 tbody tr:nth-child(8) {

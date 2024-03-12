@@ -279,6 +279,10 @@ h1 {
   letter-spacing: 2px;
   color: var(--afl-200);
   text-shadow: 1px 1px 2px var(--afl-900);
+  background-color: var(--afl-800);
+  margin: auto;
+  padding-left: 16px;
+  border-radius: 8px;
 }
 .game-list {
   padding: 16px;
@@ -287,6 +291,7 @@ h1 {
 
 .tabbed-content {
   background-color: var(--afl-800);
+  margin: 10px auto;
   padding: 10px;
   border-radius: 8px;
 }
@@ -307,7 +312,7 @@ button {
   transition: background-color 0.3s ease, color 0.3s ease;
   border-radius: 6px;
   font-family: 'Inter', sans-serif;
-  font-size: medium;
+  font-size: 1rem;
 }
 
 button:hover, button.active {
@@ -316,14 +321,14 @@ button:hover, button.active {
 }
 
 .tabs button {
-  border-radius: 6px 6px 0 0;
+  border-radius: 8px 8px 0 0;
 }
 
 .round-selection select {
   background-color: var(--afl-200);
   color: var(--afl-900);
   margin-left: 10px;
-  padding: 10px;
+  padding: 10px 20px;
   border: none;
   border-radius: 8px;
   font-size: 1rem;
@@ -339,11 +344,15 @@ button:hover, button.active {
 }
 
 .game-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   background-color: var(--afl-600);
   border-radius: 8px;
   padding: 16px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   color: var(--afl-200);
+  min-height: 7em;
 }
 
 .vs-container {
@@ -372,8 +381,14 @@ button:hover, button.active {
 
 .game-checkbox {
   display: flex;
+  justify-content: center;
   align-items: center;
+  width: 100%;
   margin-top: 8px;
+}
+
+.game-checkbox label {
+  padding-left: 0.5em;
 }
 
 input[type="checkbox"] {

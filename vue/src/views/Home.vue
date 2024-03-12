@@ -1,8 +1,8 @@
 <template>
   <div class="home">
     <div class="home-container">
-      <GameListComp @gameStatusChanged="handleGameStatusChanged" class="half-width"/>
-      <LadderComp :userId="userId" ref="ladderComponent" class="half-width"/>
+      <LadderComp :userId="userId" ref="ladderComponent" class="width-smaller"/>
+      <GameListComp @gameStatusChanged="handleGameStatusChanged" class="width-larger"/>
     </div>
   </div>
 </template>
@@ -46,8 +46,12 @@ export default {
   justify-content: space-between;
 }
 
-.half-width {
-  width: 50%;
+.width-smaller {
+  width: 45%;
+}
+
+.width-larger {
+  width: 55%;
 }
 
 .game-list, .ladder {
