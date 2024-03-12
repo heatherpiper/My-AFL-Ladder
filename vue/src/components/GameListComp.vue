@@ -18,20 +18,22 @@
       </div>
       <div v-if="activeTab">
         <div class="games-container">
-          <div class="game-card" v-for="game in currentRoundGames" :key="game.id" @click="selectGame(game.id)">
+          <div class="game-card" v-for="game in currentRoundGames" :key="game.id">
             <div class="vs-container">
               <span class="vs-text">vs</span>
               <div class="team-name">{{ game.hteam }}</div>
               <div class="team-name">{{ game.ateam }}</div>
             </div>
-            <div class="checkmark-container">
-              <img v-if="selectedGames.has(game.id)" src="/green-checkmark.svg" alt="Selected">
-              <img v-else src="/blue-checkmark.svg" alt="Not selected">
+            <div class="checkmark-container" 
+              @click.stop="selectGame(game.id)"
+              @mouseenter="hoverCheckmark = game.id"
+              @mouseleave="hoverCheckmark = null">
+              <img :src="getCheckmarkSrc(game.id)" alt="Checkmark">
             </div>
         </div>
 
         </div>
-        <button v-if="selectedGames.size > 0" @click="confirmSelection" class="confirm-button">
+        <button v-if="selectedGames.length > 0" @click="confirmSelection" class="confirm-button">
           Confirm as {{  activeTab === 'unwatched' ? 'watched' : 'unwatched' }}
         </button>
       </div>
@@ -62,7 +64,7 @@ export default {
       /**
        * The games that the user has selected to mark as watched/unwatched
        */
-      selectedGames: new Set(),
+      selectedGames: [],
       /**
        * The round number that the user has selected
        */
@@ -71,6 +73,7 @@ export default {
        * Whether to show the confirm button for marking games as watched/unwatched
        */
       showConfirmButton: false,
+      hoverCheckmark: null,
     };
   },
   computed: {
@@ -111,6 +114,17 @@ export default {
     }
   },
   methods: {
+    getCheckmarkSrc(gameId) {
+      const isSelected = this.selectedGames.includes(gameId);
+      const isHovered = this.hoverCheckmark === gameId;
+      if (isHovered && !isSelected) {
+        return '/checkmark-hover.svg';
+      } else if (isSelected) {
+        return '/checkmark-green.svg';
+      } else {
+        return '/checkmark-greyed.svg'
+      }
+    },
     /**
      * Set the active round number
      * @param {String} round The round number to set as active
@@ -132,13 +146,14 @@ export default {
      * @param {Event} event The event object
      */
     selectGame(gameId) {
-      if (this.selectedGames.has(gameId)) {
-        this.selectedGames.delete(gameId);
+      const index = this.selectedGames.indexOf(gameId);
+      if (index > -1) {
+        // If game is already selected, remove it from array to prevent duplicates
+        this.selectedGames.splice(index, 1)
       } else {
-        this.selectedGames.add(gameId);
+        // If game is not selected, add it to the array
+        this.selectedGames.push(gameId);
       }
-      this.showConfirmButton = this.selectedGames.size > 0;
-      this.$forceUpdate();
     },
     /**
      * Mark the selected games as watched/unwatched
@@ -385,8 +400,8 @@ button:hover, button.active {
   position: absolute;
   bottom: 10px;
   right: 10px;
-  width: 42px;
-  height: 42px;
+  width: 36px;
+  height: 36px;
 }
 
 @media (max-width: 768px) {
