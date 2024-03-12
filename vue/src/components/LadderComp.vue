@@ -91,7 +91,7 @@ h1 {
   color: var(--afl-200);
   text-shadow: 1px 1px 2px var(--afl-900);
   background-color: var(--afl-800);
-  width: 80%;
+  width: 90%;
   margin: auto;
   padding-left: 16px;
   border-radius: 8px;
@@ -103,7 +103,7 @@ h1 {
   border-radius: 8px;
   padding: 10px;
   overflow: hidden;
-  width: 80%;
+  width: 90%;
 }
 
 table {
