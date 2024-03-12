@@ -2,15 +2,11 @@
   <div class="game-list">
     <h1>GAMES</h1>
     <div class="tabbed-content">
-      <div class="tabs">
-        <button :class="{ active: activeTab === 'unwatched' }" @click="setActiveTab('unwatched')">Unwatched</button>
-        <button :class="{ active: activeTab === 'watched' }" @click="setActiveTab('watched')">Watched</button>
-      </div>
-      <div v-if="activeTab">
-        <div @click="toggleCheckboxes" class="mark-as-toggle">
-          Mark games as {{ activeTab === 'unwatched' ? 'watched' : 'unwatched' }}
+      <div class="tabs-and-round-selection">
+        <div class="tabs">
+          <button :class="{ active: activeTab === 'unwatched' }" @click="setActiveTab('unwatched')">Unwatched</button>
+          <button :class="{ active: activeTab === 'watched' }" @click="setActiveTab('watched')">Watched</button>
         </div>
-
         <div class="round-selection">
           <select v-model="currentRound">
             <option disabled value="">Select Round</option>
@@ -18,6 +14,12 @@
               Round {{ round }}
             </option>
           </select>
+        </div>
+      </div>
+      <div v-if="activeTab">
+
+        <div @click="toggleCheckboxes" class="mark-as-toggle">
+          Mark games as {{ activeTab === 'unwatched' ? 'watched' : 'unwatched' }}
         </div>
 
         <div class="games-container">
@@ -279,7 +281,6 @@ h1 {
   text-shadow: 1px 1px 2px var(--afl-900);
 }
 .game-list {
-  max-width: 100%;
   padding: 16px;
   color: var(--afl-900);
 }
@@ -288,6 +289,12 @@ h1 {
   background-color: var(--afl-800);
   padding: 10px;
   border-radius: 8px;
+}
+
+.tabs-and-round-selection {
+  display: flex;
+  justify-content: space-between;
+  margin-right: 6px;
 }
 
 button {
@@ -312,12 +319,15 @@ button:hover, button.active {
   border-radius: 6px 6px 0 0;
 }
 
-select {
+.round-selection select {
+  background-color: var(--afl-200);
+  color: var(--afl-900);
   margin-left: 10px;
   padding: 10px;
-  border: 1px solid var(--afl-900);
-  border-radius: 6px;
-  font-size: medium;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .games-container {

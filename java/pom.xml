@@ -8,7 +8,7 @@
         <version>2.3.0.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.techelevator</groupId>
+    <groupId>com.heatherpiper</groupId>
     <artifactId>later-ladder</artifactId>
     <version>1.0</version>
 

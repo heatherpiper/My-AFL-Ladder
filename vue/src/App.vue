@@ -34,7 +34,7 @@
 }
 
 body {
-  background: radial-gradient(circle at center, var(--afl-500) 0%, var(--afl-700) 60%, var(--afl-900) 100%);
+  background: radial-gradient(circle at center, var(--afl-500) 10%, var(--afl-700) 75%, var(--afl-800) 100%);
   background-attachment: fixed;
   font-family: 'Inter', sans-serif;
 }

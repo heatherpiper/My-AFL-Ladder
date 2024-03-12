@@ -22,7 +22,7 @@
         <tbody>
           <tr v-for="(ladderEntry, index) in teamLadder" :key="ladderEntry.teamId">
             <td>
-              <div class="team-rank">{{ index + 1 }}</div>
+              <div class="team-rank" :class="{ 'highlight-rank': index < 8 }">{{ index + 1 }}</div>
             </td>
             <td>
               <div class="team-name">{{ ladderEntry.teamName }}</div>
@@ -95,10 +95,11 @@ h1 {
 
 .table-container {
   background-color: var(--afl-800);
-  margin: 10px;
+  margin: 10px auto;
   border-radius: 8px;
   padding: 10px;
   overflow: hidden;
+  width: 80%;
 }
 
 table {
@@ -115,18 +116,13 @@ thead th {
 }
 
 tbody tr {
-  margin: 0;
-  padding: 0;
   background-color: var(--afl-700);
   color: var(--afl-200);
-  line-height: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 10px;
+  line-height: 1rem;
 }
 
 td {
-  padding: 1rem;
+  padding: 0.5rem;
 }
 
 td:not(:last-child) {
@@ -136,10 +132,24 @@ td:not(:last-child) {
 .team-rank{
   font-weight: 900;
   background-color: var(--afl-500);
+  border: 2px solid var(--afl-500);
   border-radius: 8px;
-  padding: 0.2rem;
   text-align: center;
-  margin: 2px;
+  margin-left: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+.highlight-rank {
+  border: 2px solid var(--afl-400);
+}
+
+tbody tr:nth-child(8) {
+  border-bottom: 4px solid var(--afl-800);
 }
 
 .team-name {
