@@ -1,16 +1,19 @@
 <template>
   <div class="game-list">
-    <h1>GAMES</h1>
-    <div class="games-section">
-      <div class="round-selection">
-        <select v-model="currentRound">
-          <option disabled value="">Select Round</option>
-          <option v-for="round in rounds" :key="round" :value="round">
-            Round {{ round }}
-          </option>
-        </select>
-      </div>
 
+    <div class="header-section">
+      <h1>GAMES</h1>
+      <div class="round-selection">
+          <select v-model="currentRound">
+            <option disabled value="">Select Round</option>
+            <option v-for="round in rounds" :key="round" :value="round">
+              Round {{ round }}
+            </option>
+          </select>
+      </div>
+    </div>
+
+    <div class="games-section">
       <div class="section-container">
         <h2 class="section-header">Unwatched Games</h2>
         <div class="games-container">
@@ -60,7 +63,9 @@
           </div>
         </div>
       </div>
+
     </div>
+
   </div>
 </template>
 
@@ -166,7 +171,7 @@ export default {
           if (index > -1) {
             this.processingGames.splice(index, 1);
           }
-        }, 250);
+        }, 100);
         this.$emit('gameStatusChanged', { gameId: gameId, operation: operation });
       })
       .catch(error => {
@@ -241,7 +246,21 @@ export default {
   
 <style scoped>
 
+.header-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 16px;
+  background-color: var(--afl-800);
+  border-radius: 8px;
+  margin: auto;
+}
+
 h1 {
+  margin: 0;
+  flex-grow: 1;
+  padding-left: 16px;
+  border-radius: 8px;
   font-family: 'League Gothic', sans-serif;
   font-size: xxx-large;
   text-transform: uppercase;
@@ -249,9 +268,6 @@ h1 {
   color: var(--afl-200);
   text-shadow: 1px 1px 2px var(--afl-900);
   background-color: var(--afl-800);
-  margin: auto;
-  padding-left: 16px;
-  border-radius: 8px;
 }
 
 .games-section {
@@ -275,8 +291,7 @@ h2 {
 .round-selection select {
   background-color: var(--afl-200);
   color: var(--afl-900);
-  margin-left: 10px;
-  padding: 10px 20px;
+  padding: 8px 10px;
   border: none;
   border-radius: 8px;
   font-size: 1rem;
