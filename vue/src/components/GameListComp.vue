@@ -1,42 +1,57 @@
 <template>
   <div class="game-list">
     <h1>GAMES</h1>
-    <div class="tabbed-content">
-      <div class="tabs-and-round-selection">
-        <div class="tabs">
-          <button :class="{ active: activeTab === 'unwatched' }" @click="setActiveTab('unwatched')">Unwatched</button>
-          <button :class="{ active: activeTab === 'watched' }" @click="setActiveTab('watched')">Watched</button>
-        </div>
-        <div class="round-selection">
-          <select v-model="currentRound">
-            <option disabled value="">Select Round</option>
-            <option v-for="round in rounds" :key="round" :value="round">
-              Round {{ round }}
-            </option>
-          </select>
-        </div>
+    <div class="games-section">
+      <div class="round-selection">
+        <select v-model="currentRound">
+          <option disabled value="">Select Round</option>
+          <option v-for="round in rounds" :key="round" :value="round">
+            Round {{ round }}
+          </option>
+        </select>
       </div>
-      <div v-if="activeTab">
+
+      <div class="section-container">
+        <h2 class="section-header">Unwatched Games</h2>
         <div class="games-container">
-          <div class="game-card" v-for="game in currentRoundGames" :key="game.id">
+          <div class="game-card" v-for="game in filteredUnwatchedGames" :key="game.id">
             <div class="vs-container">
               <span class="vs-text">vs</span>
               <div class="team-name">{{ game.hteam }}</div>
               <div class="team-name">{{ game.ateam }}</div>
             </div>
-            <div class="image-container" 
-              @click.stop="selectGame(game.id)"
-              @mouseover="hover = game.id"
-              @mouseleave="hover = null">
+            <div class="image-container"
+                 @click.stop="selectGame(game.id)"
+                 @mouseover="hover = game.id"
+                 @mouseleave="hover = null">
               <img :src="getImageSrc(game.id)" alt="Action button">
             </div>
+          </div>
         </div>
+      </div>
 
+      <div class="section-container">
+        <h2 class="section-header">Watched Games</h2>
+        <div class="games-container">
+          <div class="game-card" v-for="game in filteredWatchedGames" :key="game.id">
+            <div class="vs-container">
+              <span class="vs-text">vs</span>
+              <div class="team-name">{{ game.hteam }}</div>
+              <div class="team-name">{{ game.ateam }}</div>
+            </div>
+            <div class="image-container"
+                 @click.stop="selectGame(game.id)"
+                 @mouseover="hover = game.id"
+                 @mouseleave="hover = null">
+              <img :src="getImageSrc(game.id, true)" alt="Action button">
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
+
 
   
 <script>
@@ -51,13 +66,9 @@ export default {
        */
       unwatchedGames: [],
       /**
-       * The games that the user has already watched
+       * The games that the user has marked as watched
        */
       watchedGames: [],
-      /**
-       * The currently active tab (unwatched or watched)
-       */
-      activeTab: 'unwatched',
       /**
        * The games that the user has selected to mark as watched/unwatched
        */
@@ -66,10 +77,6 @@ export default {
        * The round number that the user has selected
        */
       currentRound: '',
-      /**
-       * Whether to show the confirm button for marking games as watched/unwatched
-       */
-      showConfirmButton: false,
       /**
        * Whether to show the hover effect for the action button
        */
@@ -86,35 +93,17 @@ export default {
      * @returns {Array} An array of round numbers
      */
     rounds() {
-      const rounds = this.currentGames.map(game => game.round);
+      const allGames = [...this.unwatchedGames, ...this.watchedGames];
+      const rounds = allGames.map(game => game.round);
       return Array.from(new Set(rounds)).sort((a, b) => a - b); 
     },
-    /**
-     * Games grouped by round number
-     * @returns {Object} An object with round numbers as keys and games for each round as values
-     */
-    gamesByRound() {
-      return this.rounds.reduce((round_object, round) => {
-        round_object[round] = this.currentGames.filter(game => game.round === round); // Create an object with round numbers as keys and games for each round as values
-        return round_object;
-      }, {});
+    filteredUnwatchedGames() {
+      if (!this.currentRound) return [];
+      return this.unwatchedGames.filter(game => game.round === this.currentRound);
     },
-    /**
-     * The games for the currently selected round
-     * @returns {Array} An array of games for the current round, returns an empty array if currentRound is not set
-     */
-    currentRoundGames() {
-      if(!this.currentRound) {
-        return [];
-      }
-      return this.gamesByRound[this.currentRound] || []; 
-    },
-    /**
-     * The games for the currently active tab
-     * @returns {Array} An array of games for the active tab, either unwatched or watched
-     */
-    currentGames() {
-      return this.activeTab === 'unwatched' ? this.unwatchedGames : this.watchedGames;
+    filteredWatchedGames() {
+      if (!this.currentRound) return [];
+      return this.watchedGames.filter(game => game.round === this.currentRound);
     }
   },
   methods: {
@@ -126,59 +115,39 @@ export default {
     getImageSrc(gameId) {
       const isSelected = this.selectedGames.includes(gameId);
       const isHovering = this.hover === gameId;
+      const isWatched = this.watchedGames.some(game => game.id === gameId);
 
-      if(this.activeTab === 'unwatched') {
-        if (isHovering && !isSelected) return '/checkmark-filled.svg';
-        return isSelected ? '/checkmark-filled.svg' : 'checkmark-greyed.svg'
+      if (isWatched) {
+        return isHovering && !isSelected ? '/remove-filled.svg' : '/remove-greyed.svg';
       } else {
-        if (isHovering && !isSelected) return '/remove-filled.svg';
-        return isSelected ? '/remove-filled.svg' : '/remove-greyed.svg'
+        return isHovering && !isSelected ? '/checkmark-filled.svg' : '/checkmark-greyed.svg';
       }
-    },
-    /**
-     * Set the active round number
-     * @param {String} round The round number to set as active
-     */
-    setActiveRound(round) {
-      this.currentRound = round;
-    },
-    /**
-     * Set the active tab, reset checkbox visibility
-     * @param {String} tab The tab to set as active, either 'unwatched' or 'watched'
-     */
-    setActiveTab(tab) {
-      this.activeTab = tab;
-      this.showCheckboxes = false;
     },
     /**
      * Select a game to mark as watched/unwatched
      * @param {String} gameId The ID of the game to select
      * @param {Event} event The event object
      */
-    selectGame(gameId) {
+     selectGame(gameId) {
+      const isWatched = this.watchedGames.findIndex(game => game.id === gameId) !== -1;
+      const operation = isWatched ? 'remove' : 'add';
+      const serviceMethod = operation === 'add' ? WatchedGamesService.addGamesToWatchedList : WatchedGamesService.removeGamesFromWatchedList;
+      
       this.processingGames.push(gameId);
-
-      this.$nextTick(() => {
-        setTimeout(() => {
-          const operation = this.activeTab === 'unwatched' ? 'add' : 'remove';
-          const serviceMethod = operation === 'add' ? WatchedGamesService.addGamesToWatchedList : WatchedGamesService.removeGamesFromWatchedList;
-
-          serviceMethod(this.$store.state.user.id, gameId)
-            .then(() => {
-              this.moveGameBetweenLists(gameId, operation);
-              this.$emit('gameStatusChanged', { gameId: gameId, operation: operation });
-            })
-            .catch(error => {
-              console.error(`Error marking game as ${operation === 'add' ? 'watched' : 'unwatched'}:`, error);
-            })
-            .finally(() => {
-              const index = this.processingGames.indexOf(gameId);
-              if (index > -1) {
-                this.processingGames.splice(index, 1);
-              }
-            });
-        }, 500);
-      });
+      serviceMethod(this.$store.state.user.id, gameId)
+        .then(() => {
+          this.moveGameBetweenLists(gameId, operation);
+          this.$emit('gameStatusChanged', { gameId: gameId, operation: operation });
+        })
+        .catch(error => {
+          console.error(`Error marking game as ${operation}:`, error);
+        })
+        .finally(() => {
+          const index = this.processingGames.indexOf(gameId);
+          if (index > -1) {
+            this.processingGames.splice(index, 1);
+          }
+        });
     },
     /**
      * Move a game between the watched and unwatched lists
@@ -189,6 +158,7 @@ export default {
       const sourceList = operation === 'add' ? this.unwatchedGames : this.watchedGames;
       const targetList = operation === 'add' ? this.watchedGames : this.unwatchedGames;
       const gameIndex = sourceList.findIndex(game => game.id === gameId);
+
       if (gameIndex !== -1) {
         const [game] = sourceList.splice(gameIndex, 1);
         targetList.push(game);
@@ -227,48 +197,6 @@ export default {
           console.error('Error fetching unwatched games:', error);
         });
     },
-    /**
-     * Mark a game as watched or unwatched
-     * @param {String} gameId The ID of the game to mark
-     * @param {Event} event The event object
-     */
-    markAsWatched(gameId, event) {
-      console.log(`Marking game with ID: ${gameId} as watched`);
-      const userId = this.$store.state.user.id;
-      if (userId) {
-        if (event.target.checked) {
-          WatchedGamesService.addGamesToWatchedList(userId, gameId)
-            .then(() => {
-              console.log('Game marked as watched');
-              const gameIndex = this.unwatchedGames.findIndex(game => game.id === gameId);
-              if (gameIndex !== -1) {
-                const [game] = this.unwatchedGames.splice(gameIndex, 1);
-                this.watchedGames.push(game);
-              }
-            })
-            .catch(error => {
-              console.error('Error marking game as watched:', error);
-            });
-        } else {
-          WatchedGamesService.removeGamesFromWatchedList(userId, gameId)
-            .then(() => {
-              console.log('Game marked as unwatched');
-              const gameIndex = this.watchedGames.findIndex(game => game.id === gameId);
-              if (gameIndex !== -1) {
-                const [game] = this.watchedGames.splice(gameIndex, 1);
-                this.unwatchedGames.push(game);
-              }
-            })
-            .catch(error => {
-              console.error('Error marking game as unwatched:', error);
-            });
-        }
-      } else {
-        console.error('User ID is undefined.');
-      }
-      console.log(`Unwatched games: ${JSON.stringify(this.unwatchedGames)}`);
-      console.log(`Watched games: ${JSON.stringify(this.watchedGames)}`);
-    }
   },
   mounted() {
     // Fetch games when the component is mounted
@@ -276,7 +204,7 @@ export default {
     // Set the active round when the component is mounted
       this.$nextTick(() => {
         if (this.rounds.length > 0) {
-          this.setActiveRound(this.rounds[0]);
+          this.currentRound = this.rounds[0].toString();
         }
       });
     }
@@ -297,56 +225,24 @@ h1 {
   padding-left: 16px;
   border-radius: 8px;
 }
-.game-list {
-  color: var(--afl-900);
-  margin: auto;
-}
 
-.tabbed-content {
+.games-section {
   background-color: var(--afl-800);
   margin: 10px auto;
   padding: 10px;
   border-radius: 8px;
 }
 
-.tabs-and-round-selection {
-  display: flex;
-  justify-content: space-between;
-  margin-right: 8px;
-  align-items: center;
-  flex-wrap: wrap;
+.game-list {
+  color: var(--afl-900);
+  margin: auto;
 }
 
-button {
-  background-color: var(--afl-600);
+h2 {
   color: var(--afl-200);
-  border: 1px solid var(--afl-900);
-  padding: 10px 20px;
-  margin: 0 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  border-radius: 6px;
-  font-family: 'Inter', sans-serif;
-  font-size: 1rem;
+  margin-left: 8px;
 }
 
-button:hover, button.active {
-  background-color: var(--afl-500);
-  color: var(--afl-100);
-}
-
-.tabs button {
-  border-radius: 8px 8px 0 0;
-}
-
-.confirm-button {
-  background-color: var(--afl-500);
-  color: var(--afl-100)
-}
-
-.confirm-button:hover {
-  background-color: var(--afl-400);
-}
 
 .round-selection select {
   background-color: var(--afl-200);
