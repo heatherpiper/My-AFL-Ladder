@@ -1,8 +1,8 @@
 <template>
   <div class="home">
     <div class="home-container">
-      <LadderComp :userId="userId" ref="ladderComponent" class="width-smaller"/>
-      <GameListComp @gameStatusChanged="handleGameStatusChanged" class="width-larger"/>
+      <LadderComp :userId="userId" ref="ladderComponent" class="width-half"/>
+      <GameListComp @gameStatusChanged="handleGameStatusChanged" class="width-half"/>
     </div>
   </div>
 </template>
@@ -41,21 +41,29 @@ export default {
 </script>
 
 <style scoped>
+
 .home-container {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
 }
 
-.width-smaller {
+.width-half {
   width: 45%;
-}
-
-.width-larger {
-  width: 55%;
 }
 
 .game-list, .ladder {
   margin-top: 0;
   padding-top: 0;
 }
+
+@media (max-width: 768px) {
+  .home-container {
+    flex-direction: column;
+  }
+  .width-half {
+    width: 100%;
+  }
+}
+
 </style>

@@ -298,8 +298,8 @@ h1 {
   border-radius: 8px;
 }
 .game-list {
-  padding: 16px;
   color: var(--afl-900);
+  margin: auto;
 }
 
 .tabbed-content {
@@ -312,7 +312,9 @@ h1 {
 .tabs-and-round-selection {
   display: flex;
   justify-content: space-between;
-  margin-right: 6px;
+  margin-right: 8px;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 button {
@@ -413,6 +415,26 @@ button:hover, button.active {
 @media (max-width: 768px) {
   .games-container {
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .tabs-and-round-selection {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tabs, .round-selection {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .round-selection {
+    order: 2;
+  }
+
+  .tabs {
+    order: 1;
   }
 }
 

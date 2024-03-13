@@ -97,6 +97,10 @@ h1 {
   border-radius: 8px;
 }
 
+.ladder {
+  margin: auto;
+}
+
 .table-container {
   background-color: var(--afl-800);
   margin: 10px auto;
