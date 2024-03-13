@@ -14,7 +14,13 @@
       <div class="section-container">
         <h2 class="section-header">Unwatched Games</h2>
         <div class="games-container">
-          <div class="game-card" v-for="game in filteredUnwatchedGames" :key="game.id">
+          <div class="game-card game-card-transition" 
+            v-for="game in filteredUnwatchedGames"
+            :key="game.id"
+            :class="{'game-card-hide': processingGames.includes(game.id)}"
+            @click.stop="selectGame(game.id)"
+            @mouseover="hover = game.id"
+            @mouseleave="hover = null">
             <div class="vs-container">
               <span class="vs-text">vs</span>
               <div class="team-name">{{ game.hteam }}</div>
@@ -33,7 +39,13 @@
       <div class="section-container">
         <h2 class="section-header">Watched Games</h2>
         <div class="games-container">
-          <div class="game-card" v-for="game in filteredWatchedGames" :key="game.id">
+          <div class="game-card game-card-transition" 
+            v-for="game in filteredWatchedGames"
+            :key="game.id"
+            :class="{'game-card-hide': processingGames.includes(game.id)}"
+            @click.stop="selectGame(game.id)"
+            @mouseover="hover = game.id"
+            @mouseleave="hover = null">
             <div class="vs-container">
               <span class="vs-text">vs</span>
               <div class="team-name">{{ game.hteam }}</div>
@@ -113,14 +125,22 @@ export default {
      * @returns {String} The image source for the action button
      */
     getImageSrc(gameId) {
-      const isSelected = this.selectedGames.includes(gameId);
       const isHovering = this.hover === gameId;
       const isWatched = this.watchedGames.some(game => game.id === gameId);
+      const isProcessing = this.processingGames.includes(gameId);
 
       if (isWatched) {
-        return isHovering && !isSelected ? '/remove-filled.svg' : '/remove-greyed.svg';
+        if (isHovering && !isProcessing) {
+          return '/checkmark-hover.svg';
+        } else {
+          return '/checkmark-filled.svg';
+        }
       } else {
-        return isHovering && !isSelected ? '/checkmark-filled.svg' : '/checkmark-greyed.svg';
+        if (isHovering && !isProcessing) {
+          return '/checkmark-hover.svg';
+        } else {
+          return '/checkmark-greyed.svg';
+        }
       }
     },
     /**
@@ -131,24 +151,32 @@ export default {
      selectGame(gameId) {
       const isWatched = this.watchedGames.findIndex(game => game.id === gameId) !== -1;
       const operation = isWatched ? 'remove' : 'add';
+      if (!this.selectedGames.includes(gameId)) {
+        this.selectedGames.push(gameId);
+      }
+
       const serviceMethod = operation === 'add' ? WatchedGamesService.addGamesToWatchedList : WatchedGamesService.removeGamesFromWatchedList;
       
       this.processingGames.push(gameId);
       serviceMethod(this.$store.state.user.id, gameId)
-        .then(() => {
+      .then(() => {
+        setTimeout(() => {
           this.moveGameBetweenLists(gameId, operation);
-          this.$emit('gameStatusChanged', { gameId: gameId, operation: operation });
-        })
-        .catch(error => {
-          console.error(`Error marking game as ${operation}:`, error);
-        })
-        .finally(() => {
           const index = this.processingGames.indexOf(gameId);
           if (index > -1) {
             this.processingGames.splice(index, 1);
           }
-        });
-    },
+        }, 250);
+        this.$emit('gameStatusChanged', { gameId: gameId, operation: operation });
+      })
+      .catch(error => {
+        console.error(`Error marking game as ${operation}:`, error);
+        const index = this.processingGames.indexOf(gameId);
+        if (index > -1) {
+          this.processingGames.splice(index, 1);
+        }
+      });
+  },
     /**
      * Move a game between the watched and unwatched lists
      * @param {String} gameId The ID of the game to move
@@ -308,29 +336,20 @@ h2 {
   height: 36px;
 }
 
-@media (max-width: 768px) {
-  .games-container {
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  }
+.game-card-transition {
+  transition: opacity 1s ease, visibility 1s ease;
+  opacity: 1;
+  visibility: visible
+}
+
+.game-card-hide {
+  opacity: 0;
+  visibility: hidden;
 }
 
 @media (max-width: 768px) {
-  .tabs-and-round-selection {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .tabs, .round-selection {
-    width: 100%;
-    margin-bottom: 10px;
-  }
-
-  .round-selection {
-    order: 2;
-  }
-
-  .tabs {
-    order: 1;
+  .games-container {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   }
 }
 
