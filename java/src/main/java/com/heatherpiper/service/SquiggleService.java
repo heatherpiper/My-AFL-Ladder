@@ -32,7 +32,7 @@ public class SquiggleService {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .header("Accept", "application/json")
-                .header("User-Agent", "My AFL Ladder (github.com/heatherpiper/My-AFL-Ladder)")
+                .header("User-Agent", "Later Ladder (github.com/heatherpiper/Later-Ladder)")
                 .build();
 
         try {
@@ -93,13 +93,16 @@ public class SquiggleService {
                     .filter(game -> game.getComplete() == 100)
                     .mapToInt(Game::getRound)
                     .max()
-                    .orElse(0);
+                    .orElse(-1);
 
-            if (highestCompletedRound == 0 && year > LocalDate.now().getYear() - 2) {
-                // If no games from current year are completed, try previous year
+            boolean isCurrentYearOrLater = year >= LocalDate.now().getYear();
+            boolean shouldFallbackToPreviousYear = highestCompletedRound == -1 && !isCurrentYearOrLater;
+
+            if (shouldFallbackToPreviousYear) {
+                // If no games are completed and it's not the current year or later, try the previous year
                 return fetchGamesUpToMostRecentRound(year - 1);
             } else {
-                for (int round = 1; round <= highestCompletedRound; round++) {
+                for (int round = 0; round <= highestCompletedRound; round++) {
                     allGames.addAll(fetchGamesForYearAndRound(year, round));
                 }
             }
