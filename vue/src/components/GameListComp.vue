@@ -165,15 +165,21 @@ export default {
      * @param {Event} event The event object
      */
      selectGame(gameId) {
-      const isWatched = this.watchedGames.findIndex(game => game.id === gameId) !== -1;
-      const operation = isWatched ? 'remove' : 'add';
-      if (!this.selectedGames.includes(gameId)) {
-        this.selectedGames.push(gameId);
+      // Check if the game is incomplete; if so, do nothing
+      const game = this.unwatchedGames.find(game => game.id === gameId);
+      if (game && game.complete !== 100) {
+        return;
       }
 
+      // Determine if the game is currently marked as watched
+      const isWatched = this.watchedGames.some(game => game.id === gameId);
+
+      // Proceed with adding or removing game from the watched list
+      const operation = isWatched ? 'remove' : 'add';
+      this.processingGames.push(gameId);
+      
       const serviceMethod = operation === 'add' ? WatchedGamesService.addGamesToWatchedList : WatchedGamesService.removeGamesFromWatchedList;
       
-      this.processingGames.push(gameId);
       serviceMethod(this.$store.state.user.id, gameId)
       .then(() => {
         setTimeout(() => {
@@ -192,7 +198,7 @@ export default {
           this.processingGames.splice(index, 1);
         }
       });
-  },
+    },
     /**
      * Move a game between the watched and unwatched lists
      * @param {String} gameId The ID of the game to move
