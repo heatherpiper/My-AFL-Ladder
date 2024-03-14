@@ -28,12 +28,14 @@
               <span class="vs-text">vs</span>
               <div class="team-name">{{ game.hteam }}</div>
               <div class="team-name">{{ game.ateam }}</div>
+              <div class="complete-status" v-if="game.complete !== 100">Not yet played</div>
+              <div v-else class="game-score">{{  game.hscore }} - {{ game.ascore }}</div>
             </div>
             <div class="image-container"
                  @click.stop="selectGame(game.id)"
                  @mouseover="hover = game.id"
                  @mouseleave="hover = null">
-              <img :src="getImageSrc(game.id)" alt="Action button">
+              <img :src="getImageSrc(game.id)" alt="Watched check mark">
             </div>
           </div>
         </div>
@@ -53,6 +55,7 @@
               <span class="vs-text">vs</span>
               <div class="team-name">{{ game.hteam }}</div>
               <div class="team-name">{{ game.ateam }}</div>
+              <div class="game-score">{{ game.hscore }} - {{ game.ascore }}</div>
             </div>
             <div class="image-container"
                  @click.stop="selectGame(game.id)"
@@ -112,12 +115,19 @@ export default {
       const rounds = allGames.map(game => game.round);
       return Array.from(new Set(rounds)).sort((a, b) => a - b); 
     },
-
+    /**
+     * The unwatched games for the selected round
+     * @returns {Array} An array of unwatched games
+     */
     filteredUnwatchedGames() {
       if (!this.currentRound) return [];
       const currentRoundNumber = Number(this.currentRound);
       return this.unwatchedGames.filter(game => Number(game.round) === currentRoundNumber);
     },
+    /**
+     * The watched games for the selected round
+     * @returns {Array} An array of watched games
+     */
     filteredWatchedGames() {
       if (!this.currentRound) return [];
       const currentRoundNumber = Number(this.currentRound);
@@ -199,7 +209,7 @@ export default {
       }
     },
     /**
-     * Fetch the games for the unwatched and watched tabs
+     * Fetch all games, watched and unwatched
      */
     fetchGames() {
       return Promise.all([this.fetchUnwatchedGames(), this.fetchWatchedGames()]);
@@ -232,7 +242,7 @@ export default {
     },
   },
   mounted() {
-    // Fetch games when the component is mounted
+    // Fetch games when the component is mounted, and set the current round
     this.fetchGames().then(() => {
       if (this.rounds.length > 0) {
         this.currentRound = this.rounds[0].toString();
@@ -339,6 +349,18 @@ h2 {
   text-align: left;
   margin: 4px 0;
   font-weight: 900;
+}
+
+.complete-status {
+  margin-top: 10px;
+  color: var(--afl-250);
+  font-style: italic;
+}
+
+.game-score {
+  margin-top: 10px;
+  font-weight: bold;
+  color: #8ac4ff;
 }
 
 .image-container {
