@@ -141,18 +141,16 @@ export default {
      * @returns {String} The image source for the action button
      */
     getImageSrc(gameId) {
+      const game = this.unwatchedGames.concat(this.watchedGames).find(game => game.id === gameId);
       const isHovering = this.hover === gameId;
       const isWatched = this.watchedGames.some(game => game.id === gameId);
-      const isProcessing = this.processingGames.includes(gameId);
+
+      const isIncomplete = game && game.complete !== 100;
 
       if (isWatched) {
-        if (isHovering && !isProcessing) {
-          return '/checkmark-hover.svg';
-        } else {
-          return '/checkmark-filled.svg';
-        }
+        return isHovering ? '/checkmark-hover.svg' : '/checkmark-filled.svg';
       } else {
-        if (isHovering && !isProcessing) {
+        if (isHovering && !isIncomplete) {
           return '/checkmark-hover.svg';
         } else {
           return '/checkmark-greyed.svg';
