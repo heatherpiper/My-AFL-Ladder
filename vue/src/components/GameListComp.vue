@@ -2,7 +2,7 @@
   <div class="game-list">
 
     <div class="header-section">
-      <h1>GAMES</h1>
+      <h1>Games</h1>
       <div class="round-selection">
           <select v-model="currentRound">
             <option disabled value="">Select Round</option>
@@ -68,8 +68,6 @@
 
   </div>
 </template>
-
-
   
 <script>
 import WatchedGamesService from '../services/WatchedGamesService';
@@ -114,13 +112,16 @@ export default {
       const rounds = allGames.map(game => game.round);
       return Array.from(new Set(rounds)).sort((a, b) => a - b); 
     },
+
     filteredUnwatchedGames() {
       if (!this.currentRound) return [];
-      return this.unwatchedGames.filter(game => game.round === this.currentRound);
+      const currentRoundNumber = Number(this.currentRound);
+      return this.unwatchedGames.filter(game => Number(game.round) === currentRoundNumber);
     },
     filteredWatchedGames() {
       if (!this.currentRound) return [];
-      return this.watchedGames.filter(game => game.round === this.currentRound);
+      const currentRoundNumber = Number(this.currentRound);
+      return this.watchedGames.filter(game => Number(game.round) === currentRoundNumber);
     }
   },
   methods: {
@@ -201,15 +202,14 @@ export default {
      * Fetch the games for the unwatched and watched tabs
      */
     fetchGames() {
-      this.fetchUnwatchedGames();
-      this.fetchWatchedGames();
+      return Promise.all([this.fetchUnwatchedGames(), this.fetchWatchedGames()]);
     },
     /**
      * Fetch the games that the user has watched
      */
     fetchWatchedGames() {
       const userId = this.$store.state.user.id;
-      WatchedGamesService.getWatchedGames(userId)
+      return WatchedGamesService.getWatchedGames(userId)
         .then(response => {
           this.watchedGames = response.data;
         })
@@ -222,7 +222,7 @@ export default {
      */
     fetchUnwatchedGames() {
       const userId = this.$store.state.user.id;
-      WatchedGamesService.getUnwatchedGames(userId)
+      return WatchedGamesService.getUnwatchedGames(userId)
         .then(response => {
           this.unwatchedGames = response.data;
         })
@@ -233,15 +233,14 @@ export default {
   },
   mounted() {
     // Fetch games when the component is mounted
-      this.fetchGames();
-    // Set the active round when the component is mounted
-      this.$nextTick(() => {
-        if (this.rounds.length > 0) {
-          this.currentRound = this.rounds[0].toString();
-        }
-      });
-    }
-  };
+    this.fetchGames().then(() => {
+      if (this.rounds.length > 0) {
+        this.currentRound = this.rounds[0].toString();
+        console.log("Set currentRound after fetching:", this.currentRound);
+      }
+    }).catch(error => console.error("Error in mounted hook:", error));
+  },
+};
 </script>
   
 <style scoped>
@@ -286,7 +285,6 @@ h2 {
   color: var(--afl-200);
   margin-left: 8px;
 }
-
 
 .round-selection select {
   background-color: var(--afl-200);
