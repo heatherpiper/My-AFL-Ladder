@@ -21,10 +21,11 @@ public class SquiggleService {
     private final HttpClient httpClient;
 
     @Autowired
-    private GameDao gameDao;
+    private final GameDao gameDao;
 
-    public SquiggleService() {
-        this.httpClient = HttpClient.newHttpClient();
+    public SquiggleService(HttpClient httpClient, GameDao gameDao) {
+        this.httpClient = httpClient;
+        this.gameDao = gameDao;
     }
 
     public List<Game> fetchGamesForYearAndRound(int year, int round) {
