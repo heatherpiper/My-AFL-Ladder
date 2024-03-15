@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://later-ladder-backend.onrender.com';
+const API_URL = process.env.VUE_APP_REMOTE_API
 
 export default {
     getAllGames() {

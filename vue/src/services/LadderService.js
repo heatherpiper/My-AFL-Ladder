@@ -1,7 +1,7 @@
 import axios from 'axios';
 import store from '../store';
 
-const API_URL = 'https://later-ladder-backend.onrender.com';
+const API_URL = process.env.VUE_APP_REMOTE_API
 
 export default {
     getLadder() {
