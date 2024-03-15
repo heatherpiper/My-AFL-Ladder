@@ -1,7 +1,7 @@
 import axios from 'axios';
 import store from '../store';
 
-const API_URL = 'http://localhost:9000';
+const API_URL = 'https://later-ladder-backend.onrender.com';
 
 export default {
     getLadder() {

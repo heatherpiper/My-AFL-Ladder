@@ -40,7 +40,8 @@ public class JWTFilter extends GenericFilterBean {
         if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
             Authentication authentication = tokenProvider.getAuthentication(jwt);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            LOG.debug("set Authentication to com.techelevator.security context for '{}', uri: {}", authentication.getName(), requestURI);
+            LOG.debug("set Authentication to com.heatherpiper.security context for '{}', uri: {}",
+                    authentication.getName(), requestURI);
         } else {
             LOG.debug("no valid JWT token found, uri: {}", requestURI);
         }

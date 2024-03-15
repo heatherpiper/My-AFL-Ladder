@@ -48,7 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * Configure com.techelevator.auctions.security settings
+     * Configure com.heatherpiper.auctions.security settings
      * @param httpSecurity
      * @throws Exception
      */

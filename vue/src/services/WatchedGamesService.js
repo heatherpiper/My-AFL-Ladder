@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:9000';
+const API_URL = 'https://later-ladder-backend.onrender.com';
 
 export default {
     addGamesToWatchedList(userId, gameIds) {
