@@ -14,10 +14,11 @@
     </div>
 
     <div class="games-section">
+
       <div class="section-container">
         <h2 class="section-header">Unwatched Games</h2>
-        <div class="games-container">
-          <div class="game-card game-card-transition" 
+        <div v-if="filteredUnwatchedGames.length" class="games-container">
+          <div class="game-card game-card-transition"
             v-for="game in filteredUnwatchedGames"
             :key="game.id"
             :class="{'game-card-hide': processingGames.includes(game.id)}"
@@ -39,11 +40,14 @@
             </div>
           </div>
         </div>
+        <div v-else class="no-games-message">
+          No more unwatched games.
+        </div>
       </div>
 
       <div class="section-container">
         <h2 class="section-header">Watched Games</h2>
-        <div class="games-container">
+        <div v-if="filteredWatchedGames.length" class="games-container">
           <div class="game-card game-card-transition" 
             v-for="game in filteredWatchedGames"
             :key="game.id"
@@ -64,6 +68,9 @@
               <img :src="getImageSrc(game.id, true)" alt="Action button">
             </div>
           </div>
+        </div>
+        <div v-else class="no-games-message">
+          Click a game to mark it as watched.
         </div>
       </div>
 
@@ -87,10 +94,6 @@ export default {
        * The games that the user has marked as watched
        */
       watchedGames: [],
-      /**
-       * The games that the user has selected to mark as watched/unwatched
-       */
-      selectedGames: [],
       /**
        * The round number that the user has selected
        */
@@ -120,7 +123,7 @@ export default {
      * @returns {Array} An array of unwatched games
      */
     filteredUnwatchedGames() {
-      if (!this.currentRound) return [];
+      if (this.currentRound === null || this.currentRound === undefined) return [];
       const currentRoundNumber = Number(this.currentRound);
       return this.unwatchedGames.filter(game => Number(game.round) === currentRoundNumber);
     },
@@ -129,7 +132,7 @@ export default {
      * @returns {Array} An array of watched games
      */
     filteredWatchedGames() {
-      if (!this.currentRound) return [];
+      if (this.currentRound === null || this.currentRound === undefined) return [];
       const currentRoundNumber = Number(this.currentRound);
       return this.watchedGames.filter(game => Number(game.round) === currentRoundNumber);
     }
@@ -250,7 +253,6 @@ export default {
     this.fetchGames().then(() => {
       if (this.rounds.length > 0) {
         this.currentRound = this.rounds[0].toString();
-        console.log("Set currentRound after fetching:", this.currentRound);
       }
     }).catch(error => console.error("Error in mounted hook:", error));
   },
@@ -342,7 +344,7 @@ h2 {
 .vs-text {
   position: absolute;
   left: 0px;
-  top: 50%;
+  top: 33%;
   transform: translateY(-50%);
   font-weight: bold;
   color: var(--afl-400);
@@ -356,13 +358,13 @@ h2 {
 }
 
 .complete-status {
-  margin-top: 10px;
+  margin-top: 8px;
   color: var(--afl-250);
   font-style: italic;
 }
 
 .game-score {
-  margin-top: 10px;
+  margin-top: 8px;
   font-weight: bold;
   color: #8ac4ff;
 }
@@ -384,6 +386,13 @@ h2 {
 .game-card-hide {
   opacity: 0;
   visibility: hidden;
+}
+
+.no-games-message {
+  color: var(--afl-250);
+  padding: 2rem;
+  text-align: center;
+  font-style: italic;
 }
 
 @media (max-width: 768px) {
