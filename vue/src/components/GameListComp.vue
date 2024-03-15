@@ -26,11 +26,11 @@
             @mouseover="hover = game.id"
             @mouseleave="hover = null">
             <div class="game-text-container">
+              <div class="team-name">{{ game.hteam }}</div>
               <div class="vs-container">
-                <div class="team-name">{{ game.hteam }}</div>
                 <span class="vs-text">vs.</span>
+                <div class="team-name">{{ game.ateam }}</div>
               </div>
-              <div class="team-name">{{ game.ateam }}</div>
               <div v-if="game.complete === 100" class="complete-status" >Full time</div>
               <div v-else class="complete-status">Not yet played</div>
             </div>
@@ -57,14 +57,22 @@
             @click.stop="selectGame(game.id)"
             @mouseover="hover = game.id"
             @mouseleave="hover = null">
+
             <div class="game-text-container">
+              <div class="team-name">
+                  {{ game.hteam }}
+                  <span v-if="game.winner === game.hteam">&#x2714;</span>
+                </div>
               <div class="vs-container">
-                <div class="team-name">{{ game.hteam }}</div>
                 <span class="vs-text">vs.</span>
+                <div class="team-name">
+                {{ game.ateam }}
+                <span v-if="game.winner === game.ateam">&#x2714;</span>
+                </div>
               </div>
-              <div class="team-name">{{ game.ateam }}</div>
               <div class="game-score">{{ game.hscore }} - {{ game.ascore }}</div>
             </div>
+            
             <div class="image-container"
                  @click.stop="selectGame(game.id)"
                  @mouseover="hover = game.id"
@@ -354,9 +362,14 @@ h2 {
 }
 
 .vs-text {
-  margin: 0 8px;
+  margin-right: 8px;
   color: var(--afl-250);
   font-weight: bold;
+}
+
+.team-name span {
+  color: #7EC466;
+  margin-left: 4px;
 }
 
 .complete-status {
