@@ -84,15 +84,14 @@ export default {
 
 <style scoped>
 h1 {
-  font-family: 'League Gothic', sans-serif;
-  font-size: xxx-large;
+  font-family: 'Roboto', sans-serif;
+  font-size: xx-large;
   text-transform: uppercase;
-  letter-spacing: 2px;
   color: var(--afl-200);
   text-shadow: 1px 1px 2px var(--afl-900);
   background-color: var(--afl-800);
   margin: auto;
-  padding-left: 16px;
+  padding: 8px 16px;
   border-radius: 8px;
 }
 

@@ -25,9 +25,11 @@
             @click.stop="selectGame(game.id)"
             @mouseover="hover = game.id"
             @mouseleave="hover = null">
-            <div class="vs-container">
-              <span class="vs-text">vs</span>
-              <div class="team-name">{{ game.hteam }}</div>
+            <div class="game-text-container">
+              <div class="vs-container">
+                <div class="team-name">{{ game.hteam }}</div>
+                <span class="vs-text">vs.</span>
+              </div>
               <div class="team-name">{{ game.ateam }}</div>
               <div class="complete-status" v-if="game.complete !== 100">Not yet played</div>
               <div v-else class="game-score">{{  game.hscore }} - {{ game.ascore }}</div>
@@ -55,9 +57,11 @@
             @click.stop="selectGame(game.id)"
             @mouseover="hover = game.id"
             @mouseleave="hover = null">
-            <div class="vs-container">
-              <span class="vs-text">vs</span>
-              <div class="team-name">{{ game.hteam }}</div>
+            <div class="game-text-container">
+              <div class="vs-container">
+                <div class="team-name">{{ game.hteam }}</div>
+                <span class="vs-text">vs.</span>
+              </div>
               <div class="team-name">{{ game.ateam }}</div>
               <div class="game-score">{{ game.hscore }} - {{ game.ascore }}</div>
             </div>
@@ -265,7 +269,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-right: 16px;
+  padding: 8px 16px;
   background-color: var(--afl-800);
   border-radius: 8px;
   margin: auto;
@@ -274,12 +278,10 @@ export default {
 h1 {
   margin: 0;
   flex-grow: 1;
-  padding-left: 16px;
   border-radius: 8px;
-  font-family: 'League Gothic', sans-serif;
-  font-size: xxx-large;
+  font-family: 'Roboto', sans-serif;
+  font-size: xx-large;
   text-transform: uppercase;
-  letter-spacing: 2px;
   color: var(--afl-200);
   text-shadow: 1px 1px 2px var(--afl-900);
   background-color: var(--afl-800);
@@ -299,7 +301,7 @@ h1 {
 
 h2 {
   color: var(--afl-200);
-  margin-left: 8px;
+  margin-left: 16px;
 }
 
 .round-selection select {
@@ -333,28 +335,28 @@ h2 {
   min-height: 5em;
 }
 
-.vs-container {
+.game-text-container {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   position: relative;
-  padding-left: 30px
+  padding-left: 10px;
 }
 
-.vs-text {
-  position: absolute;
-  left: 0px;
-  top: 33%;
-  transform: translateY(-50%);
-  font-weight: bold;
-  color: var(--afl-400);
+.vs-container {
+  display: flex;
+  align-items: center;
 }
 
 .team-name {
-  width: 100%;
-  text-align: left;
   margin: 4px 0;
   font-weight: 900;
+}
+
+.vs-text {
+  margin: 0 8px;
+  color: var(--afl-250);
+  font-weight: bold;
 }
 
 .complete-status {
@@ -366,7 +368,7 @@ h2 {
 .game-score {
   margin-top: 8px;
   font-weight: bold;
-  color: #8ac4ff;
+  color: var(--afl-250);
 }
 
 .image-container {

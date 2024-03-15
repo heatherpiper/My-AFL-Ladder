@@ -29,7 +29,7 @@
   --afl-450: #0e87ff;
   --afl-400: #1FB4FF; 
   --afl-300: #E8001B;
-  --afl-250: #91b8df;
+  --afl-250: #8ebeee;
   --afl-200: #EDF4F7;
   --afl-100: #F2F4F7;
 }
@@ -45,33 +45,32 @@ body {
   justify-content: space-between;
   align-items: center;
   background-color: var(--afl-800);
-  padding: 0.66rem 10px;
+  padding: 16px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: right;
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
 }
 
 .page-title {
-  font-family: 'League Gothic', sans-serif;
+  font-family: 'Roboto Condensed', sans-serif;
   text-transform: uppercase;
-  letter-spacing: 1px;
   color: var(--afl-200);
   margin: 0;
-  padding: 0 10px;
+  padding: 0 8px;
+  font-size: x-large;
 }
 
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .nav-link {
   color: var(--afl-200);
   text-decoration: none;
-  margin: 0 15px;
-  font-size: large;
+  margin: 0 8px;
   text-transform: uppercase;
   position: relative;
 }
@@ -81,7 +80,7 @@ body {
 }
 
 .separator {
-  color: var(--afl-500);
+  color: var(--afl-250);
 }
 
 </style>
