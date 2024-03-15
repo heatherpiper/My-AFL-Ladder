@@ -31,8 +31,8 @@
                 <span class="vs-text">vs.</span>
               </div>
               <div class="team-name">{{ game.ateam }}</div>
-              <div class="complete-status" v-if="game.complete !== 100">Not yet played</div>
-              <div v-else class="game-score">{{  game.hscore }} - {{ game.ascore }}</div>
+              <div v-if="game.complete === 100" class="complete-status" >Full time</div>
+              <div v-else class="complete-status">Not yet played</div>
             </div>
             <div class="image-container"
                  @click.stop="selectGame(game.id)"
