@@ -6,7 +6,7 @@ Later Ladder offers a solution: to display a team ladder that only refreshes as 
 
 This is a work in progress. 
 
-Status: You can now view a live version of Later Ladder at [LaterLadder.com}(https://www.laterladder.com)! Core functionality is complete. Users can mark games as watched or unwatched and the team ladder updates according to those game results. Games do not have to be watched in any particular order.
+Status: You can now view a live version of Later Ladder at [LaterLadder.com](https://www.laterladder.com)! Core functionality is complete. Users can mark games as watched or unwatched and the team ladder updates according to those game results. Games do not have to be watched in any particular order.
 
 ![Later Ladder demonstration](demo.gif)
 
