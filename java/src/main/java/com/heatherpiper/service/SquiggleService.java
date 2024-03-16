@@ -1,5 +1,7 @@
 package com.heatherpiper.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.heatherpiper.model.Game;
@@ -13,19 +15,35 @@ import java.util.*;
 
 import com.heatherpiper.dao.GameDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import reactor.core.Disposable;
+import reactor.core.publisher.Flux;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 @Service
 public class SquiggleService {
+
+    private Disposable gameUpdateSubscription;
 
     private final HttpClient httpClient;
 
     @Autowired
     private final GameDao gameDao;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     public SquiggleService(HttpClient httpClient, GameDao gameDao) {
         this.httpClient = httpClient;
         this.gameDao = gameDao;
+    }
+
+    @PostConstruct
+    public void init() {
+        subscribeToGameUpdates();
     }
 
     public List<Game> fetchGamesForYearAndRound(int year, int round) {
@@ -100,7 +118,7 @@ public class SquiggleService {
             boolean shouldFallbackToPreviousYear = highestCompletedRound == -1 && !isCurrentYearOrLater;
 
             if (shouldFallbackToPreviousYear) {
-                // If no games are completed and it's not the current year or later, try the previous year
+                // If no games are completed, and it's not the current year or later, try the previous year
                 return fetchGamesUpToMostRecentRound(year - 1);
             } else {
                 for (int round = 0; round <= highestCompletedRound; round++) {
@@ -113,7 +131,6 @@ public class SquiggleService {
         }
         return allGames;
     }
-
 
     private List<Game> parseGames(String responseBody) {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -131,6 +148,65 @@ public class SquiggleService {
         } catch (IOException e) {
             e.printStackTrace();
             return List.of();
+        }
+    }
+
+    public void subscribeToGameUpdates() {
+        if (gameUpdateSubscription != null && !gameUpdateSubscription.isDisposed()) {
+            gameUpdateSubscription.dispose();
+        }
+
+        Flux<String> eventStream = reactor.netty.http.client.HttpClient.create()
+                .get()
+                .uri("https://api.squiggle.com.au/sse/games")
+                .responseContent()
+                .asString()
+                .windowUntil(s -> s.contains("\n\n"))
+                .flatMap(w -> w.reduce(String::concat));
+
+        gameUpdateSubscription = eventStream.subscribe(
+                this::processSseEvent,
+                error -> {
+                    System.err.println("Error on Game Event Stream: " + error);
+                    reconnectAfterDelay();
+                },
+                () -> System.out.println("Game Event Stream Completed")
+        );
+    }
+
+    private void processSseEvent(String sseEvent) {
+        try {
+            if (sseEvent.startsWith("data:")) {
+                String json = sseEvent.substring("data:".length());
+                if (json.trim().startsWith("[")) {
+                    List<Game> games = objectMapper.readValue(json, new TypeReference<>() {
+                    });
+                    gameDao.saveAll(games);
+                } else {
+                    Game game = objectMapper.readValue(json, Game.class);
+                    gameDao.saveAll(List.of(game));
+                }
+            }
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Async
+    private void reconnectAfterDelay() {
+        try {
+            Thread.sleep(10000);
+            subscribeToGameUpdates();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            System.err.println("Failed to wait before reconnecting: " + e.getMessage());
+        }
+    }
+
+    @PreDestroy
+    public void onDestroy() {
+        if (gameUpdateSubscription != null && !gameUpdateSubscription.isDisposed()) {
+            gameUpdateSubscription.dispose();
         }
     }
 }
