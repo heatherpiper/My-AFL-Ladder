@@ -8,6 +8,10 @@ This is a work in progress.
 
 Status: You can now view a live version of Later Ladder at [LaterLadder.com](https://www.laterladder.com)! Core functionality is complete. Users can mark games as watched or unwatched and the team ladder updates according to those game results. Games do not have to be watched in any particular order.
 
+Recent updates:
+- Final scores now appear once a game is marked as watched
+- Games are updated in real time. When a game has finished, it can immediately be marked as watched.
+
 ![Later Ladder demonstration](demo.gif)
 
 Features to come:
