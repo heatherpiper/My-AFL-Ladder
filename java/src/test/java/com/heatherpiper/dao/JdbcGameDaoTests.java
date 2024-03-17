@@ -39,6 +39,7 @@ public class JdbcGameDaoTests {
         expectedGame = new Game();
         expectedGame.setId(1);
         expectedGame.setYear(2023);
+        expectedGame.setUnixtime(1703277000);
         expectedGame.setRound(1);
         expectedGame.setHteam("Team A");
         expectedGame.setAteam("Team B");
@@ -121,6 +122,7 @@ public class JdbcGameDaoTests {
         mockGame1.setId(1);
         mockGame1.setRound(5);
         mockGame1.setYear(2021);
+        mockGame1.setUnixtime(1703277000);
         mockGame1.setHteam("Team A");
         mockGame1.setAteam("Team B");
         mockGame1.setHscore(100);
@@ -132,6 +134,7 @@ public class JdbcGameDaoTests {
         mockGame2.setId(2);
         mockGame2.setRound(5);
         mockGame2.setYear(2021);
+        mockGame2.setUnixtime(1703277000);
         mockGame2.setHteam("Team C");
         mockGame2.setAteam("Team D");
         mockGame2.setHscore(90);
