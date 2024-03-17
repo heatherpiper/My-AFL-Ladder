@@ -203,6 +203,7 @@ export default {
           }
         }, 100);
         this.$emit('gameStatusChanged', { gameId: gameId, operation: operation });
+        this.hover = null;
       })
       .catch(error => {
         console.error(`Error marking game as ${operation}:`, error);
