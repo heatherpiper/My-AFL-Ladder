@@ -155,6 +155,18 @@ export default {
     }
   },
   methods: {
+    determineDefaultRound() {
+      let defaultRound = this.rounds[this.rounds.length - 1];
+
+      for (let round of this.rounds.slice().reverse()) {
+        const unwatchedInRound = this.unwatchedGames.some(game => Number(game.round) === round);
+        if (unwatchedInRound) {
+          defaultRound = round;
+          break;
+        }
+      }
+      this.currentRound = defaultRound.toString();
+    },
     /**
      * Get the image source for the action button
      * @param {String} gameId The ID of the game
@@ -271,8 +283,8 @@ export default {
     this.fetchGames().then(() => {
       if (savedRound) {
         this.currentRound = savedRound;
-      } else if (this.rounds.length > 0) {
-        this.currentRound = this.rounds[0].toString();
+      } else {
+        this.determineDefaultRound();
       }
     }).catch(error => console.error("Error in mounted hook:", error));
   },
