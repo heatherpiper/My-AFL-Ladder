@@ -39,7 +39,6 @@ public class WatchedGamesService {
     }
 
     public void markGamesAsWatchedSequentially(int userId, List<Integer> gameIds) {
-        logger.info("Starting to mark games as watched sequentially for user {}, gameIds: {}", userId, gameIds);
 
         // Validate user ID and game IDs
         validateUserAndGameIds(userId, gameIds);
@@ -48,11 +47,9 @@ public class WatchedGamesService {
         for (Integer gameId : gameIds) {
             markGameAsWatchedAndUpdateLadder(userId, gameId);
         }
-        logger.info("Completed marking games as watched sequentially for user {}", userId);
     }
 
     public void markGamesAsUnwatchedSequentially(int userId, List<Integer> gameIds) {
-        logger.info("Starting to mark games as unwatched sequentially for user {}, gameIds: {}", userId, gameIds);
 
         // Validate user ID and game IDs
         validateUserAndGameIds(userId, gameIds);
@@ -61,7 +58,6 @@ public class WatchedGamesService {
         for (Integer gameId : gameIds) {
             markGameAsUnwatchedAndUpdateLadder(userId, gameId);
         }
-        logger.info("Completed marking games as unwatched sequentially for user {}", userId);
     }
 
     @Transactional
@@ -139,7 +135,6 @@ public class WatchedGamesService {
     }
 
     private void updateTeamLadder(int userId, String teamName, int points, int pointsForThisGame, int pointsAgainstThisGame) {
-        logger.debug("Updating team ladder for userId: {}, teamName: {}, points: {}", userId, teamName, points);
 
         // Validate team name
         int teamId = teamDao.findTeamIdByName(teamName);

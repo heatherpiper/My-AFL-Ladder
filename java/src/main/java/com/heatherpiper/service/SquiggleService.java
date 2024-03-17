@@ -152,7 +152,6 @@ public class SquiggleService {
     }
 
     public void subscribeToGameUpdates() {
-        System.out.println("Starting SSE subscription to game updates...");
         if (gameUpdateSubscription != null && !gameUpdateSubscription.isDisposed()) {
             gameUpdateSubscription.dispose();
         }
@@ -176,7 +175,6 @@ public class SquiggleService {
     }
 
     private void processSseEvent(String sseEvent) {
-        System.out.println("Received SSE event: " + sseEvent);
         try {
             if (sseEvent.startsWith("data:")) {
                 String json = sseEvent.substring("data:".length());
