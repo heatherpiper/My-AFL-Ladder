@@ -28,7 +28,7 @@
             <div class="game-text-container">
               <div class="team-name">{{ game.hteam }}</div>
               <div class="vs-container">
-                <span class="vs-text">vs.</span>
+                <span class="vs-text">v.</span>
                 <div class="team-name">{{ game.ateam }}</div>
               </div>
               <div v-if="game.complete === 100" class="complete-status" >Full time</div>
@@ -64,7 +64,7 @@
                   <span v-if="game.winner === game.hteam">&#x2714;</span>
                 </div>
               <div class="vs-container">
-                <span class="vs-text">vs.</span>
+                <span class="vs-text">v.</span>
                 <div class="team-name">
                 {{ game.ateam }}
                 <span v-if="game.winner === game.ateam">&#x2714;</span>
@@ -72,7 +72,7 @@
               </div>
               <div class="game-score">{{ game.hscore }} - {{ game.ascore }}</div>
             </div>
-            
+
             <div class="image-container"
                  @click.stop="selectGame(game.id)"
                  @mouseover="hover = game.id"

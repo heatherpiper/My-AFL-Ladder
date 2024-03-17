@@ -33,6 +33,7 @@ public class JdbcGameDao implements GameDao {
         game.setId(rs.getInt("id"));
         game.setRound(rs.getInt("round"));
         game.setYear(rs.getInt("year"));
+        game.setUnixtime(rs.getInt("unixtime"));
         game.setHteam(rs.getString("hteam"));
         game.setAteam(rs.getString("ateam"));
         game.setHscore(rs.getObject("hscore", Integer.class));
@@ -88,7 +89,8 @@ public class JdbcGameDao implements GameDao {
     }
 
     public Game fetchGameDetails(int id) {
-        String sql = "SELECT id, round, year, hteam, ateam, hscore, ascore, winner, complete FROM games WHERE id = ?";
+        String sql = "SELECT id, round, year, unixtime, hteam, ateam, hscore, ascore, winner, complete FROM games " +
+                "WHERE id = ?";
         try {
             return jdbcTemplate.queryForObject(sql, new Object[]{id}, gameRowMapper);
         } catch (EmptyResultDataAccessException e) {
@@ -98,11 +100,12 @@ public class JdbcGameDao implements GameDao {
 
     @Override
     public void saveAll(List<Game> games) {
-        String sql = "INSERT INTO games (id, round, year, hteam, ateam, hscore, ascore, winner, complete) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)" +
+        String sql = "INSERT INTO games (id, round, year, unixtime, hteam, ateam, hscore, ascore, winner, complete) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" +
                 "ON CONFLICT (id) DO UPDATE SET " +
                 "round = EXCLUDED.round, " +
                 "year = EXCLUDED.year, " +
+                "unixtime = EXCLUDED.unixtime," +
                 "hteam = EXCLUDED.hteam, " +
                 "ateam = EXCLUDED.ateam, " +
                 "hscore = EXCLUDED.hscore, " +
@@ -117,12 +120,13 @@ public class JdbcGameDao implements GameDao {
                 ps.setInt(1, game.getId());
                 ps.setInt(2, game.getRound());
                 ps.setInt(3, game.getYear());
-                ps.setString(4, game.getHteam());
-                ps.setString(5, game.getAteam());
-                ps.setObject(6, game.getHscore());
-                ps.setObject(7, game.getAscore());
-                ps.setString(8, game.getWinner());
-                ps.setInt(9, game.getComplete());
+                ps.setInt(4, game.getUnixtime());
+                ps.setString(5, game.getHteam());
+                ps.setString(6, game.getAteam());
+                ps.setObject(7, game.getHscore());
+                ps.setObject(8, game.getAscore());
+                ps.setString(9, game.getWinner());
+                ps.setInt(10, game.getComplete());
             }
 
             public int getBatchSize() {

@@ -22,6 +22,7 @@ public class JdbcWatchedGamesDao implements WatchedGamesDao {
         game.setId(rs.getInt("id"));
         game.setRound(rs.getInt("round"));
         game.setYear(rs.getInt("year"));
+        game.setUnixtime(rs.getInt("unixtime"));
         game.setHteam(rs.getString("hteam"));
         game.setAteam(rs.getString("ateam"));
         game.setHscore(rs.getObject("hscore", Integer.class));
@@ -33,7 +34,8 @@ public class JdbcWatchedGamesDao implements WatchedGamesDao {
 
     @Override
     public List<Game> findWatchedGames(int userId) {
-        String sql = "SELECT g.* FROM games g INNER JOIN watched_games wg ON g.id = wg.game_id WHERE wg.user_id = ?";
+        String sql = "SELECT g.* FROM games g INNER JOIN watched_games wg ON g.id = wg.game_id WHERE wg.user_id = ? " +
+                "ORDER BY g.unixtime ASC";
         return jdbcTemplate.query(sql, gameRowMapper, userId);
     }
 
@@ -41,7 +43,8 @@ public class JdbcWatchedGamesDao implements WatchedGamesDao {
     public List<Game> findUnwatchedGames(int userId) {
         String sql = "SELECT g.* FROM games g " +
                 "LEFT JOIN watched_games wg ON g.id = wg.game_id AND wg.user_id = ? " +
-                "WHERE wg.game_id IS NULL";
+                "WHERE wg.game_id IS NULL" +
+                "ORDER BY g.unixtime ASC";
         return jdbcTemplate.query(sql, new Object[]{userId}, gameRowMapper);
     }
 
