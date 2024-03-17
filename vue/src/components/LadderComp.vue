@@ -83,6 +83,7 @@ export default {
 </script>
 
 <style scoped>
+
 h1 {
   font-family: 'Roboto', sans-serif;
   font-size: xx-large;
@@ -91,7 +92,7 @@ h1 {
   text-shadow: 1px 1px 2px var(--afl-900);
   background-color: var(--afl-800);
   margin: auto;
-  padding: 8px 16px;
+  padding: 4px 12px;
   border-radius: 8px;
 }
 
@@ -116,7 +117,7 @@ thead th {
   color: var(--afl-200);
   text-align: left;
   background-color: var(--afl-800);
-  padding: 0.8rem;
+  padding: 0.5rem;
   text-transform: uppercase;
 }
 
@@ -127,7 +128,7 @@ tbody tr {
 }
 
 td {
-  padding: 0.5rem;
+  padding: 0.4rem;
 }
 
 td:not(:last-child) {
@@ -168,6 +169,40 @@ tbody tr:nth-child(8) {
 .points {
   font-weight: 900;
   text-align: center;
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: x-large;
+  }
+
+  .table-container {
+    margin-bottom: 1.25rem;
+  }
+
+  thead th {
+    padding: 0.4rem;
+    font-size: small;
+  }
+  
+  td {
+    padding: 0.4rem;
+  }
+
+  .team-rank {
+    width: 1.75rem;
+    height: 1.75rem;
+    font-weight: 700;
+    margin-left: 0.25rem;
+  }
+
+  .team-name {
+    font-weight: 700;
+  }
+
+  .points {
+    font-weight: 700;
+  }
 }
 
 </style>

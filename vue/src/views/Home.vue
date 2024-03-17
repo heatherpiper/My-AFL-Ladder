@@ -57,6 +57,7 @@ export default {
   padding-top: 0;
 }
 
+
 @media (max-width: 768px) {
   .home-container {
     flex-direction: column;

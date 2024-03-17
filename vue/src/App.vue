@@ -1,10 +1,8 @@
 <template>
   <div id="app">
     <div id="nav" class="nav-bar">
-      <h1 class="page-title">Later Ladder</h1>
+      <h1 class="site-title">Later Ladder</h1>
       <div class="nav-links">
-        <router-link class="nav-link" v-bind:to="{ name: 'home' }">Home</router-link>
-        <div class="separator">&nbsp;|&nbsp;</div>
         <router-link class="nav-link" v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link>
       </div>
     </div>
@@ -45,14 +43,14 @@ body {
   justify-content: space-between;
   align-items: center;
   background-color: var(--afl-800);
-  padding: 16px;
+  padding: 8px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: right;
   margin-bottom: 1.5rem;
 }
 
-.page-title {
+.site-title {
   font-family: 'Roboto Condensed', sans-serif;
   text-transform: uppercase;
   color: var(--afl-200);
@@ -64,14 +62,12 @@ body {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 8px;
 }
 
 .nav-link {
   color: var(--afl-200);
   text-decoration: none;
   margin: 0 8px;
-  text-transform: uppercase;
   position: relative;
 }
 
@@ -79,8 +75,24 @@ body {
   color: var(--afl-200);
 }
 
-.separator {
-  color: var(--afl-250);
+@media (max-width: 600px) {
+  .nav-bar {
+    padding: 8px;
+    margin-bottom: 1.25rem;
+  }
+
+  .site-title {
+    font-size: large;
+    padding: 0 4px;
+  }
+
+  .nav-links {
+    gap: 4px;
+  }
+
+  .nav-link {
+    margin: 0 4px;
+  }
 }
 
 </style>

@@ -277,7 +277,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 16px;
+  padding: 4px 12px;
   background-color: var(--afl-800);
   border-radius: 8px;
   margin: auto;
@@ -295,6 +295,16 @@ h1 {
   background-color: var(--afl-800);
 }
 
+.round-selection select {
+  background-color: var(--afl-200);
+  color: var(--afl-900);
+  padding: 4px 8px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 .games-section {
   background-color: var(--afl-800);
   margin: 10px auto;
@@ -309,17 +319,8 @@ h1 {
 
 h2 {
   color: var(--afl-200);
-  margin-left: 16px;
-}
-
-.round-selection select {
-  background-color: var(--afl-200);
-  color: var(--afl-900);
-  padding: 8px 10px;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-left: 8px;
+  font-size: x-large;
 }
 
 .games-container {
@@ -337,7 +338,7 @@ h2 {
   justify-content: space-between;
   background-color: var(--afl-600);
   border-radius: 8px;
-  padding: 16px;
+  padding: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   color: var(--afl-200);
   min-height: 5em;
@@ -414,6 +415,15 @@ h2 {
   .games-container {
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   }
+
+  h1 {
+    font-size: x-large;
+  }
+
+  .no-games-message {
+    font-size: small;
+  }
+
 }
 
 </style>
