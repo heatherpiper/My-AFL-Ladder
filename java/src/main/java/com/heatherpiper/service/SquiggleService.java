@@ -159,7 +159,7 @@ public class SquiggleService {
 
         Flux<String> eventStream = reactor.netty.http.client.HttpClient.create()
                 .get()
-                .uri("https://api.squiggle.com.au/sse/test")
+                .uri("https://api.squiggle.com.au/sse/games")
                 .responseContent()
                 .asString()
                 .windowUntil(s -> s.contains("\n\n"))
@@ -168,10 +168,10 @@ public class SquiggleService {
         gameUpdateSubscription = eventStream.subscribe(
                 this::processSseEvent,
                 error -> {
-                    System.err.println("Error on Test Event Stream: " + error);
+                    System.err.println("Error on Game Event Stream: " + error);
                     reconnectAfterDelay();
                 },
-                () -> System.out.println("Test Event Stream Completed")
+                () -> System.out.println("Game Event Stream Completed")
         );
     }
 
