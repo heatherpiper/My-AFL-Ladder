@@ -105,7 +105,7 @@ public class JdbcGameDao implements GameDao {
                 "ON CONFLICT (id) DO UPDATE SET " +
                 "round = EXCLUDED.round, " +
                 "year = EXCLUDED.year, " +
-                "unixtime = EXCLUDED.unixtime," +
+                "unixtime = EXCLUDED.unixtime, " +
                 "hteam = EXCLUDED.hteam, " +
                 "ateam = EXCLUDED.ateam, " +
                 "hscore = EXCLUDED.hscore, " +
