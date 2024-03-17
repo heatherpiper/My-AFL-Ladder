@@ -149,6 +149,11 @@ export default {
       return this.watchedGames.filter(game => Number(game.round) === currentRoundNumber);
     }
   },
+  watch: {
+    currentRound(newValue) {
+      localStorage.setItem('currentRound', newValue);
+    }
+  },
   methods: {
     /**
      * Get the image source for the action button
@@ -262,9 +267,11 @@ export default {
     },
   },
   mounted() {
-    // Fetch games when the component is mounted, and set the current round
+    const savedRound = localStorage.getItem('currentRound');
     this.fetchGames().then(() => {
-      if (this.rounds.length > 0) {
+      if (savedRound) {
+        this.currentRound = savedRound;
+      } else if (this.rounds.length > 0) {
         this.currentRound = this.rounds[0].toString();
       }
     }).catch(error => console.error("Error in mounted hook:", error));
