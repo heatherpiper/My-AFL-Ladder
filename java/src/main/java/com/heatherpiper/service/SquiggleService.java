@@ -74,7 +74,7 @@ public class SquiggleService {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .header("Accept", "application/json")
-                .header("User-Agent", "My AFL Ladder (github.com/heatherpiper/My-AFL-Ladder)")
+                .header("User-Agent", "Later Ladder (github.com/heatherpiper/Later-Ladder)")
                 .build();
 
         try {
