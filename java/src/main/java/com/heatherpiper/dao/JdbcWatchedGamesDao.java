@@ -43,7 +43,7 @@ public class JdbcWatchedGamesDao implements WatchedGamesDao {
     public List<Game> findUnwatchedGames(int userId) {
         String sql = "SELECT g.* FROM games g " +
                 "LEFT JOIN watched_games wg ON g.id = wg.game_id AND wg.user_id = ? " +
-                "WHERE wg.game_id IS NULL" +
+                "WHERE wg.game_id IS NULL " +
                 "ORDER BY g.unixtime ASC";
         return jdbcTemplate.query(sql, new Object[]{userId}, gameRowMapper);
     }
