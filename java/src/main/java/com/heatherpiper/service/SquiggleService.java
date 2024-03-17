@@ -152,13 +152,14 @@ public class SquiggleService {
     }
 
     public void subscribeToGameUpdates() {
+        System.out.println("Starting SSE subscription to game updates...");
         if (gameUpdateSubscription != null && !gameUpdateSubscription.isDisposed()) {
             gameUpdateSubscription.dispose();
         }
 
         Flux<String> eventStream = reactor.netty.http.client.HttpClient.create()
                 .get()
-                .uri("https://api.squiggle.com.au/sse/games")
+                .uri("https://api.squiggle.com.au/sse/test")
                 .responseContent()
                 .asString()
                 .windowUntil(s -> s.contains("\n\n"))
@@ -167,14 +168,15 @@ public class SquiggleService {
         gameUpdateSubscription = eventStream.subscribe(
                 this::processSseEvent,
                 error -> {
-                    System.err.println("Error on Game Event Stream: " + error);
+                    System.err.println("Error on Test Event Stream: " + error);
                     reconnectAfterDelay();
                 },
-                () -> System.out.println("Game Event Stream Completed")
+                () -> System.out.println("Test Event Stream Completed")
         );
     }
 
     private void processSseEvent(String sseEvent) {
+        System.out.println("Received SSE event: " + sseEvent);
         try {
             if (sseEvent.startsWith("data:")) {
                 String json = sseEvent.substring("data:".length());
