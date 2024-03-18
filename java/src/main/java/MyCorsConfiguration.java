@@ -11,7 +11,8 @@ public class MyCorsConfiguration {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("https://later-ladder-backend.onrender.com");
+        config.addAllowedOrigin("https://laterladder.com");
+        config.addAllowedOrigin("https://www.laterladder.com");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);

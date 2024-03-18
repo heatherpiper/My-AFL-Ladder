@@ -5,8 +5,6 @@ import Login from '../views/Login.vue'
 import Logout from '../views/Logout.vue'
 import Register from '../views/Register.vue'
 import store from '../store/index'
-import GameListComp from '../components/GameListComp.vue';
-import GameDetailsComp from '../components/GameDetailsComp.vue';
 
 Vue.use(Router)
 
@@ -55,22 +53,6 @@ const router = new Router({
         requiresAuth: false
       }
     },
-    {
-      path: '/games',
-      name: 'games',
-      component: GameListComp,
-      meta: {
-        requiresAuth: true
-      }
-    },
-    {
-      path: '/games/:id',
-      name: 'game',
-      component: GameDetailsComp,
-      meta: {
-        requiresAuth: true
-      }
-    }
   ]
 })
 

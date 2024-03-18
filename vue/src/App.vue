@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <notification-modal v-if="showNotificationModal" :message="notificationMessage" @close="showNotificationModal = false"></notification-modal>
     <div id="nav" class="nav-bar">
       <router-link to="/" class="site-title-link">
         <h1 class="site-title">Later Ladder</h1>
@@ -14,7 +15,34 @@
 </template>
 
 <script>
+import NotificationModal from './components/NotificationModal.vue';
 
+export default {
+  components: {
+    NotificationModal
+  },
+  data() {
+    return {
+      showNotificationModal: false,
+      notificationMessage: ''
+    }
+  },
+  created() {
+    this.$bus.$on('show-notification', this.showNotification);
+  },
+  beforeDestroy() {
+    this.$bus.$off('show-notification', this.showNotification);
+  },
+  methods: {
+    showNotification(message) {
+      this.notificationMessage = message;
+      this.showNotificationModal = true;
+    },
+    closeNotification() {
+      this.showNotificationModal = false;
+    },
+  },
+};
 </script>
 
 
