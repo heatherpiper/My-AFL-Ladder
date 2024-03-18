@@ -1,9 +1,11 @@
 <template>
   <div class="home">
-    <div v-if="showGuestNotice && !userId" class="guest-notice">
-      <button class="close-button" @click="dismissGuestNotice">&times;</button>
-      <p>Your watched games and ladder standings will not be saved without an account. Please <router-link to="/login">log in</router-link> or <router-link to="/register">register</router-link> if you wish to save your data.</p>
-    </div>
+    <transition name="fade">
+      <div v-if="showGuestNotice && !userId" class="guest-notice">
+        <button class="close-button" @click="dismissGuestNotice">&times;</button>
+        <p>Your watched games and ladder standings will not be saved without an account. Please <router-link to="/login">log in</router-link> or <router-link to="/register">register</router-link> if you wish to save your data.</p>
+      </div>
+    </transition>
     <div class="home-container">
       <component :is="ladderComponent" :userId="userId" ref="ladderComponent" class="width-half"/>
       <commponent :is="gameListComponent" @recalculateLadder="recalculateLadder" @watchedStatusChanged="handleGameStatusChanged" @gameStatusChanged="handleGameStatusChanged" class="width-half"/>
@@ -100,6 +102,7 @@ export default {
 
 .guest-notice a {
   color: var(--afl-600);
+  text-decoration-line: none;
 }
 
 .guest-notice a:visited {
@@ -114,17 +117,26 @@ export default {
   border: none;
   color: var(--afl-800);
   cursor: pointer;
-  margin: 2px 4px;
+  margin: 2px 8px;
 }
 
 .guest-notice p {
   padding: 8px;
 }
 
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.25s;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
 @media (max-width: 768px) {
   .home-container {
     flex-direction: column;
   }
+
   .width-half {
     width: 100%;
   }
@@ -132,6 +144,10 @@ export default {
   .guest-notice {
     width: 100%;
     font-size: small;
+  }
+
+  .close-button {
+    margin: 2px 4px 1px 1px;
   }
 }
 
