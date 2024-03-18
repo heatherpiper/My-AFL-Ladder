@@ -1,6 +1,7 @@
 <template>
   <div class="home">
-    <div v-if="!userId" class="guest-notice">
+    <div v-if="showGuestNotice && !userId" class="guest-notice">
+      <button class="close-button" @click="dismissGuestNotice">&times;</button>
       <p>Your watched games and ladder standings will not be saved without an account. Please <router-link to="/login">log in</router-link> or <router-link to="/register">register</router-link> if you wish to save your data.</p>
     </div>
     <div class="home-container">
@@ -37,10 +38,14 @@ export default {
   },
   data() {
     return {
-      teamLadder: []
+      teamLadder: [], 
+      showGuestNotice: true
     }
   },
   methods: {
+    dismissGuestNotice() {
+      this.showGuestNotice = false;
+    },
     recalculateLadder() {
       if (this.$refs.ladderComponent && typeof this.$refs.ladderComponent.calculateLadder === 'function') {
         this.$refs.ladderComponent.calculateLadder();
@@ -81,20 +86,40 @@ export default {
 }
 
 .guest-notice {
+  position: relative;
   text-align: center;
   margin: 1.5em auto;
-  background-color: var(--afl-600);
-  color: var(--afl-200);
+  background-color: var(--afl-200);
+  color: var(--afl-800);
   border: 1px solid var(--afl-800);
   border-radius: 8px;
-  width: 85%;
+  width: 80%;
   box-sizing: border-box;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.guest-notice a {
+  color: var(--afl-600);
 }
 
 .guest-notice a:visited {
-  color: var(--afl-400);
+  color: var(--afl-600);
 }
 
+.close-button {
+  float: right;
+  font-size: large;
+  font-weight: bold;
+  background: none;
+  border: none;
+  color: var(--afl-800);
+  cursor: pointer;
+  margin: 2px 4px;
+}
+
+.guest-notice p {
+  padding: 8px;
+}
 
 @media (max-width: 768px) {
   .home-container {
@@ -102,6 +127,11 @@ export default {
   }
   .width-half {
     width: 100%;
+  }
+
+  .guest-notice {
+    width: 100%;
+    font-size: small;
   }
 }
 
