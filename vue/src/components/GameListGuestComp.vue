@@ -220,6 +220,7 @@
             }
 
             this.$emit('watchedStatusChanged', gameId);
+            this.hover = null;
           }, 200);
         }
       },
