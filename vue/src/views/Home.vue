@@ -1,5 +1,8 @@
 <template>
   <div class="home">
+    <div v-if="!userId" class="guest-notice">
+      <p>Your watched games and ladder standings will not be saved without an account. Please <router-link to="/login">log in</router-link> or <router-link to="/register">register</router-link> if you wish to save your data.</p>
+    </div>
     <div class="home-container">
       <component :is="ladderComponent" :userId="userId" ref="ladderComponent" class="width-half"/>
       <commponent :is="gameListComponent" @recalculateLadder="recalculateLadder" @watchedStatusChanged="handleGameStatusChanged" @gameStatusChanged="handleGameStatusChanged" class="width-half"/>
@@ -75,6 +78,21 @@ export default {
 .game-list, .ladder {
   margin-top: 0;
   padding-top: 0;
+}
+
+.guest-notice {
+  text-align: center;
+  margin: 1.5em auto;
+  background-color: var(--afl-600);
+  color: var(--afl-200);
+  border: 1px solid var(--afl-800);
+  border-radius: 8px;
+  width: 85%;
+  box-sizing: border-box;
+}
+
+.guest-notice a:visited {
+  color: var(--afl-400);
 }
 
 

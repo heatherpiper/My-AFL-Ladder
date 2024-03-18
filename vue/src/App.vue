@@ -1,8 +1,11 @@
 <template>
   <div id="app">
     <div id="nav" class="nav-bar">
-      <h1 class="site-title">Later Ladder</h1>
+      <router-link to="/" class="site-title-link">
+        <h1 class="site-title">Later Ladder</h1>
+      </router-link>
       <div class="nav-links">
+        <router-link class="nav-link" v-bind:to="{ name: 'login' }" v-if="$store.state.token === ''">Login</router-link>
         <router-link class="nav-link" v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link>
       </div>
     </div>
@@ -57,6 +60,16 @@ body {
   margin: 0;
   padding: 0 8px;
   font-size: x-large;
+}
+
+.site-title-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.site-title-link:hover,
+.site-title-link:visited {
+  text-decoration: none;
 }
 
 .nav-links {
