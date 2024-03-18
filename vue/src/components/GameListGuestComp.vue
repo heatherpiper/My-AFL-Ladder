@@ -220,7 +220,7 @@
             }
 
             this.$emit('watchedStatusChanged', gameId);
-          }, 100);
+          }, 200);
         }
       },
       /**
