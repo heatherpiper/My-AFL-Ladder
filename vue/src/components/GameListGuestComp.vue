@@ -195,14 +195,32 @@
        */
        selectGame(gameId) {
         let gamesData = JSON.parse(sessionStorage.getItem('gamesData'));
-        const game = gamesData.find(game => game.id === gameId);
+        const gameIndex = gamesData.findIndex(game => game.id === gameId);
 
-        if (game && game.complete === 100) {
-            game.watched = !game.watched;
-            sessionStorage.setItem('gamesData', JSON.stringify(gamesData));
+        // Check if game is incomplete; if so, do nothing
+        if (gamesData[gameIndex] && gamesData[gameIndex].complete !== 100) {
+          return;
+        }
+
+        // Determine if the game is currently marked as watched
+        if (gameIndex !== -1) {
+          gamesData[gameIndex].watched = !gamesData[gameIndex].watched;
+
+          // Temporarily add gameId to processingGames to trigger animation
+          this.processingGames.push(gameId);
+          sessionStorage.setItem('gamesData', JSON.stringify(gamesData));
+
+          setTimeout(() => {
             this.loadGamesFromSession();
 
+            // Remove gameId from processingGames after animation
+            const index = this.processingGames.indexOf(gameId);
+            if (index > -1) {
+              this.processingGames.splice(index, 1);
+            }
+
             this.$emit('watchedStatusChanged', gameId);
+          }, 100);
         }
       },
       /**
