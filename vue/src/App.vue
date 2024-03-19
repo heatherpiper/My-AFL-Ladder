@@ -108,7 +108,7 @@ body {
 .nav-link {
   color: var(--afl-200);
   text-decoration: none;
-  margin: 0 8px;
+  margin: 0 16px;
   position: relative;
 }
 
@@ -125,10 +125,6 @@ body {
   .site-title {
     font-size: large;
     padding: 0 4px;
-  }
-
-  .nav-links {
-    gap: 4px;
   }
 
   .nav-link {

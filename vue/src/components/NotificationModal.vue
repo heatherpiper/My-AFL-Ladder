@@ -22,8 +22,8 @@
     background-color: var(--afl-200);
     padding: 16px 12px;
     margin-top: 1em;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,.5);
+    border-radius: 12px;
+    box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.1), 0 4px 4px 0 rgba(0, 0, 0, 0.1);
     z-index: 1000;
   }
 

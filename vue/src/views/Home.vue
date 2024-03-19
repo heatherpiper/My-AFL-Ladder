@@ -94,10 +94,10 @@ export default {
   background-color: var(--afl-200);
   color: var(--afl-800);
   border: 1px solid var(--afl-800);
-  border-radius: 8px;
+  border-radius: 12px;
   width: 80%;
   box-sizing: border-box;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.1), 0 6px 6px 0 rgba(0, 0, 0, 0.1);
 }
 
 .guest-notice a {

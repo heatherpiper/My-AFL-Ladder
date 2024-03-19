@@ -62,10 +62,10 @@ export default {
 
 .login {
     max-width: 400px;
-    margin: 40px auto; 
-    padding: 30px;
+    margin: 2em auto; 
+    padding: 1.8em;
     background-color: var(--afl-200);
-    border: 1px solid var(--afl-900);
+    border: 1px solid var(--afl-800);
     border-radius: 12px; 
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
@@ -87,7 +87,7 @@ input[type="password"] {
   padding: 10px;
   background-color: #e1e6e9;
   border: none;
-  border-radius: 6px; 
+  border-radius: 8px; 
   color: var(--afl-900); 
   display: block;
   margin: auto;
@@ -98,7 +98,7 @@ button[type="submit"] {
   padding: 10px;
   background-color: var(--afl-500); 
   border: none; 
-  border-radius: 6px; 
+  border-radius: 8px; 
   color: var(--afl-100); 
   cursor: pointer;
   display: block;
@@ -112,28 +112,27 @@ button[type="submit"]:hover {
 
 div[role="alert"] {
   color: #ff6b6b;
-  margin-bottom: 15px;
+  margin-bottom: 16px;
   text-align: center;
 }
 
 div[role="notice"] {
   color: var(--afl-600);
-  margin-bottom: 15px;
+  margin-bottom: 16px;
   text-align: center;
 }
 
 p {
   text-align: center;
-  color: #8b8c8d;
+  color: var(--afl-800);
 }
 
-p a, .router-link {
-  color: var(--afl-500);
+p router-link {
+  color: var(--afl-600);
 }
 
-p a:visited, .router-link:visited {
-  color: var(--color-purple);
+*:visited {
+  color: var(--afl-600);
 }
-
 
 </style>
