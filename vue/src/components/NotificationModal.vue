@@ -28,6 +28,7 @@
   }
 
   .notification-modal p {
+    color: var(--afl-800);
     text-align: center;
     margin-bottom: 1.25em;
   }
@@ -35,11 +36,17 @@
   .notification-modal button {
     display: block;
     margin: 0 auto;
-    padding: 8px 32px;
+    padding: 10px 32px;
     border: none;
     border-radius: 8px;
-    background-color: var(--afl-600);
+    background-color: var(--afl-500);
     color: var(--afl-200);
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .notification-modal button:hover {
+    background-color: var(--afl-450);
   }
 
   .fade-enter-active, .fade-leave-active {

@@ -69,4 +69,10 @@ router.beforeEach((to, from, next) => {
   }
 });
 
+import { bus } from '../event-bus.js';
+
+router.afterEach(() => {
+  bus.$emit('reset-notification-modal');
+})
+
 export default router;

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <notification-modal v-if="showNotificationModal" :message="notificationMessage" @close="showNotificationModal = false"></notification-modal>
+    <notification-modal v-if="showNotificationModal && $route.name !== 'login' && $route.name !== 'register'" :message="notificationMessage" @close="showNotificationModal = false"></notification-modal>
     <div id="nav" class="nav-bar">
       <router-link to="/" class="site-title-link">
         <h1 class="site-title">Later Ladder</h1>
@@ -29,11 +29,15 @@ export default {
   },
   created() {
     this.$bus.$on('show-notification', this.showNotification);
+    this.$bus.$on('reset-notification-modal', this.resetNotificationModal)
   },
   beforeDestroy() {
     this.$bus.$off('show-notification', this.showNotification);
   },
   methods: {
+    resetNotificationModal() {
+      this.showNotificationModal = false;
+    },
     showNotification(message) {
       this.notificationMessage = message;
       this.showNotificationModal = true;
@@ -42,6 +46,11 @@ export default {
       this.showNotificationModal = false;
     },
   },
+  watch: {
+    '$route'() {
+      this.showNotificationModal = false;
+    }
+  }
 };
 </script>
 
