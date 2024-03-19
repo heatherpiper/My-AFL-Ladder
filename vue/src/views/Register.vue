@@ -159,6 +159,7 @@ button[type="submit"] {
   display: block;
   margin: 20px auto;
   font-size: 16px;
+  transition: background-color 0.1s ease-in-out;
 }
 
 button[type="submit"]:hover {

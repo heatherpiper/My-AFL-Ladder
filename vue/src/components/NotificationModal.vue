@@ -43,6 +43,7 @@
     color: var(--afl-200);
     cursor: pointer;
     font-size: 16px;
+    transition: background-color 0.1s ease-in-out;
   }
 
   .notification-modal button:hover {

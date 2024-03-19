@@ -1,11 +1,13 @@
 <template>
   <div id="app">
     <notification-modal v-if="showNotificationModal && $route.name !== 'login' && $route.name !== 'register'" :message="notificationMessage" @close="showNotificationModal = false"></notification-modal>
+    <about-modal :is-visible="showAboutModal" @close="showAboutModal = false"></about-modal>
     <div id="nav" class="nav-bar">
       <router-link to="/" class="site-title-link">
         <h1 class="site-title">Later Ladder</h1>
       </router-link>
       <div class="nav-links">
+        <router-link class="nav-link" v-bind:to="{ name: 'about' }">About</router-link>
         <router-link class="nav-link" v-bind:to="{ name: 'login' }" v-if="$store.state.token === ''">Login</router-link>
         <router-link class="nav-link" v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link>
       </div>
@@ -19,12 +21,12 @@ import NotificationModal from './components/NotificationModal.vue';
 
 export default {
   components: {
-    NotificationModal
+    NotificationModal,
   },
   data() {
     return {
       showNotificationModal: false,
-      notificationMessage: ''
+      notificationMessage: '',
     }
   },
   created() {
@@ -112,6 +114,7 @@ body {
 .nav-links {
   display: flex;
   align-items: center;
+  text-transform: uppercase;
 }
 
 .nav-link {
@@ -125,6 +128,7 @@ body {
   color: var(--afl-200);
 }
 
+
 @media (max-width: 600px) {
   .nav-bar {
     padding: 8px;
@@ -132,12 +136,12 @@ body {
   }
 
   .site-title {
-    font-size: large;
+    font-size: x-large;
     padding: 0 4px;
   }
 
   .nav-link {
-    margin: 0 4px;
+    margin: 0 8px;
   }
 }
 

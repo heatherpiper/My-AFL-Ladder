@@ -62,7 +62,6 @@ public class AuthenticationController {
             User user = userDao.createUser(newUser);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (UniqueConstraintViolationException e) {
-            // This would need you to catch specific exceptions in createUser and throw UniqueConstraintViolationException for username uniqueness violations
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body("Username is already taken.");
