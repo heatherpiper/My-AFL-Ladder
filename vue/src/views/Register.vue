@@ -9,10 +9,10 @@
         <input type="text" id="username" placeholder="Username" v-model="user.username" required autofocus />
       </div>
       <div class="form-input-group">
-        <input type="password" id="password" placeholder="Password" v-model="user.password" required />
+        <input type="password" id="password" placeholder="Password" v-model="user.password" @input="clearErrors" required />
       </div>
       <div class="form-input-group">
-        <input type="password" id="confirmPassword" placeholder="Confirm password" v-model="user.confirmPassword" required />
+        <input type="password" id="confirmPassword" placeholder="Confirm password" v-model="user.confirmPassword" @input="clearErrors" required />
       </div>
       <button type="submit">Register</button>
       <p>Already have an account? <router-link :to="{ name: 'login' }">Log in.</router-link></p>
@@ -40,32 +40,73 @@ export default {
   },
   methods: {
     register() {
-      if (this.user.password != this.user.confirmPassword) {
+      this.clearErrors();
+
+      if (this.user.password !== this.user.confirmPassword) {
         this.registrationErrors = true;
         this.registrationErrorMsg = 'Password & Confirm Password do not match.';
-      } else {
-        authService
-          .register(this.user)
-          .then((response) => {
-            if (response.status == 201) {
-              this.$router.push({
-                path: '/login',
-                query: { registration: 'success' },
-              });
-            }
-          })
-          .catch((error) => {
-            const response = error.response;
-            this.registrationErrors = true;
-            if (response.status === 400) {
-              this.registrationErrorMsg = 'Bad Request: Validation Errors';
-            }
-          });
+        return;
       }
+
+      if (!this.validatePassword()) {
+        return;
+      }
+
+      authService
+        .register(this.user)
+        .then((response) => {
+          if (response.status == 201) {
+            this.$router.push({
+              path: '/login',
+              query: { registration: 'success' },
+            });
+          }
+        })
+        .catch((error) => {
+          this.registrationErrors = true;
+          if (error.response && error.response.status === 400) {
+            this.registrationErrorMsg = 'Bad Request: Validation Errors';
+          } else {
+            this.registrationErrorMsg = 'An error occurred during registration.';
+          }
+        });
     },
     clearErrors() {
       this.registrationErrors = false;
       this.registrationErrorMsg = 'There were problems registering this user.';
+    },
+    validatePassword() {
+      this.clearErrors();
+      const errors = [];
+
+      if (!this.user.password) {
+        errors.push('Password is required.');
+      } else {
+          if (this.user.password.length < 8) {
+            errors.push('Password must be at least 8 characters long.');
+          }
+          if (this.user.password.length > 30) {
+            errors.push('Password must be at most 30 characters long.');
+          }
+          if (!/[A-Z]/.test(this.user.password)) {
+            errors.push('Password must contain at least one uppercase letter.');
+          }
+          if (!/[a-z]/.test(this.user.password)) {
+            errors.push('Password must contain at least one lowercase letter.');
+          }
+          if (!/[0-9]/.test(this.user.password)) {
+            errors.push('Password must contain at least one digit.');
+          }
+          if (!/[!@#$%^&*.]/.test(this.user.password)) {
+            errors.push('Password must contain at least one special character (!@#$%^&*.)');
+          }
+      }
+      if (errors.length > 0) {
+        this.registrationErrors = true;
+        this.registrationErrorMsg = errors.join(' ');
+        return false;
+      }
+      return true;
     },
   },
 };

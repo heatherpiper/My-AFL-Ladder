@@ -440,10 +440,6 @@ h2 {
     font-size: x-large;
   }
 
-  .no-games-message {
-    font-size: small;
-  }
-
 }
 
 </style>
