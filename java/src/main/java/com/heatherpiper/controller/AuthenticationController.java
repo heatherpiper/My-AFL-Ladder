@@ -3,6 +3,7 @@ package com.heatherpiper.controller;
 import javax.validation.Valid;
 
 import com.heatherpiper.exception.DaoException;
+import com.heatherpiper.exception.UniqueConstraintViolationException;
 import com.heatherpiper.model.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -56,14 +57,19 @@ public class AuthenticationController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(path = "/register", method = RequestMethod.POST)
-    public void register(@Valid @RequestBody RegisterUserDto newUser) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterUserDto newUser) {
         try {
             User user = userDao.createUser(newUser);
-            if (user == null) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User registration failed.");
-            }
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (UniqueConstraintViolationException e) {
+            // This would need you to catch specific exceptions in createUser and throw UniqueConstraintViolationException for username uniqueness violations
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Username is already taken.");
         } catch (DaoException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "User registration failed.");
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("User registration failed due to an unexpected error.");
         }
     }
 

@@ -65,7 +65,7 @@ export default {
         .catch((error) => {
           this.registrationErrors = true;
           if (error.response && error.response.status === 400) {
-            this.registrationErrorMsg = 'Bad Request: Validation Errors';
+            this.registrationErrorMsg = error.response.data || 'Username is already taken.';
           } else {
             this.registrationErrorMsg = 'An error occurred during registration.';
           }

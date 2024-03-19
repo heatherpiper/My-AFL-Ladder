@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 import com.heatherpiper.exception.DaoException;
+import com.heatherpiper.exception.UniqueConstraintViolationException;
 import com.heatherpiper.model.RegisterUserDto;
 import com.heatherpiper.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,7 +92,7 @@ public class JdbcUserDao implements UserDao {
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
         } catch (DataIntegrityViolationException e) {
-            throw new DaoException("Data integrity violation", e);
+            throw new UniqueConstraintViolationException("Username is already taken.", e);
         }
         return newUser;
     }
