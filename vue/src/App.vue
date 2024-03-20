@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <notification-modal v-if="showNotificationModal && $route.name !== 'login' && $route.name !== 'register'" :message="notificationMessage" @close="showNotificationModal = false"></notification-modal>
+    <notification-modal v-if="showNotificationModal && $route.name !== 'login' && $route.name !== 'register'" :message="notificationMessage" @close="handleNotificationClose"></notification-modal>
     <div id="nav" class="nav-bar">
       <router-link to="/" class="site-title-link">
         <h1 class="site-title">Later Ladder</h1>
@@ -43,9 +43,10 @@ export default {
       this.notificationMessage = message;
       this.showNotificationModal = true;
     },
-    closeNotification() {
-      this.showNotificationModal = false;
-    },
+    handleNotificationClose() {
+      this.$store.commit('LOGOUT');
+      this.$router.push({ name: 'login' });
+    }
   },
   watch: {
     '$route'() {
