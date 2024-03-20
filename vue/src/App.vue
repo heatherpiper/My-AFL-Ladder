@@ -3,7 +3,7 @@
     <notification-modal v-if="showNotificationModal && $route.name !== 'login' && $route.name !== 'register'" :message="notificationMessage" @close="handleNotificationClose"></notification-modal>
     <div id="nav" class="nav-bar">
       <router-link to="/" class="site-title-link">
-        <h1 class="site-title">Later Ladder</h1>
+        <img src="@/assets/LaterLadder-Wordmark.webp" alt="Later Ladder logo" class="site-logo">
       </router-link>
       <div class="nav-links">
         <router-link class="nav-link" v-bind:to="{ name: 'about' }" v-if="$route.path !== '/about'">About</router-link>
@@ -92,13 +92,11 @@ body {
   margin-bottom: 1.5rem;
 }
 
-.site-title {
-  font-family: 'Roboto Condensed', sans-serif;
-  text-transform: uppercase;
-  color: var(--afl-200);
+.site-logo {
+  height: 2.5em;
+  width: auto;
   margin: 0;
   padding: 0 8px;
-  font-size: x-large;
 }
 
 .site-title-link {
