@@ -301,11 +301,9 @@
   
   h1 {
     margin: 0;
-    flex-grow: 1;
     border-radius: 8px;
     font-family: 'Roboto', sans-serif;
     font-size: xx-large;
-    text-transform: uppercase;
     color: var(--afl-200);
     text-shadow: 1px 1px 2px var(--afl-900);
     background-color: var(--afl-800);

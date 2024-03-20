@@ -1,13 +1,12 @@
 <template>
   <div id="app">
     <notification-modal v-if="showNotificationModal && $route.name !== 'login' && $route.name !== 'register'" :message="notificationMessage" @close="showNotificationModal = false"></notification-modal>
-    <about-modal :is-visible="showAboutModal" @close="showAboutModal = false"></about-modal>
     <div id="nav" class="nav-bar">
       <router-link to="/" class="site-title-link">
         <h1 class="site-title">Later Ladder</h1>
       </router-link>
       <div class="nav-links">
-        <router-link class="nav-link" v-bind:to="{ name: 'about' }">About</router-link>
+        <router-link class="nav-link" v-bind:to="{ name: 'about' }" v-if="$route.path !== '/about'">About</router-link>
         <router-link class="nav-link" v-bind:to="{ name: 'login' }" v-if="$store.state.token === ''">Login</router-link>
         <router-link class="nav-link" v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link>
       </div>
