@@ -101,12 +101,17 @@ export default {
 }
 
 .guest-notice a {
-  color: var(--afl-600);
+  color: var(--afl-500);
   text-decoration-line: none;
 }
 
 .guest-notice a:visited {
   color: var(--afl-600);
+}
+
+.guest-notice a:hover {
+  text-decoration-line: underline;
+  cursor: pointer;
 }
 
 .close-button {

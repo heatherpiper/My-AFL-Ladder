@@ -1,13 +1,15 @@
 <template>
     <div class="about-container">
 
-
         <div class="section-container">
             <div class="header-box">
                 <h2 class="section-header">About Later Ladder</h2>
             </div>
             <div class="section-box">
                 <div class="section-content">
+                    <div class="logo-container">
+                        <img src="@/assets/LaterLadder-Logo.webp" alt="Later Ladder color logo" class="logo-image">
+                    </div>
                     <p>Later Ladder is a web application tailored for fans of the Australian Football League (AFL), which enables users to track AFL team standings in a unique way. Designed for those who prefer watching games after their live broadcast, it allows for the updating and viewing of team standings based on the outcomes of games the user has marked as watched, without spoiling the results of games yet to be seen. This project was born from my personal experience as an American AFL fan, addressing the challenge of following the league from a timezone where games are often aired overnight.</p>
                     <h3>Core technologies</h3>
                     <ul>
@@ -30,6 +32,7 @@
                         <li>Display wins, losses, and draws in ladder</li>
                         <li>Enhanced user accounts with options for password recovery and ability to log in using OAuth providers</li>
                     </ul>
+                    
                 </div>
             </div>
         </div>
@@ -116,6 +119,15 @@ export default {
     cursor: pointer;
 }
 
+.logo-container {
+    text-align: center;
+    margin-top: 1em;
+}
+
+.logo-image {
+    max-width: 400px;
+}
+
 .button-container {
     text-align: center;
 }
@@ -128,6 +140,7 @@ export default {
     border-radius: 8px;
     background-color: var(--afl-500);
     color: var(--afl-200);
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.1);
     cursor: pointer;
     text-decoration: none;
     transition: background-color 0.1s ease-in-out;
@@ -157,6 +170,10 @@ export default {
 
     ul {
         padding-left: 1em;
+    }
+
+    .logo-image {
+        max-width: 300px;
     }
 
     .back-button {
