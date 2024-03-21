@@ -59,15 +59,13 @@
             @mouseleave="hover = null">
 
             <div class="game-text-container">
-              <div class="team-name">
+              <div class="team-name" :class="{'team-winner': game.winner === game.hteam}">
                   {{ game.hteam }}
-                  <span v-if="game.winner === game.hteam">&#x2714;</span>
                 </div>
               <div class="vs-container">
                 <span class="vs-text">v.</span>
-                <div class="team-name">
-                {{ game.ateam }}
-                <span v-if="game.winner === game.ateam">&#x2714;</span>
+                <div class="team-name" :class="{'team-winner': game.winner === game.ateam}">
+                  {{ game.ateam }}
                 </div>
               </div>
               <div class="game-score">{{ game.hscore }} - {{ game.ascore }}</div>
@@ -386,7 +384,8 @@ h2 {
   font-weight: bold;
 }
 
-.team-name span {
+.team-winner::after {
+  content: '\2714';
   color: #7EC466;
   margin-left: 4px;
 }
