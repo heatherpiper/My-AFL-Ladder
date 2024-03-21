@@ -60,14 +60,12 @@
 
             <div class="game-text-container">
               <div class="team-name">
-                  {{ game.hteam }}
-                  <span v-if="game.winner === game.hteam">&#x2714;</span>
+                  <span>{{ game.hteam }}<span v-if="game.winner === game.hteam" class="checkmark">&#x2714;</span></span>
                 </div>
               <div class="vs-container">
                 <span class="vs-text">v.</span>
                 <div class="team-name">
-                {{ game.ateam }}
-                <span v-if="game.winner === game.ateam">&#x2714;</span>
+                  <span>{{ game.ateam }}<span v-if="game.winner === game.ateam" class="checkmark">&#x2714;</span></span>
                 </div>
               </div>
               <div class="game-score">{{ game.hscore }} - {{ game.ascore }}</div>
@@ -386,7 +384,7 @@ h2 {
   font-weight: bold;
 }
 
-.team-name span {
+.checkmark {
   color: #7EC466;
   margin-left: 4px;
 }
