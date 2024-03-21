@@ -1,6 +1,9 @@
 <template>
   <div id="login" class="login">
     <form @submit.prevent="login">
+      <div class="logo-container">
+        <img src="@/assets/LaterLadder-Lettermark.svg" alt="Later Ladder lettermark">
+      </div>
       <h1 >Please sign in</h1>
       <div role="alert" v-if="invalidCredentials">
         Invalid username or password
@@ -70,6 +73,16 @@ export default {
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
 
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5em;
+}
+
+.logo-container img {
+  max-width: 80px;
+}
+
 .login h1 {
   color: var(--afl-600);
   text-align: center;
@@ -129,11 +142,11 @@ p {
 }
 
 p router-link {
-  color: var(--afl-600);
+  color: var(--afl-500);
 }
 
 *:visited {
-  color: var(--afl-600);
+  color: var(--afl-500);
 }
 
 </style>

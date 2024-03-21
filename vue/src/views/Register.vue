@@ -1,6 +1,9 @@
 <template>
   <div id="register" class="register">
     <form @submit.prevent="register">
+      <div class="logo-container">
+        <img src="@/assets/LaterLadder-Lettermark.svg" alt="Later Ladder lettermark">
+      </div>
       <h1>Sign up</h1>
       <div role="alert" v-if="registrationErrors">
         {{ registrationErrorMsg }}
@@ -124,6 +127,16 @@ export default {
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
 
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5em;
+}
+
+.logo-container img {
+  max-width: 80px;
+}
+
 .register h1 {
   color: var(--afl-600);
   text-align: center;
@@ -178,11 +191,11 @@ p {
 }
 
 p a{
-  color: var(--afl-600);
+  color: var(--afl-500);
 }
 
 p a:visited {
-  color: var(--afl-600);
+  color: var(--afl-500);
 }
 
 </style>
