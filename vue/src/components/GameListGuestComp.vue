@@ -406,8 +406,8 @@
     position: absolute;
     bottom: 10px;
     right: 10px;
-    width: 36px;
-    height: 36px;
+    width: 2em;
+    height: 2em;
   }
   
   .game-card-transition {
