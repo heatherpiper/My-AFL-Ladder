@@ -259,8 +259,11 @@
       },
       loadGamesFromSession() {
         const gamesData = JSON.parse(sessionStorage.getItem('gamesData') || '[]');
-        this.unwatchedGames = gamesData.filter(game => !game.watched);
-        this.watchedGames = gamesData.filter(game => game.watched);
+
+        const sortedGamesData = gamesData.sort((a, b) => a.unixtime - b.unixtime);
+
+        this.unwatchedGames = sortedGamesData.filter(game => !game.watched);
+        this.watchedGames = sortedGamesData.filter(game => game.watched);
       },
       toggleWatchedStatus(gameId) {
         let gamesData = JSON.parse(sessionStorage.getItem('gamesData'));
