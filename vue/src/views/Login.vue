@@ -12,7 +12,7 @@
         Thank you for registering. Please sign in.
       </div>
       <div class="form-input-group">
-        <input type="text" id="username" placeholder="Username" v-model="user.username" required autofocus />
+        <input type="text" id="username" placeholder="Username" v-model="user.username" required />
       </div>
       <div class="form-input-group">
         <input type="password" id="password" placeholder="Password" v-model="user.password" required />

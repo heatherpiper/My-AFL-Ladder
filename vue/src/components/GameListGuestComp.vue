@@ -366,7 +366,7 @@
     flex-direction: column;
     align-items: flex-start;
     position: relative;
-    padding-left: 10px;
+    padding: 0 10px;
   }
   
   .vs-container {
@@ -387,7 +387,7 @@
   
   .team-name span {
     color: #7EC466;
-    margin-left: 4px;
+    margin-left: 8px;
   }
   
   .complete-status {
