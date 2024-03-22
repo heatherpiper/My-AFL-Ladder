@@ -10,7 +10,7 @@
                     <div class="logo-container">
                         <img src="@/assets/LaterLadder-Logo.webp" alt="Later Ladder color logo" class="logo-image">
                     </div>
-                    <p>Later Ladder is a web application tailored for fans of the Australian Football League (AFL), which enables users to track AFL team standings in a unique way. Designed for those who prefer watching games after their live broadcast, it allows for the updating and viewing of team standings based on the outcomes of games the user has marked as watched, without spoiling the results of games yet to be seen. This project was born from my personal experience as an American AFL fan, addressing the challenge of following the league from a timezone where games are often aired overnight.</p>
+                    <p>Later Ladder is a web application tailored for fans of the Australian Football League (AFL), which enables users to track AFL team standings in a unique way. Designed for those who prefer watching games after their live broadcast, it allows for the updating and viewing of team standings based on the outcomes of games the user has marked as watched, removing the risk of spoiling the outcomes of games not yet seen. This project was born from my personal experience as an American AFL fan, addressing the challenge of following the league from a timezone where games are often aired overnight.</p>
                     <h3>Core technologies</h3>
                     <ul>
                         <li><strong>Backend</strong>: Utilizes Java and Spring Boot, creating a robust API for data processing and interaction</li>
