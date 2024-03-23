@@ -176,20 +176,34 @@ public class SquiggleService {
 
     private void processSseEvent(String sseEvent) {
         try {
-            if (sseEvent.startsWith("data:")) {
-                String json = sseEvent.substring("data:".length());
-                if (json.trim().startsWith("[")) {
-                    List<Game> games = objectMapper.readValue(json, new TypeReference<>() {
-                    });
-                    gameDao.saveAll(games);
-                } else {
-                    Game game = objectMapper.readValue(json, Game.class);
+            if (sseEvent.startsWith("event:")) {
+                String eventType = extractEventType(sseEvent);
+                if (eventType.equals("removeGame")) {
+                    String data = extractData(sseEvent);
+                    Game game = objectMapper.readValue(data, Game.class);
                     gameDao.saveAll(List.of(game));
                 }
             }
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+    }
+
+    private String extractEventType(String sseEvent) {
+        int eventStart = sseEvent.indexOf("event:");
+        int dataStart = sseEvent.indexOf("data:");
+        if (eventStart != -1 && dataStart != -1) {
+            return sseEvent.substring(eventStart + 6, dataStart).trim();
+        }
+        return "";
+    }
+
+    private String extractData(String sseEvent) {
+        int dataStart = sseEvent.indexOf("data:");
+        if (dataStart != -1) {
+            return sseEvent.substring(dataStart + 5).trim();
+        }
+        return "";
     }
 
     private static final int MAX_RETRY_ATTEMPTS = 5;
