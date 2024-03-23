@@ -192,15 +192,28 @@ public class SquiggleService {
         }
     }
 
+    private static final int MAX_RETRY_ATTEMPTS = 5;
+    private static final long INITIAL_DELAY_MS = 1000;
+    private static final double BACKOFF_FACTOR = 2.0;
+
+    private int retryAttempts = 0;
+
     @Async
     private void reconnectAfterDelay() {
-        try {
-            Thread.sleep(10000);
-            subscribeToGameUpdates();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            System.err.println("Failed to wait before reconnecting: " + e.getMessage());
+        if (retryAttempts < MAX_RETRY_ATTEMPTS) {
+            long delay = (long) (INITIAL_DELAY_MS * Math.pow(BACKOFF_FACTOR, retryAttempts));
+            retryAttempts++;
+
+            try {
+                Thread.sleep(delay);
+                subscribeToGameUpdates();
+            } catch (InterruptedException e) {
+                System.err.println("Failed to wait before reconnecting: " + e.getMessage());
+            }
+        } else {
+            System.err.println("Max retry attempts reached. Aborting reconnection.");
         }
+
     }
 
     @PreDestroy
