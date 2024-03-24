@@ -154,6 +154,11 @@ export default {
   },
   methods: {
     determineDefaultRound() {
+      if (this.rounds.length === 0) {
+        this.currentRound = '';
+        return;
+      }
+
       let defaultRound = this.rounds[this.rounds.length - 1];
 
       const earliestUnwatchedRound = this.rounds.find(round =>

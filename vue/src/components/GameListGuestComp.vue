@@ -156,10 +156,15 @@
     },
     methods: {
       determineDefaultRound() {
+        if (this.rounds.length === 0) {
+          this.currentRound = '';
+          return;
+        }
+
         let defaultRound = this.rounds[this.rounds.length - 1];
   
         const earliestUnwatchedRound = this.rounds.find(round =>
-        this.unwatchedGames.some(game => Number(game.round) === round));
+          this.unwatchedGames.some(game => Number(game.round) === round));
       
         if (earliestUnwatchedRound !== undefined) {
           defaultRound = earliestUnwatchedRound;
