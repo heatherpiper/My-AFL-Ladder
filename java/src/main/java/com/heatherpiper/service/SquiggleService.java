@@ -1,7 +1,6 @@
 package com.heatherpiper.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.heatherpiper.model.Game;
@@ -11,6 +10,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
+import java.time.Duration;
 import java.util.*;
 
 import com.heatherpiper.dao.GameDao;
@@ -19,6 +19,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
+import reactor.util.retry.Retry;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -164,14 +165,17 @@ public class SquiggleService {
                 .windowUntil(s -> s.contains("\n\n"))
                 .flatMap(w -> w.reduce(String::concat));
 
-        gameUpdateSubscription = eventStream.subscribe(
-                this::processSseEvent,
-                error -> {
-                    System.err.println("Error on Game Event Stream: " + error);
-                    reconnectAfterDelay();
-                },
-                () -> System.out.println("Game Event Stream Completed")
-        );
+        gameUpdateSubscription = eventStream
+                .retryWhen(Retry.backoff(5, Duration.ofSeconds(2))
+                        .maxBackoff(Duration.ofMinutes(1))
+                        .doBeforeRetry(retrySignal ->
+                                System.out.println("Attempting to reconnect, attempt " + retrySignal.totalRetries() + 1))
+                )
+                .subscribe(
+                        this::processSseEvent,
+                        error -> System.err.println("Error on Game Event Stream " + error),
+                        () -> System.out.println("Game Event Stream Completed")
+                );
     }
 
     private void processSseEvent(String sseEvent) {
