@@ -12,6 +12,7 @@ import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.time.Duration;
 import java.util.*;
+import java.util.function.Predicate;
 
 import com.heatherpiper.dao.GameDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
+import reactor.netty.http.client.PrematureCloseException;
 import reactor.util.retry.Retry;
 
 import javax.annotation.PostConstruct;
@@ -165,15 +167,18 @@ public class SquiggleService {
                 .windowUntil(s -> s.contains("\n\n"))
                 .flatMap(w -> w.reduce(String::concat));
 
+        Predicate<Throwable> isRetryableException = throwable -> throwable instanceof PrematureCloseException;
+
         gameUpdateSubscription = eventStream
                 .retryWhen(Retry.backoff(5, Duration.ofSeconds(2))
+                        .filter(isRetryableException)
                         .maxBackoff(Duration.ofMinutes(1))
-                        .doBeforeRetry(retrySignal ->
-                                System.out.println("Attempting to reconnect, attempt " + retrySignal.totalRetries() + 1))
-                )
+                        .doBeforeRetry(retrySignal -> {
+                            System.out.println("Attempting to reconnect, attempt #" + (retrySignal.totalRetries() + 1));
+                        }))
                 .subscribe(
                         this::processSseEvent,
-                        error -> System.err.println("Error on Game Event Stream " + error),
+                        error -> System.err.println("Error on Game Event Stream: " + error),
                         () -> System.out.println("Game Event Stream Completed")
                 );
     }
@@ -208,30 +213,6 @@ public class SquiggleService {
             return sseEvent.substring(dataStart + 5).trim();
         }
         return "";
-    }
-
-    private static final int MAX_RETRY_ATTEMPTS = 5;
-    private static final long INITIAL_DELAY_MS = 1000;
-    private static final double BACKOFF_FACTOR = 2.0;
-
-    private int retryAttempts = 0;
-
-    @Async
-    private void reconnectAfterDelay() {
-        if (retryAttempts < MAX_RETRY_ATTEMPTS) {
-            long delay = (long) (INITIAL_DELAY_MS * Math.pow(BACKOFF_FACTOR, retryAttempts));
-            retryAttempts++;
-
-            try {
-                Thread.sleep(delay);
-                subscribeToGameUpdates();
-            } catch (InterruptedException e) {
-                System.err.println("Failed to wait before reconnecting: " + e.getMessage());
-            }
-        } else {
-            System.err.println("Max retry attempts reached. Aborting reconnection.");
-        }
-
     }
 
     @PreDestroy
