@@ -9,6 +9,9 @@
         <router-link class="nav-link" v-bind:to="{ name: 'about' }" v-if="$route.path !== '/about'">About</router-link>
         <router-link class="nav-link" v-bind:to="{ name: 'login' }" v-if="$store.state.token === ''">Login</router-link>
         <router-link class="nav-link" v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link>
+        <button class="mode-toggle" @click="toggleMode">
+          <i class="fas" :class="{ 'fa-sun': isDarkMode, 'fa-moon': !isDarkMode }"></i>
+        </button>
       </div>
     </div>
     <router-view />
@@ -17,6 +20,7 @@
 
 <script>
 import NotificationModal from './components/NotificationModal.vue';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   components: {
@@ -27,6 +31,9 @@ export default {
       showNotificationModal: false,
       notificationMessage: '',
     }
+  },
+  computed: {
+    ...mapGetters(['isDarkMode']),
   },
   created() {
     this.$bus.$on('show-notification', this.showNotification);
@@ -46,7 +53,8 @@ export default {
     handleNotificationClose() {
       this.$store.commit('LOGOUT');
       this.$router.push({ name: 'login' });
-    }
+    },
+    ...mapActions(['toggleMode']),
   },
   watch: {
     '$route'() {
@@ -72,6 +80,11 @@ export default {
   --afl-250: #8ebeee;
   --afl-200: #EDF4F7;
   --afl-100: #F2F4F7;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
 }
 
 body {
@@ -126,6 +139,20 @@ body {
   color: var(--afl-200);
 }
 
+.mode-toggle {
+  background: none;
+  border: none;
+  color: var(--afl-500);
+  cursor: pointer;
+  font-size: 1.25rem;
+  margin-left: 16px;
+  outline: none;
+  transition: color 0.3s;
+}
+
+.mode-toggle:hover {
+  color: var(--afl-450);
+}
 
 @media (max-width: 600px) {
   .nav-bar {

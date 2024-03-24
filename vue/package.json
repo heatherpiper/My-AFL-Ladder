@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --https --key localhost-key.pem --cert localhost.pem",
+    "serve": "vue-cli-service serve --http --key localhost-key.pem --cert localhost.pem",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },

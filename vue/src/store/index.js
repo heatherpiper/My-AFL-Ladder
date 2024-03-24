@@ -19,7 +19,8 @@ if(currentToken != null) {
 export default new Vuex.Store({
   state: {
     token: currentToken || '',
-    user: currentUser || {}
+    user: currentUser || {},
+    isDarkMode: true
   },
   mutations: {
     SET_AUTH_TOKEN(state, token) {
@@ -37,6 +38,17 @@ export default new Vuex.Store({
       state.token = '';
       state.user = {};
       axios.defaults.headers.common = {};
+    },
+    TOGGLE_MODE(state) {
+      state.isDarkMode = !state.isDarkMode;
     }
+  },
+  actions: {
+    toggleMode({ commit }) {
+      commit('TOGGLE_MODE');
+    }
+  },
+  getters: {
+    isDarkMode: state => state.isDarkMode
   }
 })
