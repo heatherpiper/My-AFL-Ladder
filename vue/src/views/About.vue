@@ -94,15 +94,31 @@ export default {
     padding:  10px 24px 24px 24px;
     color: var(--afl-800);
     border: 1px solid var(--afl-800);
+    line-height: 1.5em;
+}
+
+.logo-container {
+    text-align: center;
+    margin-top: 1em;
+}
+
+.logo-image {
+    max-width: 400px;
+}
+
+.section-content p {
+    margin-top: 0.75em;
 }
 
 .section-content h3 {
     color: var(--afl-500);
-    margin: 1.5em 0 0.5em 0;
+    font-size: x-large;
+    margin-top: 1.5em;
+    margin-bottom: 0;
 }
 
 .section-content li {
-    margin: 0.5em 0;
+    margin: 0.75em 0;
 }
 
 .section-content li strong {
@@ -117,15 +133,6 @@ export default {
 .section-content a:hover {
     text-decoration: underline;
     cursor: pointer;
-}
-
-.logo-container {
-    text-align: center;
-    margin-top: 1em;
-}
-
-.logo-image {
-    max-width: 400px;
 }
 
 .button-container {
