@@ -140,6 +140,7 @@ body {
 }
 
 .mode-toggle {
+  display: none; /* Hide the mode toggle until light/dark modes are done */
   background: none;
   border: none;
   color: var(--afl-500);
