@@ -13,6 +13,7 @@ public class MyCorsConfiguration {
         config.setAllowCredentials(true);
         config.addAllowedOrigin("https://laterladder.com");
         config.addAllowedOrigin("https://www.laterladder.com");
+        config.addAllowedOrigin("http://localhost:8080");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
