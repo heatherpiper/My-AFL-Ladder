@@ -1,20 +1,37 @@
-# Later Ladder
+# Later Ladder - Customized AFL team standings and game tracker
 
-As an American fan of the Australian Football League (AFL) and Aussie rules football, one of the challenges I've faced is the inconvenience of checking current team standings without inadvertently spoiling match results that occurred overnight.
+<p align="center">
+    <picture>
+        <source media="(prefers-color-scheme: light)" srcset="vue/src/assets/LaterLadder-Logo-SocialLight.webp" width="468">
+        <source media="(prefers-color-scheme: dark)" srcset="vue/src/assets/LaterLadder-Logo-SocialDark.webp" width="468">
+        <img alt="Later Ladder wordmark" src="vue/src/assets/LaterLadder-Logo-SocialLight.webp">
+    </picture>
+</p>
 
-Later Ladder offers a solution: to display a team ladder that only refreshes as the user personally marks off the games they've watched. This unique feature ensures that you can stay informed about the current AFL standings while preserving the excitement of each match!
+<h3 align="center">
+    Later Ladder can now be viewed at <a href="https://www.laterladder.com">LaterLadder.com</a>.
+</h3>
 
-This is a work in progress. 
+## About Later Ladder
 
-Status: You can now view a live version of Later Ladder at [LaterLadder.com](https://www.laterladder.com)! Core functionality is complete. Users can mark games as watched or unwatched and the team ladder updates according to those game results. Games do not have to be watched in any particular order.
+As an American fan of the Australian Football League (AFL) and Aussie rules football, one of the challenges I've faced is the inconvenience of checking current team standings without inadvertently spoiling the outcome of matches that occurred overnight.
+
+Later Ladder offers a solution: users can select which games they've watched, and the team ladder will update only according to the results of watched games. This unique feature ensures that you can stay informed about the current AFL standings while preserving the excitement of each match!
 
 ![Later Ladder demonstration](demo.gif)
 
-Recent updates:
-- Final scores now appear once a game is marked as watched
-- Games are updated in real time. When a game has finished, it can immediately be marked as watched.
-- Guests can now use Later Ladder without registering for an account
+## Status
 
-Features coming soon:
+**Later Ladder is a work in progress. It is a passion project that will continue to evolve over time as I expand both the project scope and my abilities as a developer.**
+
+Core functionality is now complete. Users are able mark games as watched to update the team ladder. Registered users can save their watched games list.
+
+### Recent updates
+- Guests can now use Later Ladder without registering for an account
+- Final scores now appear once a game is marked as watched
+- Games are updated in real time using server-sent events. Once a game has finished, it can immediately be marked as watched.
+
+### Planned features:
 - Mark all games watched/unwatched up to present
-- Toggle to turn scores on/off for watched games
+- Ability to toggle visibility of game scores
+- Toggle for light and dark modes
