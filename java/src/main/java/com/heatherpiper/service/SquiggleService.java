@@ -15,6 +15,8 @@ import java.util.*;
 import java.util.function.Predicate;
 
 import com.heatherpiper.dao.GameDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,8 @@ import javax.annotation.PreDestroy;
 
 @Service
 public class SquiggleService {
+
+    private static final Logger logger = LoggerFactory.getLogger(SquiggleService.class);
 
     private Disposable gameUpdateSubscription;
 
@@ -67,7 +71,7 @@ public class SquiggleService {
             return games;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to fetch games for year {} and round {}: ", year, round, e);
             return List.of();
         }
     }
@@ -90,7 +94,7 @@ public class SquiggleService {
             return games;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to fetch games for year {}: ", year, e);
             return List.of();
         }
     }
@@ -129,8 +133,7 @@ public class SquiggleService {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
-
+            logger.error("Failed to fetch games up to most recent round for year {}: ", year, e);
         }
         return allGames;
     }
@@ -149,7 +152,7 @@ public class SquiggleService {
             }
             return gamesList;
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Failed to parse games from response body.", e);
             return List.of();
         }
     }
@@ -167,20 +170,14 @@ public class SquiggleService {
                 .windowUntil(s -> s.contains("\n\n"))
                 .flatMap(w -> w.reduce(String::concat));
 
-        Predicate<Throwable> isRetryableException = throwable -> throwable instanceof PrematureCloseException;
+        Predicate<Throwable> isRetryableException = throwable ->
+                throwable instanceof IOException;
 
-        gameUpdateSubscription = eventStream
-                .retryWhen(Retry.backoff(5, Duration.ofSeconds(2))
+        gameUpdateSubscription = eventStream.retryWhen(Retry.backoff(5, Duration.ofSeconds(5))
                         .filter(isRetryableException)
-                        .maxBackoff(Duration.ofMinutes(1))
-                        .doBeforeRetry(retrySignal -> {
-                            System.out.println("Attempting to reconnect, attempt #" + (retrySignal.totalRetries() + 1));
-                        }))
-                .subscribe(
-                        this::processSseEvent,
-                        error -> System.err.println("Error on Game Event Stream: " + error),
-                        () -> System.out.println("Game Event Stream Completed")
-                );
+                        .doBeforeRetry(retrySignal -> logger.info("Reconnecting attempt #" + retrySignal.totalRetries() + 1))
+                        .maxBackoff(Duration.ofMinutes(5)))
+                        .subscribe(this::processSseEvent, error -> logger.error("Error on Game Event Stream", error));
     }
 
     private void processSseEvent(String sseEvent) {
@@ -194,7 +191,7 @@ public class SquiggleService {
                 }
             }
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            logger.error("Error processing SSE event: {}", sseEvent, e);
         }
     }
 
