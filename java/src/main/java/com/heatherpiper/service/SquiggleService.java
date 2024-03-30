@@ -18,11 +18,9 @@ import com.heatherpiper.dao.GameDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
-import reactor.netty.http.client.PrematureCloseException;
 import reactor.util.retry.Retry;
 
 import javax.annotation.PostConstruct;
