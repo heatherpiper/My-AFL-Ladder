@@ -148,6 +148,10 @@ public class WatchedGamesService {
     private void updateTeamLadder(int userId, String teamName, int points, int pointsForThisGame, int pointsAgainstThisGame) {
 
         // Validate team name
+        if (teamName == null || teamName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Team name must not be empty or null.");
+        }
+
         int teamId = teamDao.findTeamIdByName(teamName);
         if (teamId <= 0) {
             throw new IllegalArgumentException("Invalid team name: " + teamName);
@@ -229,8 +233,10 @@ public class WatchedGamesService {
         for (int i = 0; i < entries.size(); i++) {
             UserLadderEntry entry = entries.get(i);
             entry.setPosition(i + 1);
-            userLadderEntryDao.updateUserLadderEntry(entry);
         }
+        userLadderEntryDao.updateUserLadderEntries(entries);
+
+        logger.info("Updated ranks for all teams in ladder for userId: {}", userId);
     }
 
     private double calculatePercentage(int pointsFor, int pointsAgainst) {

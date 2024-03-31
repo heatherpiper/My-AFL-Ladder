@@ -9,6 +9,8 @@ public interface UserLadderEntryDao {
 
     void updateUserLadderEntry(UserLadderEntry userLadderEntry);
 
+    void updateUserLadderEntries(List<UserLadderEntry> userLadderEntries);
+
     void deleteUserLadderEntry(int userId, int teamId);
 
     UserLadderEntry getUserLadderEntry(int userId, int teamId);

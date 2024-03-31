@@ -82,19 +82,34 @@ public class JdbcUserLadderEntryDao implements UserLadderEntryDao {
                     userLadderEntry.getPointsAgainst(),
                     userLadderEntry.getUserId(),
                     userLadderEntry.getTeamId());
-
-            if (updatedRows > 0) {
-                logger.info("Successfully updated user ladder entry for userId: {}, teamId: {}", userLadderEntry.getUserId(), userLadderEntry.getTeamId());
-            } else {
-                logger.warn("No user ladder entry was updated for userId: {}, teamId: {}. This may indicate the entry does not exist.", userLadderEntry.getUserId(), userLadderEntry.getTeamId());
-            }
         } catch (DataAccessException e) {
             logger.error("Exception while updating user ladder entry for userId: {}, teamId: {}", userLadderEntry.getUserId(), userLadderEntry.getTeamId(), e);
             throw e;
         }
     }
 
+    @Override
+    public void updateUserLadderEntries(List<UserLadderEntry> userLadderEntries) {
+        List<UserLadderEntry> successfullyUpdatedEntries = new ArrayList<>();
+        List<UserLadderEntry> failedEntries = new ArrayList<>();
 
+        for (UserLadderEntry entry : userLadderEntries) {
+            try {
+                updateUserLadderEntry(entry);
+                successfullyUpdatedEntries.add(entry);
+            } catch (DataAccessException e) {
+                logger.error("Exception while updating user ladder entry for userId: {}, teamId: {}",
+                        entry.getUserId(), entry.getTeamId(), e);
+                failedEntries.add(entry);
+            }
+        }
+        logger.info("{} user ladder entries successfully updated.", successfullyUpdatedEntries.size());
+        if (!failedEntries.isEmpty()) {
+            logger.warn("{} user ladder entries failed to update.", failedEntries.size());
+        }
+    }
+
+    @Override
     public void deleteUserLadderEntry(int userId, int teamId) {
         String sql = "DELETE FROM user_ladder WHERE user_id = ? AND team_id = ?";
         try {
@@ -121,7 +136,6 @@ public class JdbcUserLadderEntryDao implements UserLadderEntryDao {
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId, teamId);
             if (results.next()) {
                 UserLadderEntry entry = mapRowToUserLadder(results);
-                logger.info("Found user ladder entry for userId: {}, teamId: {}", userId, teamId);
                 return entry;
             } else {
                 logger.warn("No user ladder entry found for userId: {}, teamId: {}", userId, teamId);
