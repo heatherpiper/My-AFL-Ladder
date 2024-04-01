@@ -22,6 +22,7 @@
     <footer class="footer">
       <div class="footer-content">
         <router-link to="/privacy-policy" class="footer-link">Privacy Policy</router-link>
+        <span>&middot;</span>
         <a href="mailto:support@laterladder.com" class="footer-link">Contact Us</a>
         <div class="copyright">
           &copy; 2024 Later Ladder. All rights reserved.
@@ -171,19 +172,16 @@ body {
 
 .footer {
   background-color: var(--afl-800);
-  padding: 20px 0;
+  color: var(--afl-250);
+  padding: 2.5em 0 1em 0;
   text-align: center;
-  margin-top: 2em;
-}
-
-.footer-content {
-  padding: 0 16px;
+  margin-top: 1.5em;
 }
 
 .footer-link {
   color: var(--afl-250);
   text-decoration: none;
-  margin: 0 16px;
+  margin: 0 0.5em;
 }
 
 .footer-link:hover {
@@ -211,6 +209,12 @@ body {
 
   .nav-link {
     margin: 0 8px;
+  }
+
+  .footer-content {
+    line-height: 0.5em;
+    font-size: 1em;
+    margin-top: 0.5em;
   }
 }
 

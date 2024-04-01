@@ -142,7 +142,7 @@ export default {
 .back-button {
     display: inline-flex;
     margin: 1em auto;
-    padding: 16px 32px;
+    padding: 1em 2em;
     border: 1px solid var(--afl-600);
     border-radius: 8px;
     background-color: var(--afl-500);
