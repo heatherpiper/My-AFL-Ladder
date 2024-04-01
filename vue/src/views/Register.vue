@@ -9,13 +9,13 @@
         {{ registrationErrorMsg }}
       </div>
       <div class="form-input-group">
-        <input type="text" id="username" placeholder="Username" v-model="user.username" required />
+        <input type="text" id="username" placeholder="Username" v-model="user.username" autocomplete="username" required />
       </div>
       <div class="form-input-group">
-        <input type="password" id="password" placeholder="Password" v-model="user.password" @input="clearErrors" required />
+        <input type="password" placeholder="Password" id="password"  v-model="user.password" @input="clearErrors" autocomplete="new-password" required />
       </div>
       <div class="form-input-group">
-        <input type="password" id="confirmPassword" placeholder="Confirm password" v-model="user.confirmPassword" @input="clearErrors" required />
+        <input type="password" id="confirmPassword" placeholder="Confirm password" v-model="user.confirmPassword" @input="clearErrors" autocomplete="new-password" required />
       </div>
       <button type="submit">Register</button>
       <p>Already have an account? <router-link :to="{ name: 'login' }">Log in.</router-link></p>

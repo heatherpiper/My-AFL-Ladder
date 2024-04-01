@@ -4,12 +4,12 @@
     <div class="header-section">
       <h1>Games</h1>
       <div class="round-selection">
-          <select v-model="currentRound">
-            <option disabled value="">Select Round</option>
-            <option v-for="round in rounds" :key="round" :value="round">
-              Round {{ round }}
-            </option>
-          </select>
+        <select v-model="currentRound" class="current-round-selection" id="current-round-selection" aria-label="Round">
+          <option disabled value="">Choose a round</option>
+          <option v-for="round in rounds" :key="round" :value="round">
+            Round {{ round }}
+          </option>
+        </select>
       </div>
     </div>
 
@@ -317,13 +317,15 @@ h1 {
 }
 
 .round-selection select {
-  background-color: var(--afl-200);
-  color: var(--afl-900);
-  padding: 4px 8px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1rem;
+  padding: 4px 2px 4px 8px;
+  margin-right: 8px;
   border: none;
   border-radius: 6px;
-  font-size: 1rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: var(--afl-200);
+  color: var(--afl-900);
 }
 
 .games-section {

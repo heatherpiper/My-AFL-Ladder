@@ -12,10 +12,10 @@
         Thank you for registering. Please sign in.
       </div>
       <div class="form-input-group">
-        <input type="text" id="username" placeholder="Username" v-model="user.username" required />
+        <input type="text" placeholder="Username" id="username" v-model="user.username" autocomplete="username" required />
       </div>
       <div class="form-input-group">
-        <input type="password" id="password" placeholder="Password" v-model="user.password" required />
+        <input type="password" placeholder="Password" id="password" v-model="user.password" autocomplete="current-password" required />
       </div>
       <button type="submit">Sign in</button>
       <p>Need an account? <router-link :to="{ name: 'register' }">Sign up.</router-link></p>

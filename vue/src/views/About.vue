@@ -74,7 +74,7 @@ export default {
 .header-box {
     background-color: var(--afl-800);
     border-radius: 12px 12px 0 0;
-    box-shadow: 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.1);
     padding: 4px 12px;
 }
 
