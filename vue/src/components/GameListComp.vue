@@ -319,7 +319,7 @@ h1 {
 .round-selection select {
   font-family: 'Roboto', sans-serif;
   font-size: 1rem;
-  padding: 4px 2px 4px 8px;
+  padding: 4px 2px 4px 6px;
   margin-right: 8px;
   border: none;
   border-radius: 6px;

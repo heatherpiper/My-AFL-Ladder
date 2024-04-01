@@ -317,28 +317,12 @@
     background-color: var(--afl-800);
   }
 
-  select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    -ms-appearance: none;
-    appearance: none;
-    outline: 0;
-    background: var(--afl-200);
-    background-image: none;
-    border: none;
-    width: 100%;
-    cursor: pointer;
-  }
-  
-  
-
   .round-selection select {
     position: relative;
     display: block;
     font-family: 'Roboto', sans-serif;
     font-size: 1rem;
-    line-height: 1.75em;
-    padding: 0 4px;
+    padding: 4px 2px 4px 6px;
     margin-right: 8px;
     border: none;
     border-radius: 6px;
