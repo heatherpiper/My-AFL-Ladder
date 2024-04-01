@@ -23,6 +23,8 @@
       <div class="footer-content">
         <router-link to="/privacy-policy" class="footer-link">Privacy Policy</router-link>
         <span>&middot;</span>
+        <router-link to="/terms-of-service" class="footer-link">Terms of Service</router-link>
+        <span>&middot;</span>
         <a href="mailto:support@laterladder.com" class="footer-link">Contact Us</a>
         <div class="copyright">
           &copy; 2024 Later Ladder. All rights reserved.

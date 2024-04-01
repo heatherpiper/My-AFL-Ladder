@@ -7,6 +7,7 @@ import Register from '../views/Register.vue'
 import store from '../store/index'
 import About from '../views/About.vue'
 import PrivacyPolicy from '../views/PrivacyPolicy.vue'
+import TermsOfService from '../views/TermsOfService.vue'
 
 Vue.use(Router)
 
@@ -67,6 +68,14 @@ const router = new Router({
       path: "/privacy-policy",
       name: "privacy-policy",
       component: PrivacyPolicy,
+      meta: {
+        requiresAuth: false
+      }
+    },
+    {
+      path: "/terms-of-service",
+      name: "terms-of-service",
+      component: TermsOfService,
       meta: {
         requiresAuth: false
       }
