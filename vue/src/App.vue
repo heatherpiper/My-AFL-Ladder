@@ -97,7 +97,14 @@ export default {
   --afl-100: #F2F4F7;
 }
 
+#app {
+  flex: 1 0 auto;
+}
+
 body, html {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   margin: 0;
   padding: 0;
 }
@@ -106,6 +113,10 @@ body {
   background: radial-gradient(circle at center, var(--afl-500) 0%, var(--afl-600) 40%, var(--afl-800) 100%);
   background-attachment: fixed;
   font-family: 'Inter', sans-serif;
+}
+
+img {
+  max-width: 100%;
 }
 
 .nav-bar {
@@ -171,6 +182,7 @@ body {
 }
 
 .footer {
+  flex-shrink: 0;
   background-color: var(--afl-800);
   color: var(--afl-250);
   padding: 2.5em 0 1em 0;

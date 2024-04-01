@@ -148,7 +148,7 @@ export default {
 
   .guest-notice {
     width: 100%;
-    font-size: small;
+    font-size: 0.9em;
   }
 
   .close-button {

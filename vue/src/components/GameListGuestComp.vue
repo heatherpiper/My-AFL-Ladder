@@ -1,95 +1,95 @@
 <template>
-    <div class="game-list">
-  
-      <div class="header-section">
-        <h1>Games</h1>
-        <div class="round-selection">
-          <select v-model="currentRound" class="current-round-selection" id="current-round-selection" aria-label="Round">
-            <option disabled value="">Select Round</option>
-            <option v-for="round in rounds" :key="round" :value="round">
-              Round {{ round }}
-            </option>
-          </select>
-        </div>
+  <div class="game-list">
+
+    <div class="header-section">
+      <h1>Games</h1>
+      <div class="round-selection">
+        <select v-model="currentRound" class="current-round-selection" id="current-round-selection" aria-label="Round">
+          <option disabled value="">Choose a round</option>
+          <option v-for="round in rounds" :key="round" :value="round">
+            Round {{ round }}
+          </option>
+        </select>
       </div>
-  
-      <div class="games-section">
-  
-        <div class="section-container">
-          <h2 class="section-header">Unwatched Games</h2>
-          <div v-if="filteredUnwatchedGames.length" class="games-container">
-            <div class="game-card game-card-transition"
-              v-for="game in filteredUnwatchedGames"
-              :key="game.id"
-              :class="{'game-card-hide': processingGames.includes(game.id)}"
-              @click.stop="selectGame(game.id)"
-              @mouseover="hover = game.id"
-              @mouseleave="hover = null">
-              <div class="game-text-container">
-                <div class="team-name">{{ game.hteam }}</div>
-                <div class="vs-container">
-                  <span class="vs-text">v.</span>
-                  <div class="team-name">{{ game.ateam }}</div>
-                </div>
-                <div v-if="game.complete === 100" class="complete-status" >Full time</div>
-                <div v-else class="complete-status">Not yet played</div>
-              </div>
-              <div class="image-container"
-                   @click.stop="selectGame(game.id)"
-                   @mouseover="hover = game.id"
-                   @mouseleave="hover = null">
-                <img :src="getImageSrc(game.id)" alt="Watched check mark">
-              </div>
-            </div>
-          </div>
-          <div v-else class="no-games-message">
-            No more unwatched games.
-          </div>
-        </div>
-  
-        <div class="section-container">
-          <h2 class="section-header">Watched Games</h2>
-          <div v-if="filteredWatchedGames.length" class="games-container">
-            <div class="game-card game-card-transition" 
-              v-for="game in filteredWatchedGames"
-              :key="game.id"
-              :class="{'game-card-hide': processingGames.includes(game.id)}"
-              @click.stop="selectGame(game.id)"
-              @mouseover="hover = game.id"
-              @mouseleave="hover = null">
-  
-              <div class="game-text-container">
-                <div class="team-name">
-                    {{ game.hteam }}
-                    <span v-if="game.winner === game.hteam">&#x2714;</span>
-                  </div>
-                <div class="vs-container">
-                  <span class="vs-text">v.</span>
-                  <div class="team-name">
-                  {{ game.ateam }}
-                  <span v-if="game.winner === game.ateam">&#x2714;</span>
-                  </div>
-                </div>
-                <div class="game-score">{{ game.hscore }} - {{ game.ascore }}</div>
-              </div>
-  
-              <div class="image-container"
-                   @click.stop="selectGame(game.id)"
-                   @mouseover="hover = game.id"
-                   @mouseleave="hover = null">
-                <img :src="getImageSrc(game.id, true)" alt="Action button">
-              </div>
-            </div>
-          </div>
-          <div v-else class="no-games-message">
-            Click a game to mark it as watched.
-          </div>
-        </div>
-  
-      </div>
-  
     </div>
-  </template>
+
+    <div class="games-section">
+
+      <div class="section-container">
+        <h2 class="section-header">Unwatched Games</h2>
+        <div v-if="filteredUnwatchedGames.length" class="games-container">
+          <div class="game-card game-card-transition"
+            v-for="game in filteredUnwatchedGames"
+            :key="game.id"
+            :class="{'game-card-hide': processingGames.includes(game.id)}"
+            @click.stop="selectGame(game.id)"
+            @mouseover="hover = game.id"
+            @mouseleave="hover = null">
+            <div class="game-text-container">
+              <div class="team-name">{{ game.hteam }}</div>
+              <div class="vs-container">
+                <span class="vs-text">v.</span>
+                <div class="team-name">{{ game.ateam }}</div>
+              </div>
+              <div v-if="game.complete === 100" class="complete-status" >Full time</div>
+              <div v-else class="complete-status">Not yet played</div>
+            </div>
+            <div class="image-container"
+                  @click.stop="selectGame(game.id)"
+                  @mouseover="hover = game.id"
+                  @mouseleave="hover = null">
+              <img :src="getImageSrc(game.id)" alt="Watched check mark">
+            </div>
+          </div>
+        </div>
+        <div v-else class="no-games-message">
+          No more unwatched games.
+        </div>
+      </div>
+
+      <div class="section-container">
+        <h2 class="section-header">Watched Games</h2>
+        <div v-if="filteredWatchedGames.length" class="games-container">
+          <div class="game-card game-card-transition" 
+            v-for="game in filteredWatchedGames"
+            :key="game.id"
+            :class="{'game-card-hide': processingGames.includes(game.id)}"
+            @click.stop="selectGame(game.id)"
+            @mouseover="hover = game.id"
+            @mouseleave="hover = null">
+
+            <div class="game-text-container">
+              <div class="team-name">
+                  {{ game.hteam }}
+                  <span v-if="game.winner === game.hteam">&#x2714;</span>
+                </div>
+              <div class="vs-container">
+                <span class="vs-text">v.</span>
+                <div class="team-name">
+                {{ game.ateam }}
+                <span v-if="game.winner === game.ateam">&#x2714;</span>
+                </div>
+              </div>
+              <div class="game-score">{{ game.hscore }} - {{ game.ascore }}</div>
+            </div>
+
+            <div class="image-container"
+                  @click.stop="selectGame(game.id)"
+                  @mouseover="hover = game.id"
+                  @mouseleave="hover = null">
+              <img :src="getImageSrc(game.id, true)" alt="Action button">
+            </div>
+          </div>
+        </div>
+        <div v-else class="no-games-message">
+          Click a game to mark it as watched.
+        </div>
+      </div>
+
+    </div>
+  
+  </div>
+</template>
     
   <script>
   import GameService from '../services/GameService'
@@ -445,9 +445,10 @@
     h1 {
       font-size: x-large;
     }
-  
-    .no-games-message {
-      font-size: small;
+
+    .round-selection select {
+      padding: 4px 2px 4px 6px;
+      margin-right: 4px;
     }
   
   }

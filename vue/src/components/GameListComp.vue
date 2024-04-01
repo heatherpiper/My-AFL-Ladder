@@ -443,6 +443,11 @@ h2 {
     font-size: x-large;
   }
 
+  .round-selection select {
+      padding: 4px 2px 4px 6px;
+      margin-right: 4px;
+  }
+
 }
 
 </style>
