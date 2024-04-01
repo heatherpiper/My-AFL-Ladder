@@ -6,6 +6,7 @@ import Logout from '../views/Logout.vue'
 import Register from '../views/Register.vue'
 import store from '../store/index'
 import About from '../views/About.vue'
+import PrivacyPolicy from '../views/PrivacyPolicy.vue'
 
 Vue.use(Router)
 
@@ -61,9 +62,20 @@ const router = new Router({
       meta: {
         requiresAuth: false
       }
+    },
+    {
+      path: "/privacy-policy",
+      name: "privacy-policy",
+      component: PrivacyPolicy,
+      meta: {
+        requiresAuth: false
+      }
     }
-  ]
-})
+  ],
+  scrollBehavior() {
+    return { x: 0, y: 0 };
+  }
+});
 
 router.beforeEach((to, from, next) => {
   // Determine if the route requires Authentication
@@ -76,7 +88,7 @@ router.beforeEach((to, from, next) => {
     // Else let them go to their next destination
     next();
   }
-});
+})
 
 import { bus } from '../event-bus.js';
 
