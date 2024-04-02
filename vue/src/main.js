@@ -4,8 +4,9 @@ import router from './router/index'
 import store from './store/index'
 import axios from 'axios'
 import { bus } from './event-bus.js'
+import GAuth from 'vue-google-oauth2'
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 Vue.prototype.$bus = bus;
 
@@ -20,9 +21,16 @@ axios.interceptors.response.use(function (response) {
   return Promise.reject(error);
 });
 
+const gauthOption = {
+  clientId: process.env.GOOGLE_CLIENT_ID,
+  scope: 'profile email',
+  prompt: 'select_account',
+};
+
+Vue.use(GAuth, gauthOption);
 
 new Vue({
   router,
   store,
   render: h => h(App)
-}).$mount('#app')
+}).$mount('#app');

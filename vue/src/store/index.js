@@ -12,7 +12,7 @@ Vue.use(Vuex)
 const currentToken = localStorage.getItem('token')
 const currentUser = JSON.parse(localStorage.getItem('user'));
 
-if(currentToken != null) {
+if (currentToken != null) {
   axios.defaults.headers.common['Authorization'] = `Bearer ${currentToken}`;
 }
 
@@ -30,7 +30,7 @@ export default new Vuex.Store({
     },
     SET_USER(state, user) {
       state.user = user;
-      localStorage.setItem('user',JSON.stringify(user));
+      localStorage.setItem('user', JSON.stringify(user));
     },
     LOGOUT(state) {
       localStorage.removeItem('token');
@@ -46,7 +46,16 @@ export default new Vuex.Store({
   actions: {
     toggleMode({ commit }) {
       commit('TOGGLE_MODE');
-    }
+    },
+    async loginWithGoogle({ commit }, { idToken }) {
+      try {
+        const response = await axios.post('/auth/google', { idToken });
+        commit('SET_USER', response.data.user);
+        commit('SET_AUTH_TOKEN', response.data.token);
+      } catch (error) {
+        console.error('Error during Google login:', error);
+      }
+    },
   },
   getters: {
     isDarkMode: state => state.isDarkMode
