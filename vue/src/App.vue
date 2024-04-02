@@ -1,23 +1,27 @@
 <template>
   <div id="app">
 
-    <notification-modal v-if="showNotificationModal && $route.name !== 'login' && $route.name !== 'register'" :message="notificationMessage" @close="handleNotificationClose"></notification-modal>
-    
-    <div id="nav" class="nav-bar">
-      <router-link to="/" class="site-title-link">
-        <img src="@/assets/LaterLadder-Wordmark.webp" alt="Later Ladder title" class="site-title">
-      </router-link>
-      <div class="nav-links">
-        <router-link class="nav-link" v-bind:to="{ name: 'about' }" v-if="$route.path !== '/about'">About</router-link>
-        <router-link class="nav-link" v-bind:to="{ name: 'login' }" v-if="$store.state.token === ''">Login</router-link>
-        <router-link class="nav-link" v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link>
-        <button class="mode-toggle" @click="toggleMode">
-          <i class="fas" :class="{ 'fa-sun': isDarkMode, 'fa-moon': !isDarkMode }"></i>
-        </button>
-      </div>
-    </div>
+    <div class="content-wrapper">
 
-    <router-view />
+      <notification-modal v-if="showNotificationModal && $route.name !== 'login' && $route.name !== 'register'" :message="notificationMessage" @close="handleNotificationClose"></notification-modal>
+      
+      <div id="nav" class="nav-bar">
+        <router-link to="/" class="site-title-link">
+          <img src="@/assets/LaterLadder-Wordmark.webp" alt="Later Ladder title" class="site-title">
+        </router-link>
+        <div class="nav-links">
+          <router-link class="nav-link" v-bind:to="{ name: 'about' }" v-if="$route.path !== '/about'">About</router-link>
+          <router-link class="nav-link" v-bind:to="{ name: 'login' }" v-if="$store.state.token === ''">Login</router-link>
+          <router-link class="nav-link" v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link>
+          <button class="mode-toggle" @click="toggleMode">
+            <i class="fas" :class="{ 'fa-sun': isDarkMode, 'fa-moon': !isDarkMode }"></i>
+          </button>
+        </div>
+      </div>
+
+      <router-view />
+
+    </div>
 
     <footer class="footer">
       <div class="footer-content">
@@ -99,16 +103,23 @@ export default {
   --afl-100: #F2F4F7;
 }
 
-#app {
-  flex: 1 0 auto;
-}
-
 body, html {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   margin: 0;
   padding: 0;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.content-wrapper {
+  flex: 1;
+  margin-bottom: 4em;
 }
 
 body {
@@ -184,12 +195,11 @@ img {
 }
 
 .footer {
-  flex-shrink: 0;
   background-color: var(--afl-800);
   color: var(--afl-250);
   padding: 1.5em 0;
   text-align: center;
-  margin-top: 6em;
+  margin-top: auto;
 }
 
 .footer-content {
@@ -240,8 +250,8 @@ img {
     margin: 0 8px;
   }
 
-  .footer {
-    margin-top: 1.5em;
+  .content-wrapper {
+    margin-bottom: .75em;
   }
 
   .footer-links {

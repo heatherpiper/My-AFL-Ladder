@@ -82,18 +82,26 @@ export default {
     border-radius: 0 0 12px 12px;
     margin-bottom: 1.5em;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 10px 24px 24px 24px;
+    padding: 0 1.75em 1.75em 1.75rem;
     color: var(--afl-800);
     border: 1px solid var(--afl-800);
     line-height: 1.5em;
 }
 
 .terms-content p {
-    margin-top: 0.75em;
+    margin: 0.75em 0 0 0;
+}
+
+.terms-content p:last-child {
+    padding-bottom: 2em;
+}
+
+.terms-content ul {
+    padding-inline-start: 2.25em;
 }
 
 .terms-content li {
-    margin: 0 1em;
+    margin: 0.5em 0;
 }
 
 .terms-content h2 {
@@ -139,6 +147,7 @@ export default {
 }
 
 @media (max-width: 768px) {
+
     .terms-container {
         max-width: 100%;
     }
@@ -147,13 +156,30 @@ export default {
         padding: 10px 16px 16px 16px;
     }
 
-    ul {
-        padding-left: 0;
+    .terms-content ul {
+        padding-inline-start: 1.75em;
     }
 
     .back-button {
         display: block;
+        max-width: 40%;
         background-color: var(--afl-450);
+    }
+}
+
+@media (max-width: 600px) {
+
+    .terms-content ul {
+        padding-inline-start: 1.25em;
+    }
+
+    .terms-content li {
+        margin: 0.25em 0;
+    }
+
+    .back-button {
+        max-width: 100%;
+        padding: 0.75em 1.5em;
     }
 }
 

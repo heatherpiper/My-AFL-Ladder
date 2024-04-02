@@ -112,18 +112,34 @@ export default {
     border-radius: 0 0 12px 12px;
     margin-bottom: 1.5em;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 10px 24px 24px 24px;
+    padding: 1.75em;
     color: var(--afl-800);
     border: 1px solid var(--afl-800);
     line-height: 1.5em;
 }
 
+.privacy-content p:first-child {
+    margin-top: 0.5em;
+}
+
 .privacy-content p {
-    margin-top: 0.75em;
+    margin-top: 0.5em 0 0 0;
+}
+
+.privacy-content p:last-child {
+    padding-bottom: 2em;
+}
+
+.privacy-content ul {
+    padding-inline-start: 2.25em;
 }
 
 .privacy-content li {
-    margin: 0 1em;
+    margin: 0.5em 0;
+}
+
+.privacy-content li strong {
+    color: var(--afl-600);
 }
 
 .privacy-content h2 {
@@ -136,10 +152,6 @@ export default {
 .privacy-content h3 {
     color: var(--afl-600);
     margin-bottom: 0;
-}
-
-.privacy-content li strong {
-    color: var(--afl-600);
 }
 
 .privacy-content a {
@@ -180,21 +192,55 @@ export default {
 }
 
 @media (max-width: 768px) {
+
     .privacy-policy-container {
         max-width: 100%;
     }
 
     .privacy-content {
-        padding: 10px 16px 16px 16px;
+        padding: 1.5em;
     }
 
-    ul {
-        padding-left: 0;
+    .privacy-content p {
+        margin-top: 0.5em;
+    }
+
+    .privacy-content ul {
+        padding-inline-start: 1.75em;
+    }
+
+    .privacy-content li {
+        margin: 0.25em 0;
+    }
+
+    .privacy-content p:last-child {
+        padding-bottom: 1em;
     }
 
     .back-button {
         display: block;
+        max-width: 40%;
         background-color: var(--afl-450);
+    }
+}
+
+@media (max-width: 600px) {
+
+    .privacy-content {
+        padding: 1em;
+    }
+
+    .privacy-content ul {
+        padding-inline-start: 1.25em;
+    }
+
+    .section-content li {
+        margin: 0.25em 0;
+    }
+
+    .back-button {
+        max-width: 100%;
+        padding: 0.75em 1.5em;
     }
 }
 

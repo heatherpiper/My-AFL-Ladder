@@ -8,7 +8,7 @@
             <div class="section-box">
                 <div class="section-content">
                     <div class="logo-container">
-                        <img src="@/assets/LaterLadder-Logo.webp" alt="Later Ladder color logo" class="logo-image">
+                        <img src="@/assets/LaterLadder-LogoLight.svg" alt="Later Ladder color logo" class="logo-image">
                     </div>
                     <p>Later Ladder is a web application tailored for fans of the Australian Football League (AFL), which enables users to track AFL team standings in a unique way. Designed for those who prefer watching games after their live broadcast, it allows for the updating and viewing of team standings based on the outcomes of games the user has marked as watched, removing the risk of spoiling the outcomes of games not yet seen. This project was born from my personal experience as an American AFL fan, addressing the challenge of following the league from a timezone where games are often aired overnight.</p>
                     <h3>Core technologies</h3>
@@ -44,7 +44,7 @@
             </div>
             <div class="section-box">
                 <div class="section-content">
-                    <p>I'm Heather Piper, a full-stack developer from Columbus, Ohio. Prior to being a developer, I worked as a court reporter and ran a successful 3D printing business that fulfilled nearly 1,000 online orders over three years. I graduated from Tech Elevator's Java bootcamp in September 2023.</p>
+                    <p id="bio">I'm Heather Piper, a full-stack developer from Columbus, Ohio. Prior to being a developer, I worked as a court reporter and ran a successful 3D printing business that fulfilled nearly 1,000 online orders over three years. I graduated from Tech Elevator's Java bootcamp in September 2023.</p>
                     <h3>Contact me</h3>
                     <p>I welcome feedback and suggestions of all varieties. Feel free to reach out to me on my <a href="https://github.com/heatherpiper">Github profile</a> or email me at <a href="mailto:heather.a.piper@gmail.com">heather.a.piper@gmail.com</a></p>
                 </div>
@@ -91,7 +91,7 @@ export default {
     border-radius: 0 0 12px 12px;
     margin-bottom: 1.5em;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding:  10px 24px 24px 24px;
+    padding:  0.25em 1.75em 1.75em 1.75em;
     color: var(--afl-800);
     border: 1px solid var(--afl-800);
     line-height: 1.5em;
@@ -106,19 +106,24 @@ export default {
     max-width: 400px;
 }
 
+#bio {
+    margin-top: 1.5em;
+}
+
 .section-content p {
-    margin-top: 0.75em;
+    margin-top: 0.5em;
+    padding: 0.25em 0.5em 0 0.5em;
 }
 
 .section-content h3 {
     color: var(--afl-500);
     font-size: x-large;
-    margin-top: 1.5em;
+    margin-top: 1.25em;
     margin-bottom: 0;
 }
 
 .section-content li {
-    margin: 0.75em 0;
+    margin: 0.5em 0;
 }
 
 .section-content li strong {
@@ -133,6 +138,10 @@ export default {
 .section-content a:hover {
     text-decoration: underline;
     cursor: pointer;
+}
+
+.section-content p:last-child {
+    padding-bottom: 1em;
 }
 
 .button-container {
@@ -167,24 +176,50 @@ export default {
     }
 
     .section-content {
-        padding: 10px 16px 16px 16px;
-    
-    }
-
-    .section-content li strong {
-        color: var(--afl-800);
-    }
-
-    ul {
-        padding-left: 1em;
+        padding: 1.5em;
     }
 
     .logo-image {
         max-width: 300px;
     }
 
+    .section-content li {
+        margin: 0.5em 0;
+    }
+
+    .section-content ul {
+        padding-left: 1.5em;
+    }
+
+    .section-content p:last-child {
+        padding-bottom: 1em;
+    }
+
     .back-button {
         display: block;
+        max-width: 40%;
+        background-color: var(--afl-450);
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .section-content ul {
+        padding-left: 1em;
+    }
+    
+    .section-content li {
+        margin: 0.25em 0;
+    }
+
+    .section-content li strong {
+        color: var(--afl-800);
+    }
+
+    .back-button {
+        max-width: 100%;
+        padding: 0.75em 1.5em;
         background-color: var(--afl-450);
     }
 }
