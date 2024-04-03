@@ -56,46 +56,53 @@ public class AuthenticationController {
     public ResponseEntity<LoginResponseDto> googleLogin(@RequestBody String idTokenString) {
         try {
             GoogleIdToken idToken = googleIdTokenVerifier.verify(idTokenString);
-            if (idToken != null) {
-                GoogleIdToken.Payload payload = idToken.getPayload();
-                String email = payload.getEmail();
 
-                // Check if the user exists in the database
-                User user = userDao.getUserByEmail(email);
-
-                // If user doesn't exist, generate a unique username and create a new user
-                if (user == null) {
-                    String username = generatedUniqueUsername(email);
-                    user = new User();
-                    user.setEmail(email);
-                    user.setUsername(username);
-                    user.setPassword("");
-                    user.setActivated(true);
-                    user.setAuthorities("ROLE_USER");
-                    user = userDao.createGoogleUser(user);
-                }
-
-                List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()
-                        .map(authority -> new SimpleGrantedAuthority(authority.getName()))
-                        .collect(Collectors.toList());
-
-                Authentication authentication = new UsernamePasswordAuthenticationToken(
-                        user.getUsername(),
-                        null,
-                        grantedAuthorities
-                );
-
-                String jwt = tokenProvider.createToken(authentication, false);
-
-                LoginResponseDto responseDto = new LoginResponseDto(jwt, user);
-                return ResponseEntity.ok(responseDto);
-            } else {
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid ID token.");
+            // Check if the ID token is valid
+            if (idToken == null) {
+                throw new InvalidTokenException("Invalid Google ID token.");
             }
+
+            // Get user's email address
+            GoogleIdToken.Payload payload = idToken.getPayload();
+            String email = payload.getEmail();
+
+            // Check if the user exists. If not, create a new user
+            User user = userDao.getUserByEmail(email);
+            if (user == null) {
+                String username = generatedUniqueUsername(email);
+                user = new User();
+                user.setEmail(email);
+                user.setUsername(username);
+                user.setPassword("");
+                user.setActivated(true);
+                user.setAuthorities("ROLE_USER");
+                user = userDao.createGoogleUser(user);
+
+                // Make sure new user was actually created
+                if (user == null) {
+                    throw new UserCreationException("Failed to create user account.");
+                }
+            }
+
+            List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()
+                    .map(authority -> new SimpleGrantedAuthority(authority.getName()))
+                    .collect(Collectors.toList());
+
+            Authentication authentication = new UsernamePasswordAuthenticationToken(
+                    user.getUsername(),
+                    null,
+                    grantedAuthorities
+            );
+
+            String jwt = tokenProvider.createToken(authentication, false);
+
+            LoginResponseDto responseDto = new LoginResponseDto(jwt, user);
+            return ResponseEntity.ok(responseDto);
+
         } catch (InvalidTokenException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid Google ID token.");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (UserCreationException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to create user account.");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         } catch (Exception e) {
             logger.error("An error occurred during Google authentication: ", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred.");
@@ -137,6 +144,11 @@ public class AuthenticationController {
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(path = "/register", method = RequestMethod.POST)
     public ResponseEntity<?> register(@Valid @RequestBody RegisterUserDto newUser) {
+        // Validate email format
+        if (!isValidEmail(newUser.getEmail())) {
+            return ResponseEntity.badRequest().body("Invalid email format.");
+        }
+
         try {
             User user = userDao.createUser(newUser);
             return new ResponseEntity<>(HttpStatus.CREATED);
@@ -149,6 +161,11 @@ public class AuthenticationController {
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("User registration failed due to an unexpected error.");
         }
+    }
+
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        return email.matches(emailRegex);
     }
 }
 
