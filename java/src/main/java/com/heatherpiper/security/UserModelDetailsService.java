@@ -60,8 +60,13 @@ public class UserModelDetailsService implements UserDetailsService {
             grantedAuthorities.add(new SimpleGrantedAuthority(authority.getName()));
         }
 
+        String password = user.getPassword();
+        if (password == null || password.isEmpty()) {
+            password = "google-user-password";
+        }
+
         return new org.springframework.security.core.userdetails.User(user.getUsername(),
-                user.getPassword(),
+                password,
                 grantedAuthorities);
     }
 }

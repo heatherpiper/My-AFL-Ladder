@@ -30,13 +30,4 @@ public class AppConfig {
                 .setAudience(Collections.singletonList(googleClientId))
                 .build();
     }
-
-    @Bean
-    public AuthenticationController authenticationController(TokenProvider tokenProvider,
-                                                             AuthenticationManagerBuilder authenticationManagerBuilder,
-                                                             UserDao userDao,
-                                                             GoogleIdTokenVerifier googleIdTokenVerifier) {
-        return new AuthenticationController(tokenProvider, authenticationManagerBuilder, userDao,
-                googleIdTokenVerifier);
-    }
 }
