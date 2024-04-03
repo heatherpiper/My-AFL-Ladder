@@ -5,8 +5,12 @@ import javax.validation.Valid;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.heatherpiper.exception.DaoException;
+import com.heatherpiper.exception.InvalidTokenException;
 import com.heatherpiper.exception.UniqueConstraintViolationException;
+import com.heatherpiper.exception.UserCreationException;
 import com.heatherpiper.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +34,8 @@ import java.util.stream.Collectors;
 @RestController
 @CrossOrigin
 public class AuthenticationController {
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -86,8 +92,13 @@ public class AuthenticationController {
             } else {
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid ID token.");
             }
+        } catch (InvalidTokenException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid Google ID token.");
+        } catch (UserCreationException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to create user account.");
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Google authentication failed.");
+            logger.error("An error occurred during Google authentication: ", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred.");
         }
     }
 
