@@ -2,6 +2,7 @@ package com.heatherpiper.model;
 
 import com.heatherpiper.security.ValidPassword;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 /*
     The acronym DTO is being used for "data transfer object". It means that this type of class is specifically
@@ -12,23 +13,39 @@ import javax.validation.constraints.NotEmpty;
 public class RegisterUserDto {
 
     @NotEmpty
+    @Email
+    private String email;
+
+    @NotEmpty
     private String username;
+
     @NotEmpty
     @ValidPassword
     private String password;
+
     @NotEmpty
     private String confirmPassword;
+
     @NotEmpty(message = "Please select a role for this user.")
     private String role;
 
     public RegisterUserDto() {
     }
 
-    public RegisterUserDto(String username, String password, String confirmPassword, String role) {
+    public RegisterUserDto(String email, String username, String password, String confirmPassword, String role) {
+        this.email = email;
         this.username = username;
         this.password = password;
         this.confirmPassword = confirmPassword;
         this.role = role;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getUsername() {

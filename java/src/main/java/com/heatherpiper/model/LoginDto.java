@@ -7,8 +7,17 @@ package com.heatherpiper.model;
  */
 public class LoginDto {
 
+   private String email;
    private String username;
    private String password;
+
+   public String getEmail() {
+      return email;
+   }
+
+   public void setEmail(String email) {
+      this.email = email;
+   }
 
    public String getUsername() {
       return username;
@@ -29,7 +38,8 @@ public class LoginDto {
    @Override
    public String toString() {
       return "LoginDTO{" +
-              "username='" + username + '\'' +
+              "email='" + email + '\'' +
+              ", username='" + username + '\'' +
               ", password='" + password + '\'' +
               '}';
    }

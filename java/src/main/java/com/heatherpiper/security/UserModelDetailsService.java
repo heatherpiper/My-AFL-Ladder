@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -33,7 +34,19 @@ public class UserModelDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(final String login) {
         log.debug("Authenticating user '{}'", login);
         String lowercaseLogin = login.toLowerCase();
-        return createSpringSecurityUser(lowercaseLogin, userDao.getUserByUsername(lowercaseLogin));
+        User user = getUserByUsernameOrEmail(lowercaseLogin);
+        return createSpringSecurityUser(lowercaseLogin, user);
+    }
+
+    private User getUserByUsernameOrEmail(String lowercaseLogin) {
+        User user = userDao.getUserByUsername(lowercaseLogin);
+        if (user != null) {
+            user = userDao.getUserByEmail(lowercaseLogin);
+        }
+        if (user == null) {
+            throw new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the database");
+        }
+        return user;
     }
 
     private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, User user) {
