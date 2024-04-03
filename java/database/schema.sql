@@ -8,6 +8,7 @@ DROP TABLE IF EXISTS teams;
 
 CREATE TABLE users (
 	user_id SERIAL,
+	email VARCHAR(50) NOT NULL UNIQUE,
 	username VARCHAR(50) NOT NULL UNIQUE,
 	password_hash VARCHAR(200) NOT NULL,
 	role VARCHAR(50) NOT NULL,

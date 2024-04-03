@@ -13,7 +13,11 @@ public interface UserDao {
 
     User getUserByUsername(String username);
 
+    User getUserByEmail(String email);
+
     User createUser(RegisterUserDto user);
+
+    User createGoogleUser(User user);
 
     boolean userExists(int userId);
 }
