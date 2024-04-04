@@ -18,17 +18,21 @@
         <input type="password" placeholder="Password" id="password" v-model="user.password" autocomplete="current-password" required />
       </div>
       <button type="submit">Sign in</button>
+      <GoogleSignInButton />
       <p>Need an account? <router-link :to="{ name: 'register' }">Sign up.</router-link></p>
     </form>
   </div>
 </template>
 
 <script>
+import GoogleSignInButton from "../components/GoogleSignInButton.vue";
 import authService from "../services/AuthService";
 
 export default {
   name: "login",
-  components: {},
+  components: {
+    GoogleSignInButton,
+  },
   data() {
     return {
       user: {
@@ -89,7 +93,7 @@ export default {
 }
 
 .form-input-group {
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   display: flex;
   justify-content: center;
 }
@@ -97,7 +101,8 @@ export default {
 input[type="text"],
 input[type="password"] {
   width: calc(100% - 20px); 
-  padding: 10px;
+  height: 40px;
+  padding: 0 10px;
   background-color: #e1e6e9;
   border: none;
   border-radius: 8px; 
@@ -107,7 +112,8 @@ input[type="password"] {
 }
 
 button[type="submit"] {
-  width: 100%; 
+  width: 100%;
+  height: 40px;
   padding: 10px;
   background-color: var(--afl-500); 
   border: none; 
@@ -115,13 +121,15 @@ button[type="submit"] {
   color: var(--afl-100); 
   cursor: pointer;
   display: block;
-  margin: 20px auto;
+  margin: 12px auto;
   font-size: 16px;
-  transition: background-color 0.1s ease-in-out;
+  transition: background-color 0.1s ease-in-out, box-shadow 0.1s ease, transform 0.1s ease;
 }
 
 button[type="submit"]:hover {
   background-color: var(--afl-450);
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.1), 0 2px 2px rgba(0, 0, 0, 0.1);
+  transform: scale(1.01);
 }
 
 div[role="alert"] {
