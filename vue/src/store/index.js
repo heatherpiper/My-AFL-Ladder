@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import GoogleAuthService from '../services/GoogleAuthService'
 
 Vue.use(Vuex)
 
@@ -49,7 +50,7 @@ export default new Vuex.Store({
     },
     async loginWithGoogle({ commit }, { idToken }) {
       try {
-        const response = await axios.post('/auth/google', { idToken });
+        const response = await GoogleAuthService.loginWithGoogle(idToken);
         commit('SET_USER', response.data.user);
         commit('SET_AUTH_TOKEN', response.data.token);
       } catch (error) {
@@ -58,7 +59,7 @@ export default new Vuex.Store({
     },
     async exchangeAuthorizationCode({ commit }, authorizationCode) {
       try {
-        const response = await axios.post('/auth/google/exchange', { code: authorizationCode });
+        const response = await GoogleAuthService.exchangeAuthorizationCode(authorizationCode);
         const { token, user } = response.data;
         commit('SET_AUTH_TOKEN', token);
         commit('SET_USER', user);
