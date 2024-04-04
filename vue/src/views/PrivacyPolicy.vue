@@ -123,7 +123,7 @@ export default {
 }
 
 .privacy-content p {
-    margin-top: 0.5em 0 0 0;
+    margin: 0.5em 0 0 0;
 }
 
 .privacy-content p:last-child {
