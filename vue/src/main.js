@@ -25,6 +25,7 @@ const gauthOption = {
   clientId: process.env.GOOGLE_CLIENT_ID,
   scope: 'profile email',
   prompt: 'select_account',
+  redirect_uri: 'https://later-ladder.onrender.com/auth/google/callback',
 };
 
 Vue.use(GAuth, gauthOption);

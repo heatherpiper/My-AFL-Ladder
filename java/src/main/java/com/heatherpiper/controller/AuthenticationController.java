@@ -181,6 +181,11 @@ public class AuthenticationController {
         }
     }
 
+    @PostMapping("/auth/google")
+    public void initializeGoogleSignIn() {
+        // This is just a placeholder for the Google sign-in flow. The actual sign-in flow is handled by the frontend.
+    }
+
     private boolean isValidEmail(String email) {
         String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
         return email.matches(emailRegex);

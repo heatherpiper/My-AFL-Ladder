@@ -8,7 +8,7 @@ import store from '../store/index'
 import About from '../views/About.vue'
 import PrivacyPolicy from '../views/PrivacyPolicy.vue'
 import TermsOfService from '../views/TermsOfService.vue'
-import GoogleOAuthCallback from '../views/GoogleOAuthCallback.vue'
+import GoogleOAuthCallback from '../components/GoogleOAuthCallback.vue'
 
 Vue.use(Router)
 
