@@ -8,6 +8,7 @@ import store from '../store/index'
 import About from '../views/About.vue'
 import PrivacyPolicy from '../views/PrivacyPolicy.vue'
 import TermsOfService from '../views/TermsOfService.vue'
+import GoogleOAuthCallback from '../views/GoogleOAuthCallback.vue'
 
 Vue.use(Router)
 
@@ -79,6 +80,11 @@ const router = new Router({
       meta: {
         requiresAuth: false
       }
+    },
+    {
+      path: "/auth/google/callback",
+      name: 'google-oauth-callback',
+      component: GoogleOAuthCallback,
     }
   ],
   scrollBehavior() {

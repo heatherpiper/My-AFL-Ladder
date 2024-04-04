@@ -56,6 +56,17 @@ export default new Vuex.Store({
         console.error('Error during Google login:', error);
       }
     },
+    async exchangeAuthorizationCode({ commit }, authorizationCode) {
+      try {
+        const response = await axios.post('/auth/google/exchange', { code: authorizationCode });
+        const { token, user } = response.data;
+        commit('SET_AUTH_TOKEN', token);
+        commit('SET_USER', user);
+      } catch (error) {
+        console.error('Error during token exchange:', error);
+        throw error;
+      }
+    }
   },
   getters: {
     isDarkMode: state => state.isDarkMode
