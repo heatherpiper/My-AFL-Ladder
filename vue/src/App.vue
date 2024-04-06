@@ -85,6 +85,8 @@ body, html {
   display: flex;
   flex-direction: column;
   flex: 1;
+  background: radial-gradient(circle at center, var(--afl-500) 0%, var(--afl-600) 40%, var(--afl-800) 100%);
+  background-attachment: fixed;
 }
 
 .content-wrapper {
