@@ -114,17 +114,20 @@ h1 {
 
 .cta-button {
     display: inline-block;
-    background-color: var(--afl-450);
+    background-color: #7ec466;
     color: var(--afl-100);
     padding: 1rem 2rem;
+    margin: 2rem 0 0 0;
     border-radius: 8px;
     text-decoration: none;
+    font-size: 1.25rem;
     font-weight: bold;
     transition: background-color 0.3s ease;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .cta-button:hover {
-    background-color: var(--afl-400);
+    background-color: #95dd7e;
 }
 
 .mission {
@@ -214,7 +217,7 @@ h3 {
 .cta {
     text-align: center;
     margin: 4rem 4rem -4rem 4rem;
-    padding-bottom: 8rem;
+    padding-bottom: 6rem;
 }
 
 .cta-text {
@@ -226,11 +229,6 @@ h3 {
 
 .cta h2 {
     color: var(--afl-200);
-}
-
-.cta-button {
-    margin-top: 1.75rem;
-    font-size: 1.5rem;
 }
 
 </style>
