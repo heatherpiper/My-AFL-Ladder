@@ -1,8 +1,8 @@
 <template>
   <div id="app">
+    <NavBar />
     <div class="content-wrapper">
       <notification-modal v-if="showNotificationModal && $route.name !== 'login' && $route.name !== 'register'" :message="notificationMessage" @close="handleNotificationClose"></notification-modal>
-      <NavBar />
       <router-view />
     </div>
     <Footer />
@@ -78,6 +78,7 @@ body, html {
   min-height: 100vh;
   margin: 0;
   padding: 0;
+  color: var(--afl-200);
 }
 
 #app {
@@ -92,8 +93,6 @@ body, html {
 }
 
 body {
-  background: radial-gradient(circle at center, var(--afl-500) 0%, var(--afl-600) 40%, var(--afl-800) 100%);
-  background-attachment: fixed;
   font-family: 'Inter', sans-serif;
 }
 

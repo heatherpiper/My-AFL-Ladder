@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '../views/Home.vue'
+import LandingPage from '../views/LandingPage.vue'
+import Dashboard from '../views/Dashboard.vue'
+import GuestDashboard from '../views/GuestDashboard.vue'
 import Login from '../views/Login.vue'
 import Logout from '../views/Logout.vue'
 import Register from '../views/Register.vue'
@@ -18,11 +20,24 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home,
+      name: 'landing',
+      component: LandingPage,
       meta: {
         requiresAuth: false
       }
+    },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: Dashboard,
+      meta: {
+        requiresAuth: true
+      },
+    },
+    {
+      path: '/guest-dashboard',
+      name: 'guest-dashboard',
+      component: GuestDashboard,
     },
     {
       path: "/login",
@@ -79,15 +94,22 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  // Determine if the route requires Authentication
+  // Determine if the route requires authentication
   const requiresAuth = to.matched.some(x => x.meta.requiresAuth);
+
   // Determine if the user is logged in
   const isAuthenticated = store.state.token !== '';
-  // If the route requires Auth and the user is not logged in, redirect to login
+
+  // If the route requires authentication and the user is not logged in, redirect to login
   if (requiresAuth && !isAuthenticated) {
     next("/login");
+
+  // If the user is logged in, redirect to dashboard
+  } else if  (to.path === '/' && isAuthenticated) {
+    next("/dashboard");
+
+  // Else let them go to their next destination
   } else {
-    // Else let them go to their next destination
     next();
   }
 });

@@ -91,7 +91,7 @@
   </div>
 </template>
     
-  <script>
+<script>
   import GameService from '../services/GameService'
   
   export default {
@@ -339,7 +339,6 @@
   }
   
   .game-list {
-    color: var(--afl-900);
     margin: auto;
   }
   

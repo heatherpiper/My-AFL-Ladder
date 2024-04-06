@@ -1,9 +1,9 @@
 <template>
-      <div class="notification-modal">
-      <p>{{ message }}</p>
-      <button @click="$emit('close')">OK</button>
-      </div>
-  </template>
+  <div class="notification-modal">
+    <p>{{ message }}</p>
+    <button @click="$emit('close')">OK</button>
+  </div>
+</template>
   
   <script>
   export default {
@@ -27,7 +27,7 @@
   }
 
   .notification-modal p {
-    color: var(--afl-800);
+    color: var(--afl-900);
     text-align: center;
     margin-bottom: 1.25em;
   }

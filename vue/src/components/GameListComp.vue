@@ -336,7 +336,6 @@ h1 {
 }
 
 .game-list {
-  color: var(--afl-900);
   margin: auto;
 }
 
