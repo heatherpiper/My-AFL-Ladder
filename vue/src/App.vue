@@ -70,6 +70,8 @@ export default {
   --afl-250: #8ebeee;
   --afl-200: #EDF4F7;
   --afl-100: #F2F4F7;
+  --green: #7ec466;
+  --green-bright: #95dd7e;
 }
 
 body, html {
