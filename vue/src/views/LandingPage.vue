@@ -66,22 +66,24 @@
             </div>
         </section>
 
-        <section class="why-us">
-            <h2 class="why-us-header">Why Choose Later Ladder?</h2>
-            <div class="phone-mockup">
-                <img src="@/assets/phone-mockup-angled.svg" alt="Later Ladder phone mockup">
-            </div>
-            <div class="why-us-content">  
-                <p>Later Ladder was created from a genuine passion for AFL and an understanding of the international
-                    fan's dilemma. We bridge the gap between your love for AFL and the practicality of your personal
-                    schedule. Our app ensures that you never have to compromise on the excitement of the game due to
-                    spoilers again.</p>
-                <p>At Later Ladder, we're not just another app; we're your essential tool for enjoying AFL games on your
-                    schedule, keeping the spirit of competition alive and thrilling. Dive into your games, manage your
-                    standings, and enjoy AFL like never before, all through a straightforward, user-friendly platform.
-                </p>
-            </div>
-        </section>
+        <div class="why-us-container">
+            <section class="why-us">
+                <h2 class="why-us-header">Why Choose Later Ladder?</h2>
+                <div class="phone-mockup">
+                    <img src="@/assets/phone-mockup-angled.svg" alt="Later Ladder phone mockup">
+                </div>
+                <div class="why-us-content">  
+                    <p>Later Ladder was created from a genuine passion for AFL and an understanding of the international
+                        fan's dilemma. We bridge the gap between your love for AFL and the practicality of your personal
+                        schedule. Our app ensures that you never have to compromise on the excitement of the game due to
+                        spoilers again.</p>
+                    <p>At Later Ladder, we're not just another app; we're your essential tool for enjoying AFL games on your
+                        schedule, keeping the spirit of competition alive and thrilling. Dive into your games, manage your
+                        standings, and enjoy AFL like never before, all through a straightforward, user-friendly platform.
+                    </p>
+                </div>
+            </section>
+        </div>
 
         <section class="cta">
             <div class="cta-text">
@@ -167,6 +169,8 @@ h1 {
 }
 
 .mission {
+    display: flex;
+    justify-content: center;
     padding: 4rem 10rem;
     text-align: center;
 }
@@ -232,29 +236,15 @@ h3 {
     text-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
 }
 
-/* .why-us {
+.why-us-container {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: center;
     background-color: var(--afl-600);
-
-} */
-
-/* 
-.phone-mockup {
-    flex: 2;
-    padding: 2rem 1rem 0 1rem;
-    max-width: 25%;
-} */
-
-/* .why-us-content {
-    flex: 2;
-    flex-basis: 50%;
-    margin: 0 2rem 2rem 2rem;
-} */
+}
 
 .why-us {
-    background-color: var(--afl-600);
+    max-width: 1200px;
+    width: 100%;
     padding: 4rem;
     display: grid;
     grid-template-columns: minmax(auto, 25%) 1fr;
@@ -262,11 +252,13 @@ h3 {
         "image header"
         "image text";
     gap: 0 1rem;
+    align-items: center;
 }
 
 .phone-mockup {
     grid-area: image;
     align-self: center;
+    max-width: 300px;
 }
 
 .why-us-header {
@@ -278,6 +270,7 @@ h3 {
     grid-area: text;
     font-size: 1.2rem;
     margin: 0 2rem;
+    max-width: 1000px;
 }
 
 .cta {
