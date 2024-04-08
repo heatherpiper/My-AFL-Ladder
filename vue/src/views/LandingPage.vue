@@ -1,5 +1,6 @@
 <template>
     <div class="landing-page">
+
         <section class="hero">
             <div class="hero-content">
                 <div class="hero-text-and-button">
@@ -8,7 +9,8 @@
                         <p class="tagline">Enjoy footy on your schedule - spoiler free.</p>
                     </div>
                     <div class="hero-button-container">
-                        <router-link to="/guest-dashboard" class="cta-button hero-button">Try it out as a guest</router-link>
+                        <router-link to="/guest-dashboard" class="cta-button hero-button">Try it out as a
+                            guest</router-link>
                     </div>
                 </div>
                 <div class="hero-image">
@@ -32,37 +34,44 @@
 
         <section class="features">
             <div class="feature-card">
-                <img src="@/assets/feature1.svg" alt="Vector illustration of a human figure responding to an alert issued by a mobile device" class="feature-icon">
+                <img src="@/assets/feature1.svg"
+                    alt="Vector illustration of a human figure responding to an alert issued by a mobile device"
+                    class="feature-icon">
                 <div class="feature-text">
                     <h3>Control What You See</h3>
                     <p>Mark games as watched and see team standings update accordingly. You're in control, free from
-                    worrying about spoilers for the games you haven't caught up on yet.</p>
+                        worrying about spoilers for the games you haven't caught up on yet.</p>
                 </div>
             </div>
             <div class="feature-card">
-                <img src="@/assets/feature2.svg" alt="Vector illustration of a human figure selecting from presented options" class="feature-icon">
+                <img src="@/assets/feature2.svg"
+                    alt="Vector illustration of a human figure selecting from presented options" class="feature-icon">
                 <div class="feature-text">
                     <h3>Personalize Your AFL Experience</h3>
-                    <p>With a simple account setup, your watched games list and the corresponding ladder updates are saved
-                    and customized to your viewing journey.</p>
+                    <p>With a simple account setup, your watched games list and the corresponding ladder updates are
+                        saved
+                        and customized to your viewing journey.</p>
                 </div>
             </div>
             <div class="feature-card">
-                <img src="@/assets/feature3.svg" alt="Vector illustration of a human figure sitting by a large clock, adjusting the time displayed by the clockhands" class="feature-icon">
+                <img src="@/assets/feature3.svg"
+                    alt="Vector illustration of a human figure sitting by a large clock, adjusting the time displayed by the clockhands"
+                    class="feature-icon">
                 <div class="feature-text">
                     <h3>Enjoy AFL on Your Terms</h3>
-                    <p>Our app is built for ease and efficiency, focusing on delivering the information you want, precisely
-                    when you want it.</p>
+                    <p>Our app is built for ease and efficiency, focusing on delivering the information you want,
+                        precisely
+                        when you want it.</p>
                 </div>
             </div>
         </section>
 
         <section class="why-us">
+            <h2 class="why-us-header">Why Choose Later Ladder?</h2>
             <div class="phone-mockup">
                 <img src="@/assets/phone-mockup-angled.svg" alt="Later Ladder phone mockup">
             </div>
-            <div class="why-us-content">
-                <h2>Why Choose Later Ladder?</h2>
+            <div class="why-us-content">  
                 <p>Later Ladder was created from a genuine passion for AFL and an understanding of the international
                     fan's dilemma. We bridge the gap between your love for AFL and the practicality of your personal
                     schedule. Our app ensures that you never have to compromise on the excitement of the game due to
@@ -92,18 +101,20 @@ export default {
 </script>
 
 <style scoped>
-
 .landing-page {
     margin: -2rem auto 0;
     background-color: var(--afl-800);
 }
 
 .hero {
+    display: flex;
     background: linear-gradient(var(--afl-800), var(--afl-600));
     padding: 4rem 0;
+    justify-content: center;
 }
 
 .hero-content {
+    max-width: 1200px;
     display: flex;
     margin: 2rem 4rem 4rem;
     align-items: center;
@@ -161,6 +172,7 @@ h1 {
 }
 
 .mission-content {
+    max-width: 1200px;
     background: linear-gradient(var(--afl-800), var(--afl-600) 120%);
     border: 4px dashed var(--green-bright);
     border-radius: 6rem;
@@ -189,9 +201,10 @@ h2 {
 }
 
 .feature-card {
+    max-width: 360px;
     display: flex;
     flex-direction: column;
-    justify-content: center;;
+    justify-content: center;
     flex: 1;
     margin: 2rem 1rem;
     padding: 1rem 2rem 2rem 2rem;
@@ -219,28 +232,52 @@ h3 {
     text-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
 }
 
-.why-us {
+/* .why-us {
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: var(--afl-600);
-    background-repeat: repeat-x;
-    padding: 4rem;
-    font-size: 1.2rem;
-}
 
+} */
+
+/* 
 .phone-mockup {
     flex: 2;
     padding: 2rem 1rem 0 1rem;
     max-width: 25%;
-    max-height: auto;
+} */
+
+/* .why-us-content {
+    flex: 2;
+    flex-basis: 50%;
+    margin: 0 2rem 2rem 2rem;
+} */
+
+.why-us {
+    background-color: var(--afl-600);
+    padding: 4rem;
+    display: grid;
+    grid-template-columns: minmax(auto, 25%) 1fr;
+    grid-template-areas:
+        "image header"
+        "image text";
+    gap: 0 1rem;
+}
+
+.phone-mockup {
+    grid-area: image;
+    align-self: center;
+}
+
+.why-us-header {
+    grid-area: header;
+    margin: 2rem 0 1rem 2rem;
 }
 
 .why-us-content {
-    flex: 2;
-    flex-basis: 50%;
-    text-align: left;
-    margin: 0 2rem 2rem 2rem;
+    grid-area: text;
+    font-size: 1.2rem;
+    margin: 0 2rem;
 }
 
 .cta {
@@ -306,6 +343,10 @@ h3 {
         padding: 1rem;
     }
 
+    .feature-text p {
+        font-size: 1rem;
+    }
+
     .cta {
         padding: 4rem 2rem 8rem 2rem;
     }
@@ -362,17 +403,17 @@ h3 {
         padding-bottom: 0;
     }
 
-    .why-us-content h2 {
+    /* .why-us-content h2 {
         font-size: 2.5rem;
-    }
-
-    .why-us-content p {
-        font-size: 1.1rem;
     }
 
     .phone-mockup {
         margin: 0 0.5rem 0 0;
         padding: 0;
+    } */
+
+    .why-us {
+        padding: 2rem;
     }
 
     .cta {
@@ -393,7 +434,7 @@ h3 {
     }
 
     .hero-content {
-        max-width: 100%;
+        max-width: 80%;
         flex-direction: column;
         align-items: center;
         justify-content: center;
@@ -401,26 +442,26 @@ h3 {
 
     .hero-text {
         order: 1;
-        max-width: 100%;
         text-align: center;
         margin: 0.5rem 0.5rem 0 0.5rem;
         padding: 0;
     }
 
     .hero-text h1 {
-        margin:  2.5rem auto;
+        margin: 2.5rem auto;
     }
 
     .tagline {
         text-align: center;
         margin-bottom: 1rem;
+        padding-top: 0;
     }
 
     .hero-image {
         order: 2;
         text-align: center;
         max-width: calc(100% - 4rem);
-        margin: 3rem 0 0 0;
+        margin: 1rem 0 0 0;
         padding-left: 0;
     }
 
@@ -471,7 +512,7 @@ h3 {
     .feature-card {
         margin: 1rem;
     }
-    
+
     .feature-icon {
         max-width: 55%;
         height: auto;
@@ -491,8 +532,9 @@ h3 {
         padding-bottom: 0.5rem;
     }
 
-    .why-us {
+    /* .why-us {
         flex-direction: column;
+        padding: 1rem;
         align-items: center;
     }
 
@@ -503,11 +545,48 @@ h3 {
     }
 
     .why-us-content h2 {
-        font-size: 2rem;
+        font-size: 2.5rem;
+        line-height: 1.25;
     }
 
     .why-us-content p {
+        font-size: 1.1rem;
+    } */
+
+    .why-us {
+        padding: 2rem 0;
+        grid-template-columns: minmax(0, 40%) 1fr;
+        grid-template-rows: auto auto;
+        gap: 0;
+    }
+
+    .phone-mockup {
+        grid-column: 1 / 2;
+        grid-row: 1 / 2;
+        max-width: 75%;
+        justify-self: right;
+        padding-right: 1.5rem;
+        border-right: 1px solid var(--green);
+    }
+
+    .why-us-header {
+        font-size: 3rem;
+        grid-column: 2 / 3;
+        grid-row: 1 / 2;
+        align-self: center;
+        max-width: 60%;
+        line-height: 1.25;
+    }
+
+    .why-us-content {
+        grid-column: 1 / -1;
+        grid-row: 2 / 3;
+        margin-top: 1rem;
         font-size: 1rem;
+    }
+
+    .cta {
+        padding-top: 2rem;
     }
 
     .cta-text {
