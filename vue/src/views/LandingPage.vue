@@ -33,35 +33,38 @@
         </section>
 
         <section class="features">
-            <div class="feature-card">
-                <img src="@/assets/feature1.svg"
-                    alt="Vector illustration of a human figure responding to an alert issued by a mobile device"
-                    class="feature-icon">
-                <div class="feature-text">
-                    <h3>Control What You See</h3>
-                    <p>Mark games as watched and see team standings update accordingly. You're in control, free from
-                        worrying about spoilers for the games you haven't caught up on yet.</p>
+            <h2>Features</h2>
+            <div class="feature-cards">
+                <div class="feature-card">
+                    <img src="@/assets/feature1.svg"
+                        alt="Vector illustration of a human figure responding to an alert issued by a mobile device"
+                        class="feature-icon">
+                    <div class="feature-text">
+                        <h3>Control What You See</h3>
+                        <p>Mark games as watched and see team standings update accordingly. You're in control, free from
+                            worrying about spoilers for the games you haven't caught up on yet.</p>
+                    </div>
                 </div>
-            </div>
-            <div class="feature-card">
-                <img src="@/assets/feature2.svg"
-                    alt="Vector illustration of a human figure selecting from presented options" class="feature-icon">
-                <div class="feature-text">
-                    <h3>Personalize Your AFL Experience</h3>
-                    <p>With a simple account setup, your watched games list and the corresponding ladder updates are
-                        saved
-                        and customized to your viewing journey.</p>
+                <div class="feature-card">
+                    <img src="@/assets/feature2.svg"
+                        alt="Vector illustration of a human figure selecting from presented options" class="feature-icon">
+                    <div class="feature-text">
+                        <h3>Personalize Your AFL Experience</h3>
+                        <p>With a simple account setup, your watched games list and the corresponding ladder updates are
+                            saved
+                            and customized to your viewing journey.</p>
+                    </div>
                 </div>
-            </div>
-            <div class="feature-card">
-                <img src="@/assets/feature3.svg"
-                    alt="Vector illustration of a human figure sitting by a large clock, adjusting the time displayed by the clockhands"
-                    class="feature-icon">
-                <div class="feature-text">
-                    <h3>Enjoy AFL on Your Terms</h3>
-                    <p>Our app is built for ease and efficiency, focusing on delivering the information you want,
-                        precisely
-                        when you want it.</p>
+                <div class="feature-card">
+                    <img src="@/assets/feature3.svg"
+                        alt="Vector illustration of a human figure sitting by a large clock, adjusting the time displayed by the clockhands"
+                        class="feature-icon">
+                    <div class="feature-text">
+                        <h3>Enjoy AFL on Your Terms</h3>
+                        <p>Our app is built for ease and efficiency, focusing on delivering the information you want,
+                            precisely
+                            when you want it.</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -199,8 +202,21 @@ h2 {
 
 .features {
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: space-between;
     margin: 2rem auto 4rem;
+}
+
+.features h2 {
+    text-decoration: underline;
+    text-decoration-color: var(--afl-500);
+    text-decoration-thickness: 2px;
+}
+
+.feature-cards {
+    display: flex;
+    justify-content: space-between;
     max-width: 1200px;
 }
 
@@ -258,7 +274,7 @@ h3 {
 .phone-mockup {
     grid-area: image;
     align-self: center;
-    max-width: 300px;
+    max-width: 256px;
 }
 
 .why-us-header {
@@ -327,8 +343,8 @@ h3 {
         padding: 0 3rem 1rem;
     }
 
-    .features {
-        margin: 2rem 1rem 3rem 1rem;
+    .feature-cards {
+        margin: 1rem 1rem 3rem 1rem;
     }
 
     .feature-card {
@@ -384,7 +400,11 @@ h3 {
         margin: 0;
     }
 
-    .features {
+    .features h2 {
+        margin-bottom: 0.5rem;
+    }
+
+    .feature-cards {
         margin: 2rem 0;
     }
 
@@ -486,10 +506,15 @@ h3 {
         padding: 0 1rem 1.5rem 1rem;
     }
 
-    .features {
+    .features h2 {
+        margin: 2rem 0 0 0;
+        text-decoration: none;
+    }
+
+    .feature-cards {
         flex-direction: column;
         align-items: center;
-        margin-top: 4rem;
+        margin-top: 1rem;
         padding: 1rem;
     }
 
@@ -511,13 +536,13 @@ h3 {
         font-size: 1.1rem;
     }
 
-    .features h3 {
+    .feature-cards h3 {
         text-align: center;
         padding-bottom: 0.5rem;
     }
 
     .why-us {
-        padding: 2rem 0;
+        padding: 2rem 0.5rem;
         grid-template-columns: minmax(0, 40%) 1fr;
         grid-template-rows: auto auto;
         gap: 0;
@@ -568,12 +593,20 @@ h3 {
         padding: 1rem;
     }
 
-    .features {
+    .feature-cards {
         margin-top: 1.5rem;
     }
 
     .feature-card {
         margin: 0.5rem 0.25rem;
+    }
+
+    .why-us-header {
+        font-size: 2.5rem;
+    }
+
+    .why-us-content {
+        margin: 0.5rem;
     }
 
     .cta-text {
