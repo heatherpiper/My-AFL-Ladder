@@ -396,15 +396,6 @@ h3 {
         padding-bottom: 0;
     }
 
-    /* .why-us-content h2 {
-        font-size: 2.5rem;
-    }
-
-    .phone-mockup {
-        margin: 0 0.5rem 0 0;
-        padding: 0;
-    } */
-
     .why-us {
         padding: 2rem;
     }
@@ -524,27 +515,6 @@ h3 {
         text-align: center;
         padding-bottom: 0.5rem;
     }
-
-    /* .why-us {
-        flex-direction: column;
-        padding: 1rem;
-        align-items: center;
-    }
-
-    .phone-mockup {
-        margin: 2rem 0 0.5rem 0;
-        padding-top: 2rem;
-        max-width: 33%;
-    }
-
-    .why-us-content h2 {
-        font-size: 2.5rem;
-        line-height: 1.25;
-    }
-
-    .why-us-content p {
-        font-size: 1.1rem;
-    } */
 
     .why-us {
         padding: 2rem 0;

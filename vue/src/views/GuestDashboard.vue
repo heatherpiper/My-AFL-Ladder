@@ -7,7 +7,7 @@
       </div>
     </transition>
     <div class="ladder-and-games">
-      <LadderGuestComp class="width-half ladder"/>
+      <LadderGuestComp ref="ladderComponent" class="width-half ladder"/>
       <GameListGuestComp class="width-half games" @recalculateLadder="recalculateLadder"/>
     </div>
   </div>
@@ -33,7 +33,7 @@ export default {
       this.showGuestNotice = false;
     },
     recalculateLadder() {
-      this.$emit('recalculateLadder');
+      this.$refs.ladderComponent.calculateLadder();
     }
   },
 };

@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard">
-    <LadderComp :userId="userId" class="width-half ladder"/>
+    <LadderComp :userId="userId" ref="ladderComponent" class="width-half ladder"/>
     <GameListComp @watchedStatusChanged="handleGameStatusChanged" @gameStatusChanged="handleGameStatusChanged" class="width-half games"/>
   </div>
 </template>
@@ -22,7 +22,7 @@ export default {
   },
   methods: {
     handleGameStatusChanged() {
-      this.$emit('gameStatusChanged');
+      this.$refs.ladderComponent.fetchLadder();
     }
   }
 };

@@ -225,6 +225,7 @@
             }
 
             this.$emit('watchedStatusChanged', gameId);
+            this.$emit('recalculateLadder');
             this.hover = null;
           }, 200);
         }
