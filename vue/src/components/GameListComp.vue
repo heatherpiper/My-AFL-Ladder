@@ -319,19 +319,21 @@ export default {
 
 h1 {
   margin: 0;
-  border-radius: 8px;
   font-family: 'Roboto', sans-serif;
   font-size: xx-large;
   color: var(--afl-200);
   text-shadow: 1px 1px 2px var(--afl-900);
-  background-color: var(--afl-800);
+}
+
+.refresh-button {
+  margin-left: 0;
 }
 
 .round-selection select {
   font-family: 'Roboto', sans-serif;
   font-size: 1rem;
-  padding: 4px 2px 4px 6px;
-  margin-right: 8px;
+  padding: 4px 2px 2px 8px;
+  margin-right: 6px;
   border: none;
   border-radius: 6px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -454,11 +456,9 @@ h2 {
   }
 
   .round-selection select {
-      padding: 4px 2px 4px 6px;
-      margin-right: 4px;
+      padding: 4px 2px 2px 6px;
+      margin-right: 2px;
   }
-
 }
-
 </style>
   
