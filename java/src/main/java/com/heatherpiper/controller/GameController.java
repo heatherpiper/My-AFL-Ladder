@@ -4,11 +4,13 @@ import com.heatherpiper.dao.GameDao;
 import com.heatherpiper.model.Game;
 import com.heatherpiper.service.SquiggleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin
 @RestController
@@ -60,12 +62,20 @@ public class GameController {
 
     @PostMapping("/refreshGames")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<String> refreshGames(@RequestParam int year) {
+    public ResponseEntity<?> refreshGames(@RequestParam int year) {
         try {
             squiggleService.adminInitiatedRefresh(year);
-            return ResponseEntity.ok("Game data successfully refreshed.");
+            return ResponseEntity.ok(Map.of("message", "Game data successfully refreshed."));
+        } catch (IllegalStateException e) {
+            if (e.getMessage().contains("rate-limited")) {
+                return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(Map.of("error", e.getMessage()));
+            } else {
+                return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Failed to refresh game data: " + e.getMessage());
+            return ResponseEntity.badRequest().body(Map.of("error", "Failed to refresh game data: " + e.getMessage()));
         }
     }
 }

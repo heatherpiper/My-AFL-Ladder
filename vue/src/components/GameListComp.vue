@@ -2,7 +2,10 @@
   <div class="game-list">
 
     <div class="header-section">
-      <h1>Games</h1>
+      <div class="title-and-refresh">
+        <h1>Games</h1>
+        <GameDataRefreshButton class="refresh-button"/>
+      </div>
       <div class="round-selection">
         <select v-model="currentRound" class="current-round-selection" id="current-round-selection" aria-label="Round">
           <option disabled value="">Choose a round</option>
@@ -91,9 +94,13 @@
   
 <script>
 import WatchedGamesService from '../services/WatchedGamesService';
+import GameDataRefreshButton from './GameDataRefreshButton.vue';
 
 export default {
   name: "GameListComp",
+  components: {
+    GameDataRefreshButton,
+  },
   data() {
     return {
       /**
@@ -303,7 +310,11 @@ export default {
   padding: 4px 12px;
   background-color: var(--afl-800);
   border-radius: 8px;
-  margin: auto;
+}
+
+.title-and-refresh {
+  display: flex;
+  align-items: center;
 }
 
 h1 {

@@ -21,5 +21,9 @@ export default {
 
     getIncompleteGames() {
         return axios.get(`${API_URL}/incomplete`);
+    },
+
+    refreshGameData(year) {
+        return axios.post(`${API_URL}/games/refreshGames`, null, { params: { year } });
     }
 }
