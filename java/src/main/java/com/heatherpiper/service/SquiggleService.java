@@ -3,18 +3,8 @@ package com.heatherpiper.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.heatherpiper.model.Game;
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.time.LocalDate;
-import java.time.Duration;
-import java.util.*;
-import java.util.function.Predicate;
-
 import com.heatherpiper.dao.GameDao;
+import com.heatherpiper.model.Game;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +15,26 @@ import reactor.util.retry.Retry;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.Year;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
 
 @Service
 public class SquiggleService {
 
     private static final Logger logger = LoggerFactory.getLogger(SquiggleService.class);
+
+    private static final long MIN_REFRESH_INTERVAL = 15 * 60 * 1000; // 15 minutes
+
+    private long lastRefreshTime = 0;
 
     private Disposable gameUpdateSubscription;
 
@@ -105,7 +110,7 @@ public class SquiggleService {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
                     .header("Accept", "application/json")
-                    .header("User-Agent", "My AFL Ladder (github.com/heatherpiper/My-AFL-Ladder)")
+                    .header("User-Agent", "Later Ladder (github.com/heatherpiper/Later-Ladder)")
                     .build();
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             String responseBody = response.body();
@@ -134,6 +139,32 @@ public class SquiggleService {
             logger.error("Failed to fetch games up to most recent round for year {}: ", year, e);
         }
         return allGames;
+    }
+
+    public void adminInitiatedRefresh(int year) {
+        logger.info("Admin initiated refresh of games data for current year");
+
+        // Validate year
+        if (year < Year.now().getValue() - 2 || year > Year.now().getValue()) {
+            logger.warn("Invalid year provided for refresh: {}", year);
+            throw new IllegalArgumentException("Invalid year for refresh. Year must be within the last 2 years.");
+        }
+
+        // Rate limiting check
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastRefreshTime < MIN_REFRESH_INTERVAL) {
+            logger.warn("Refresh operation is rate-limited. Last refresh was less than 15 minutes ago.");
+            throw new IllegalStateException("Refresh operation is rate-limited. Please wait before trying again.");
+        }
+        lastRefreshTime = currentTime;
+
+        try {
+            fetchGamesUpToMostRecentRound(year);
+            logger.info("Successfully refreshed game data for year {}", year);
+        } catch (Exception e) {
+            logger.error("Error during admin-initiated refresh of games data for year {}: ", year, e);
+            throw new RuntimeException("Failed to refresh game data due to an error. Please check the logs for more details.");
+        }
     }
 
     private List<Game> parseGames(String responseBody) {

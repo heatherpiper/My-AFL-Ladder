@@ -49,6 +49,7 @@ export default new Vuex.Store({
     }
   },
   getters: {
-    isDarkMode: state => state.isDarkMode
+    isDarkMode: state => state.isDarkMode,
+    isAdmin: state => state.user.authorities.some(auth => auth.name === 'ROLE_ADMIN'),
   }
 })
