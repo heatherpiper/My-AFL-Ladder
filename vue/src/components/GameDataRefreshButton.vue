@@ -192,7 +192,6 @@ export default {
         font-style: normal;
         font-size: 1.25rem;
         margin-left: 0.75rem;
-        padding-bottom: auto;
     }
 
     .message[data-status="success"]::before {
@@ -254,7 +253,6 @@ export default {
         font-style: normal;
         font-size: 1.25rem;
         margin-left: 0.5rem;
-        padding-bottom: auto;
     }
 
     .message[data-status="success"]::before {
