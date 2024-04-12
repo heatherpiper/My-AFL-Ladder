@@ -32,7 +32,7 @@ public class SquiggleService {
 
     private static final Logger logger = LoggerFactory.getLogger(SquiggleService.class);
 
-    private static final long MIN_REFRESH_INTERVAL = 15 * 60 * 1000; // 15 minutes
+    private static final long MIN_REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
 
     private long lastRefreshTime = 0;
 
@@ -246,5 +246,21 @@ public class SquiggleService {
         if (gameUpdateSubscription != null && !gameUpdateSubscription.isDisposed()) {
             gameUpdateSubscription.dispose();
         }
+    }
+
+    public void subscribeToTestStream() {
+        Flux<String> eventStream = reactor.netty.http.client.HttpClient.create()
+                .get()
+                .uri("https://api.squiggle.com.au/sse/test")
+                .responseContent()
+                .asString()
+                .windowUntil(s -> s.contains("\n\n"))
+                .flatMap(w -> w.reduce(String::concat));
+
+        eventStream.subscribe(
+                event -> logger.info("Received SSE test event: {}", event),
+                error -> logger.error("Error on Test Event Stream", error),
+                () -> logger.info("Test Event Stream completed")
+        );
     }
 }
