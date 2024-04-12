@@ -8,6 +8,7 @@ import com.heatherpiper.model.Game;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.stereotype.Service;
 import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
@@ -248,19 +249,14 @@ public class SquiggleService {
         }
     }
 
-    public void subscribeToTestStream() {
-        Flux<String> eventStream = reactor.netty.http.client.HttpClient.create()
+    public Flux<ServerSentEvent<String>> subscribeToTestStream() {
+        return reactor.netty.http.client.HttpClient.create()
                 .get()
                 .uri("https://api.squiggle.com.au/sse/test")
                 .responseContent()
                 .asString()
                 .windowUntil(s -> s.contains("\n\n"))
-                .flatMap(w -> w.reduce(String::concat));
-
-        eventStream.subscribe(
-                event -> logger.info("Received SSE test event: {}", event),
-                error -> logger.error("Error on Test Event Stream", error),
-                () -> logger.info("Test Event Stream completed")
-        );
+                .flatMap(w -> w.reduce(String::concat))
+                .map(event -> ServerSentEvent.builder(event).build());
     }
 }
