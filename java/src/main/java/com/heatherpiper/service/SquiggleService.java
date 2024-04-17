@@ -190,7 +190,10 @@ public class SquiggleService {
     public void subscribeToGameUpdates() {
         if (gameUpdateSubscription != null && !gameUpdateSubscription.isDisposed()) {
             gameUpdateSubscription.dispose();
+            logger.info("Disposed the previous game update subscription.");
         }
+
+        logger.info("Attempting to connect to the Squiggle SSE endpoint...");
 
         Flux<String> eventStream = reactor.netty.http.client.HttpClient.create()
                 .get()
@@ -203,11 +206,17 @@ public class SquiggleService {
         Predicate<Throwable> isRetryableException = throwable ->
                 throwable instanceof IOException;
 
-        gameUpdateSubscription = eventStream.retryWhen(Retry.backoff(5, Duration.ofSeconds(5))
+        gameUpdateSubscription = eventStream
+                .doOnSubscribe(subscription -> logger.info("Subscribed to Game Event Stream"))
+                .retryWhen(Retry.backoff(5, Duration.ofSeconds(5))
                         .filter(isRetryableException)
-                        .doBeforeRetry(retrySignal -> logger.info("Reconnecting attempt #" + retrySignal.totalRetries() + 1))
+                        .doBeforeRetry(retrySignal -> logger.info("Reconnecting attempt #{}", retrySignal.totalRetries() + 1))
                         .maxBackoff(Duration.ofMinutes(5)))
-                        .subscribe(this::processSseEvent, error -> logger.error("Error on Game Event Stream", error));
+                .subscribe(
+                        this::processSseEvent,
+                        error -> logger.error("Error on Game Event Stream", error),
+                        () -> logger.info("Game Event Stream completed")
+                );
     }
 
     private void processSseEvent(String sseEvent) {
@@ -218,6 +227,9 @@ public class SquiggleService {
                     String data = extractData(sseEvent);
                     Game game = objectMapper.readValue(data, Game.class);
                     gameDao.saveAll(List.of(game));
+                    logger.info("Processed 'removeGame' event for Game ID: {}", game.getId());
+                } else {
+                    logger.info("Received an unhandled event type: {}", eventType);
                 }
             }
         } catch (JsonProcessingException e) {
@@ -226,19 +238,27 @@ public class SquiggleService {
     }
 
     private String extractEventType(String sseEvent) {
+        logger.debug("Extracting event type from SSE event.");
         int eventStart = sseEvent.indexOf("event:");
         int dataStart = sseEvent.indexOf("data:");
         if (eventStart != -1 && dataStart != -1) {
-            return sseEvent.substring(eventStart + 6, dataStart).trim();
+            String eventType = sseEvent.substring(eventStart + 6, dataStart).trim();
+            logger.debug("Extracted event type: {}", eventType);
+            return eventType;
         }
+        logger.debug("Failed to extract event type.");
         return "";
     }
 
     private String extractData(String sseEvent) {
+        logger.debug("Extracting data from SSE event.");
         int dataStart = sseEvent.indexOf("data:");
         if (dataStart != -1) {
-            return sseEvent.substring(dataStart + 5).trim();
+            String data = sseEvent.substring(dataStart + 5).trim();
+            logger.debug("Extracted data: {}", data);
+            return data;
         }
+        logger.debug("Failed to extract data.");
         return "";
     }
 
