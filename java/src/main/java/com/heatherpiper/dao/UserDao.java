@@ -16,4 +16,6 @@ public interface UserDao {
     User createUser(RegisterUserDto user);
 
     boolean userExists(int userId);
+
+    void updateUserLastLogin(String username);
 }

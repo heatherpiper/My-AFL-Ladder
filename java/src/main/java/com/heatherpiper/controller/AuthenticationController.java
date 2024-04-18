@@ -1,10 +1,14 @@
 package com.heatherpiper.controller;
 
-import javax.validation.Valid;
-
+import com.heatherpiper.dao.UserDao;
 import com.heatherpiper.exception.DaoException;
 import com.heatherpiper.exception.UniqueConstraintViolationException;
-import com.heatherpiper.model.*;
+import com.heatherpiper.model.LoginDto;
+import com.heatherpiper.model.LoginResponseDto;
+import com.heatherpiper.model.RegisterUserDto;
+import com.heatherpiper.model.User;
+import com.heatherpiper.security.jwt.JWTFilter;
+import com.heatherpiper.security.jwt.TokenProvider;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.heatherpiper.dao.UserDao;
-import com.heatherpiper.security.jwt.JWTFilter;
-import com.heatherpiper.security.jwt.TokenProvider;
+import javax.validation.Valid;
 
 @RestController
 @CrossOrigin
@@ -46,6 +48,7 @@ public class AuthenticationController {
         User user;
         try {
             user = userDao.getUserByUsername(loginDto.getUsername());
+            userDao.updateUserLastLogin(loginDto.getUsername());
         } catch (DaoException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Username or password is incorrect.");
         }
@@ -71,6 +74,5 @@ public class AuthenticationController {
                     .body("User registration failed due to an unexpected error.");
         }
     }
-
 }
 
