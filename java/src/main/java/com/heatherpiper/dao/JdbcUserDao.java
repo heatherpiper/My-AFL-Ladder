@@ -15,6 +15,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
@@ -133,10 +134,12 @@ public class JdbcUserDao implements UserDao {
         user.setPassword(rs.getString("password_hash"));
         user.setAuthorities(Objects.requireNonNull(rs.getString("role")));
         user.setActivated(true);
-        OffsetDateTime lastActiveOd = rs.getObject("last_active", OffsetDateTime.class);
-        OffsetDateTime lastLoginOd = rs.getObject("last_login", OffsetDateTime.class);
-        user.setLastActive(lastActiveOd);
-        user.setLastLogin(lastLoginOd);
+        Timestamp lastActiveTs = rs.getTimestamp("last_active");
+        Timestamp lastLoginTs = rs.getTimestamp("last_login");
+
+        OffsetDateTime lastActiveOd = lastActiveTs != null ? lastActiveTs.toLocalDateTime().atOffset(ZoneOffset.UTC) : null;
+        OffsetDateTime lastLoginOd = lastLoginTs != null ? lastLoginTs.toLocalDateTime().atOffset(ZoneOffset.UTC) : null;
+
 
         return user;
     }
