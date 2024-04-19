@@ -11,7 +11,8 @@ CREATE TABLE users (
 	username VARCHAR(50) NOT NULL UNIQUE,
 	password_hash VARCHAR(200) NOT NULL,
 	role VARCHAR(50) NOT NULL,
-	last_login_date TIMESTAMP WITHOUT TIME ZONE,
+	last_login TIMESTAMP WITH TIME ZONE,
+	last_active TIMESTAMP WITH TIME ZONE,
 	CONSTRAINT PK_user PRIMARY KEY (user_id)
 );
 

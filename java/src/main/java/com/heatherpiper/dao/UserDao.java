@@ -17,5 +17,7 @@ public interface UserDao {
 
     boolean userExists(int userId);
 
-    void updateUserLastLogin(String username);
+    void updateLastLogin(String username);
+
+    void updateLastActive(String username);
 }

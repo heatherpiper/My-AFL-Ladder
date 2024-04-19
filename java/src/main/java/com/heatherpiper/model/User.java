@@ -2,7 +2,7 @@ package com.heatherpiper.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -16,15 +16,17 @@ public class User {
    @JsonIgnore
    private boolean activated;
    private Set<Authority> authorities = new HashSet<>();
-   private LocalDateTime lastLoginDate;
+   private OffsetDateTime lastLogin;
+   private OffsetDateTime lastActive;
 
    public User() { }
 
-   public User(int id, String username, String password, String authorities, LocalDateTime lastLoginDate) {
+   public User(int id, String username, String password, String authorities, OffsetDateTime lastLogin, OffsetDateTime lastActive) {
       this.id = id;
       this.username = username;
       this.password = password;
-      this.lastLoginDate = lastLoginDate;
+      this.lastLogin = lastLogin;
+      this.lastActive = lastActive;
       if (authorities != null) this.setAuthorities(authorities);
       this.activated = true;
    }
@@ -77,12 +79,20 @@ public class User {
       }
    }
 
-   public LocalDateTime getLastLoginDate() {
-      return lastLoginDate;
+   public OffsetDateTime getLastLogin() {
+      return lastLogin;
    }
 
-   public void setLastLoginDate(LocalDateTime lastLoginDate) {
-      this.lastLoginDate = lastLoginDate;
+   public void setLastLogin(OffsetDateTime lastLogin) {
+      this.lastLogin = lastLogin;
+   }
+
+   public OffsetDateTime getLastActive() {
+      return lastActive;
+   }
+
+   public void setLastActive(OffsetDateTime lastActive) {
+      this.lastActive = lastActive;
    }
 
    @Override
@@ -95,12 +105,13 @@ public class User {
               Objects.equals(username, user.username) &&
               Objects.equals(password, user.password) &&
               Objects.equals(authorities, user.authorities) &&
-              Objects.equals(lastLoginDate, user.lastLoginDate);
+              Objects.equals(lastLogin, user.lastLogin) &&
+              Objects.equals(lastActive, user.lastActive);
    }
 
    @Override
    public int hashCode() {
-      return Objects.hash(id, username, password, activated, authorities, lastLoginDate);
+      return Objects.hash(id, username, password, activated, authorities, lastLogin, lastActive);
    }
 
    @Override
@@ -110,7 +121,8 @@ public class User {
               ", username='" + username + '\'' +
               ", activated=" + activated +
               ", authorities=" + authorities +
-              ", lastLoginDate=" + lastLoginDate +
+              ", lastLogin=" + lastLogin +
+              ", lastActive=" + lastActive +
               '}';
    }
 }
