@@ -48,7 +48,7 @@ public class AuthenticationController {
         User user;
         try {
             user = userDao.getUserByUsername(loginDto.getUsername());
-            userDao.updateUserLastLogin(loginDto.getUsername());
+            userDao.updateLastLogin(loginDto.getUsername());
         } catch (DaoException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Username or password is incorrect.");
         }
