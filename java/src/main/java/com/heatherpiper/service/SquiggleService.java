@@ -230,14 +230,14 @@ public class SquiggleService {
 
     private void processSseEvent(String sseEvent) {
         String trimmedEvent = sseEvent.trim();
-        if (trimmedEvent.equals(":")) {
+        if (trimmedEvent.equals(":") || trimmedEvent.isEmpty()) {
             logger.debug("Heartbeat received to keep the connection alive.");
             return;
         }
 
         try {
             String eventType = extractEventType(trimmedEvent);
-            if ("removeGame".equals(eventType) || "addGame".equals(eventType)) {
+            if (eventType.equals("removeGame") || eventType.equals("addGame")) {
                 String data = extractData(trimmedEvent);
                 Game game = objectMapper.readValue(data, Game.class);
                 gameDao.saveAll(Collections.singletonList(game));
@@ -251,7 +251,7 @@ public class SquiggleService {
     }
 
     private String extractEventType(String sseEvent) {
-        Matcher matcher = Pattern.compile("event: *(\\w+)", Pattern.MULTILINE).matcher(sseEvent);
+        Matcher matcher = Pattern.compile("^event:\\s*(\\w+)", Pattern.MULTILINE | Pattern.CASE_INSENSITIVE).matcher(sseEvent);
         if (matcher.find()) {
             return matcher.group(1).trim();
         }
@@ -259,7 +259,7 @@ public class SquiggleService {
     }
 
     private String extractData(String sseEvent) {
-        Matcher matcher = Pattern.compile("data: *(\\{.*?})", Pattern.DOTALL).matcher(sseEvent);
+        Matcher matcher = Pattern.compile("^data:\\s*(\\{.*?\\})", Pattern.DOTALL).matcher(sseEvent);
         if (matcher.find()) {
             return matcher.group(1).trim();
         }
