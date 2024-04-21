@@ -218,8 +218,14 @@ public class SquiggleService {
                         .maxBackoff(Duration.ofMinutes(1)))
                 .subscribe(
                         this::processSseEvent,
-                        error -> logger.error("Error on Game Event Stream", error),
-                        () -> logger.info("Game Event Stream completed")
+                        error -> {
+                            logger.error("Error on Game Event Stream", error);
+                            subscribeToGameUpdates();
+                        },
+                        () -> {
+                            logger.info("Game Event Stream completed");
+                            subscribeToGameUpdates();
+                        }
                 );
     }
 
