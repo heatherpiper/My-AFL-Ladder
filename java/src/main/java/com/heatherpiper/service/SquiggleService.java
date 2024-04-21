@@ -251,7 +251,7 @@ public class SquiggleService {
     }
 
     private String extractEventType(String sseEvent) {
-        Matcher matcher = Pattern.compile("^event:\\s*(\\w+)", Pattern.MULTILINE | Pattern.CASE_INSENSITIVE).matcher(sseEvent);
+        Matcher matcher = Pattern.compile("event:\\s*(\\w+)", Pattern.MULTILINE | Pattern.CASE_INSENSITIVE).matcher(sseEvent);
         if (matcher.find()) {
             return matcher.group(1).trim();
         }
@@ -259,7 +259,7 @@ public class SquiggleService {
     }
 
     private String extractData(String sseEvent) {
-        Matcher matcher = Pattern.compile("^data:\\s*(\\{.*?\\})", Pattern.DOTALL).matcher(sseEvent);
+        Matcher matcher = Pattern.compile("data:\\s*(\\{.*?})", Pattern.DOTALL).matcher(sseEvent);
         if (matcher.find()) {
             return matcher.group(1).trim();
         }
