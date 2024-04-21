@@ -213,7 +213,8 @@ public class SquiggleService {
                 .doOnSubscribe(subscription -> logger.info("Subscribed to Game Event Stream"))
                 .retryWhen(Retry.backoff(10, Duration.ofSeconds(3))
                         .filter(throwable -> throwable instanceof IOException || throwable instanceof TimeoutException)
-                        .doBeforeRetry(retrySignal -> logger.info("Reconnecting attempt #{}, due to: {}", retrySignal.totalRetries() + 1, retrySignal.failure()))
+                        .doBeforeRetry(retrySignal -> logger.info("Reconnecting attempt #{}, due to: {}", retrySignal.totalRetries() + 1,
+                                retrySignal.failure().getMessage()))
                         .maxBackoff(Duration.ofMinutes(1)))
                 .subscribe(
                         this::processSseEvent,
@@ -249,15 +250,12 @@ public class SquiggleService {
     }
 
     private String extractData(String sseEvent) {
-        logger.debug("Extracting data from SSE event.");
-        int dataStart = sseEvent.indexOf("data:");
-        if (dataStart != -1) {
-            String data = sseEvent.substring(dataStart + 5).trim();
-            logger.debug("Extracted data: {}", data);
-            return data;
+        Pattern dataPattern = Pattern.compile("^data:(.*)", Pattern.MULTILINE);
+        Matcher matcher = dataPattern.matcher(sseEvent);
+        if (matcher.find()) {
+            return matcher.group(1).trim();
         }
-        logger.debug("Failed to extract data.");
-        return "";
+        return "{}";
     }
 
     @PreDestroy
