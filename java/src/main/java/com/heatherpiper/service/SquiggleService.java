@@ -5,10 +5,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.heatherpiper.dao.GameDao;
 import com.heatherpiper.model.Game;
+import io.netty.handler.timeout.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.stereotype.Service;
 import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
@@ -25,6 +25,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Year;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
@@ -210,10 +211,10 @@ public class SquiggleService {
 
         gameUpdateSubscription = eventStream
                 .doOnSubscribe(subscription -> logger.info("Subscribed to Game Event Stream"))
-                .retryWhen(Retry.backoff(5, Duration.ofSeconds(5))
-                        .filter(isRetryableException)
-                        .doBeforeRetry(retrySignal -> logger.info("Reconnecting attempt #{}", retrySignal.totalRetries() + 1))
-                        .maxBackoff(Duration.ofMinutes(5)))
+                .retryWhen(Retry.backoff(10, Duration.ofSeconds(3))
+                        .filter(throwable -> throwable instanceof IOException || throwable instanceof TimeoutException)
+                        .doBeforeRetry(retrySignal -> logger.info("Reconnecting attempt #{}, due to: {}", retrySignal.totalRetries() + 1, retrySignal.failure()))
+                        .maxBackoff(Duration.ofMinutes(1)))
                 .subscribe(
                         this::processSseEvent,
                         error -> logger.error("Error on Game Event Stream", error),
@@ -228,7 +229,7 @@ public class SquiggleService {
             if ("removeGame".equals(eventType) || "addGame".equals(eventType)) {
                 String data = extractData(trimmedEvent);
                 Game game = objectMapper.readValue(data, Game.class);
-                gameDao.save(game);
+                gameDao.saveAll(Collections.singletonList(game));
                 logger.info("Processed '{}' event for Game ID: {}", eventType, game.getId());
             } else {
                 logger.info("Received an unhandled event type: {}", eventType);
@@ -264,16 +265,5 @@ public class SquiggleService {
         if (gameUpdateSubscription != null && !gameUpdateSubscription.isDisposed()) {
             gameUpdateSubscription.dispose();
         }
-    }
-
-    public Flux<ServerSentEvent<String>> subscribeToTestStream() {
-        return reactor.netty.http.client.HttpClient.create()
-                .get()
-                .uri("https://api.squiggle.com.au/sse/test")
-                .responseContent()
-                .asString()
-                .windowUntil(s -> s.contains("\n\n"))
-                .flatMap(w -> w.reduce(String::concat))
-                .map(event -> ServerSentEvent.builder(event).build());
     }
 }
