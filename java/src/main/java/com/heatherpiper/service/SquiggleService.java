@@ -195,7 +195,6 @@ public class SquiggleService {
             gameUpdateSubscription.dispose();
             logger.info("Disposed the previous game update subscription.");
         }
-
         logger.info("Attempting to connect to the Squiggle SSE endpoint...");
 
         Flux<String> eventStream = reactor.netty.http.client.HttpClient.create()
@@ -231,6 +230,11 @@ public class SquiggleService {
 
     private void processSseEvent(String sseEvent) {
         String trimmedEvent = sseEvent.trim();
+        if (trimmedEvent.equals(":")) {
+            logger.debug("Heartbeat received to keep the connection alive.");
+            return;
+        }
+
         try {
             String eventType = extractEventType(trimmedEvent);
             if ("removeGame".equals(eventType) || "addGame".equals(eventType)) {
@@ -247,8 +251,7 @@ public class SquiggleService {
     }
 
     private String extractEventType(String sseEvent) {
-        Pattern eventPattern = Pattern.compile("^event:(.*)$", Pattern.MULTILINE);
-        Matcher matcher = eventPattern.matcher(sseEvent);
+        Matcher matcher = Pattern.compile("event: *(\\w+)", Pattern.MULTILINE).matcher(sseEvent);
         if (matcher.find()) {
             return matcher.group(1).trim();
         }
@@ -256,8 +259,7 @@ public class SquiggleService {
     }
 
     private String extractData(String sseEvent) {
-        Pattern dataPattern = Pattern.compile("^data:(.*)", Pattern.MULTILINE);
-        Matcher matcher = dataPattern.matcher(sseEvent);
+        Matcher matcher = Pattern.compile("data: *(\\{.*?})", Pattern.DOTALL).matcher(sseEvent);
         if (matcher.find()) {
             return matcher.group(1).trim();
         }
