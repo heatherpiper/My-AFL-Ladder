@@ -27,6 +27,8 @@ import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class SquiggleService {
@@ -220,34 +222,29 @@ public class SquiggleService {
     }
 
     private void processSseEvent(String sseEvent) {
+        String trimmedEvent = sseEvent.trim();
         try {
-            if (sseEvent.startsWith("event:")) {
-                String eventType = extractEventType(sseEvent);
-                if (eventType.equals("removeGame")) {
-                    String data = extractData(sseEvent);
-                    Game game = objectMapper.readValue(data, Game.class);
-                    gameDao.saveAll(List.of(game));
-                    logger.info("Processed 'removeGame' event for Game ID: {}", game.getId());
-                } else {
-                    logger.info("Received an unhandled event type: {}", eventType);
-                }
+            String eventType = extractEventType(trimmedEvent);
+            if ("removeGame".equals(eventType) || "addGame".equals(eventType)) {
+                String data = extractData(trimmedEvent);
+                Game game = objectMapper.readValue(data, Game.class);
+                gameDao.save(game);
+                logger.info("Processed '{}' event for Game ID: {}", eventType, game.getId());
+            } else {
+                logger.info("Received an unhandled event type: {}", eventType);
             }
         } catch (JsonProcessingException e) {
-            logger.error("Error processing SSE event: {}", sseEvent, e);
+            logger.error("Error processing SSE event: {}", trimmedEvent, e);
         }
     }
 
     private String extractEventType(String sseEvent) {
-        logger.debug("Extracting event type from SSE event.");
-        int eventStart = sseEvent.indexOf("event:");
-        int dataStart = sseEvent.indexOf("data:");
-        if (eventStart != -1 && dataStart != -1) {
-            String eventType = sseEvent.substring(eventStart + 6, dataStart).trim();
-            logger.debug("Extracted event type: {}", eventType);
-            return eventType;
+        Pattern eventPattern = Pattern.compile("^event:(.*)$", Pattern.MULTILINE);
+        Matcher matcher = eventPattern.matcher(sseEvent);
+        if (matcher.find()) {
+            return matcher.group(1).trim();
         }
-        logger.debug("Failed to extract event type.");
-        return "";
+        return "unknown";
     }
 
     private String extractData(String sseEvent) {
