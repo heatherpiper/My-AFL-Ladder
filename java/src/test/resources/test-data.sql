@@ -9,12 +9,12 @@ INSERT INTO teams (team_id, name) VALUES (2, 'Team B');
 INSERT INTO teams (team_id, name) VALUES (3, 'Team C');
 INSERT INTO teams (team_id, name) VALUES (4, 'Team D');
 
-INSERT INTO games (id, round, year, unixtime, hteam, ateam, hscore, ascore, winner, complete) VALUES (1, 1, 2023,
-1703277000, 'Team A', 'Team B', 100, 90, 'Team A', 100);
-INSERT INTO games (id, round, year, unixtime, hteam, ateam, hscore, ascore, winner, complete) VALUES (2, 1, 2023,
-1703277000, 'Team C', 'Team D', 90, 100, 'Team D', 100);
-INSERT INTO games (id, round, year, unixtime, hteam, ateam, hscore, ascore, winner, complete) VALUES (3, 2, 2023,
-1703277000, 'Team A', 'Team C', 100, 100, NULL, 100);
+INSERT INTO games (id, round, year, date, hteam, ateam, hscore, ascore, winner, complete) VALUES (1, 1, 2023,
+"2024-03-15T08:40:00Z", 'Team A', 'Team B', 100, 90, 'Team A', 100);
+INSERT INTO games (id, round, year, date, hteam, ateam, hscore, ascore, winner, complete) VALUES (2, 1, 2023,
+"2024-03-15T08:40:00Z", 'Team C', 'Team D', 90, 100, 'Team D', 100);
+INSERT INTO games (id, round, year, date, hteam, ateam, hscore, ascore, winner, complete) VALUES (3, 2, 2023,
+"2024-03-15T08:40:00Z", 'Team A', 'Team C', 100, 100, NULL, 100);
 
 INSERT INTO watched_games (user_id, game_id) VALUES (1, 1);
 INSERT INTO watched_games (user_id, game_id) VALUES (1, 2);

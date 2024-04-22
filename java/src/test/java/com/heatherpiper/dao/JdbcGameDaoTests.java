@@ -2,25 +2,25 @@ package com.heatherpiper.dao;
 
 import com.heatherpiper.exception.DaoException;
 import com.heatherpiper.model.Game;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class JdbcGameDaoTests {
@@ -39,7 +39,7 @@ public class JdbcGameDaoTests {
         expectedGame = new Game();
         expectedGame.setId(1);
         expectedGame.setYear(2023);
-        expectedGame.setUnixtime(1703277000);
+        expectedGame.setDate("2024-03-15T08:40:00Z");
         expectedGame.setRound(1);
         expectedGame.setHteam("Team A");
         expectedGame.setAteam("Team B");
@@ -122,7 +122,7 @@ public class JdbcGameDaoTests {
         mockGame1.setId(1);
         mockGame1.setRound(5);
         mockGame1.setYear(2021);
-        mockGame1.setUnixtime(1703277000);
+        mockGame1.setDate("2024-03-15T08:40:00Z");
         mockGame1.setHteam("Team A");
         mockGame1.setAteam("Team B");
         mockGame1.setHscore(100);
@@ -134,7 +134,7 @@ public class JdbcGameDaoTests {
         mockGame2.setId(2);
         mockGame2.setRound(5);
         mockGame2.setYear(2021);
-        mockGame2.setUnixtime(1703277000);
+        mockGame2.setDate("2024-03-15T08:40:00Z");
         mockGame2.setHteam("Team C");
         mockGame2.setAteam("Team D");
         mockGame2.setHscore(90);
