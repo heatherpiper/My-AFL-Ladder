@@ -14,8 +14,8 @@ public class Game {
     @JsonProperty("year")
     private int year;
 
-    @JsonProperty("unixtime")
-    private int unixtime;
+    @JsonProperty("date")
+    private String date; // ISO 8601 date format
 
     @JsonProperty("hteam")
     private String hteam;
@@ -53,13 +53,12 @@ public class Game {
         this.complete = 0;
     }
 
-    public Game(int id, int round, int year, int unixtime, String hteam, String ateam, Integer hscore, Integer ascore,
-                String winner,
+    public Game(int id, int round, int year, String date, String hteam, String ateam, Integer hscore, Integer ascore, String winner,
                 int complete) {
         this.id = id;
         this.round = round;
         this.year = year;
-        this.unixtime = unixtime;
+        this.date = date;
         this.hteam = hteam;
         this.ateam = ateam;
         this.hscore = hscore;
@@ -80,8 +79,8 @@ public class Game {
         return year;
     }
 
-    public int getUnixtime() {
-        return unixtime;
+    public String getDate() {
+        return date;
     }
 
     public String getHteam() {
@@ -120,8 +119,8 @@ public class Game {
         this.year = year;
     }
 
-    public void setUnixtime(int unixtime) {
-        this.unixtime = unixtime;
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public void setHteam(String hteam) {
