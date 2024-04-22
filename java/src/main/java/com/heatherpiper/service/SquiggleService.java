@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.heatherpiper.dao.GameDao;
+import com.heatherpiper.dao.TeamDao;
 import com.heatherpiper.model.Game;
 import io.netty.handler.timeout.TimeoutException;
 import org.slf4j.Logger;
@@ -37,22 +38,21 @@ public class SquiggleService {
     private static final Logger logger = LoggerFactory.getLogger(SquiggleService.class);
 
     private static final long MIN_REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
-
     private long lastRefreshTime = 0;
 
     private Disposable gameUpdateSubscription;
 
     private final HttpClient httpClient;
-
-    @Autowired
     private final GameDao gameDao;
+    private final TeamDao teamDao;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    private ObjectMapper objectMapper;
-
-    public SquiggleService(HttpClient httpClient, GameDao gameDao) {
+    public SquiggleService(HttpClient httpClient, GameDao gameDao, TeamDao teamDao, ObjectMapper objectMapper) {
         this.httpClient = httpClient;
         this.gameDao = gameDao;
+        this.teamDao = teamDao;
+        this.objectMapper = objectMapper;
     }
 
     @PostConstruct
@@ -237,9 +237,18 @@ public class SquiggleService {
 
         try {
             String eventType = extractEventType(trimmedEvent);
-            if (eventType.equals("removeGame") || eventType.equals("addGame")) {
+            if ("addGame".equals(eventType) || "removeGame".equals(eventType)) {
                 String data = extractData(trimmedEvent);
                 Game game = objectMapper.readValue(data, Game.class);
+
+                try {
+                    game.setHteam(teamDao.findTeamNameById(Integer.parseInt(game.getHteam())));
+                    game.setAteam(teamDao.findTeamNameById(Integer.parseInt(game.getAteam())));
+                } catch (NumberFormatException e) {
+                    logger.error("Invalid Team ID format, skipping Game ID {}", game.getId(), e);
+                    return;
+                }
+
                 gameDao.saveAll(Collections.singletonList(game));
                 logger.info("Processed '{}' event for Game ID: {}", eventType, game.getId());
             } else {

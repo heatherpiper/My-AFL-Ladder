@@ -24,7 +24,7 @@ public class JdbcGameDao implements GameDao {
 
     private static final Logger logger = LoggerFactory.getLogger(JdbcGameDao.class);
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
     public JdbcGameDao(DataSource dataSource) {
@@ -40,7 +40,7 @@ public class JdbcGameDao implements GameDao {
         game.setId(rs.getInt("id"));
         game.setRound(rs.getInt("round"));
         game.setYear(rs.getInt("year"));
-        game.setUnixtime(rs.getInt("unixtime"));
+        game.setDate(rs.getString("date"));
         game.setHteam(rs.getString("hteam"));
         game.setAteam(rs.getString("ateam"));
         game.setHscore(rs.getObject("hscore", Integer.class));
@@ -97,12 +97,12 @@ public class JdbcGameDao implements GameDao {
 
     @Retryable(value = EmptyResultDataAccessException.class, maxAttempts = 3, backoff = @Backoff(delay = 1000))
     public Game fetchGameDetails(int id) {
-        String sql = "SELECT id, round, year, unixtime, hteam, ateam, hscore, ascore, winner, complete FROM games " +
+        String sql = "SELECT id, round, year, date, hteam, ateam, hscore, ascore, winner, complete FROM games " +
                 "WHERE id = ?";
         try {
             return jdbcTemplate.queryForObject(sql, new Object[]{id}, gameRowMapper);
         } catch (EmptyResultDataAccessException e) {
-            logger.error("Game with ID " + id + " not found", e);
+            logger.error("Game with ID {} not found", id, e);
             throw new DaoException("Game with ID " + id + " not found", e);
         }
     }
@@ -110,12 +110,12 @@ public class JdbcGameDao implements GameDao {
     @Retryable(value = DataAccessException.class, maxAttempts = 5, backoff = @Backoff(delay = 2000, multiplier = 2))
     @Override
     public void saveAll(List<Game> games) {
-        String sql = "INSERT INTO games (id, round, year, unixtime, hteam, ateam, hscore, ascore, winner, complete) " +
+        String sql = "INSERT INTO games (id, round, year, date, hteam, ateam, hscore, ascore, winner, complete) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" +
                 "ON CONFLICT (id) DO UPDATE SET " +
                 "round = EXCLUDED.round, " +
                 "year = EXCLUDED.year, " +
-                "unixtime = EXCLUDED.unixtime, " +
+                "date = EXCLUDED.date, " +
                 "hteam = EXCLUDED.hteam, " +
                 "ateam = EXCLUDED.ateam, " +
                 "hscore = EXCLUDED.hscore, " +
@@ -131,7 +131,7 @@ public class JdbcGameDao implements GameDao {
                     ps.setInt(1, game.getId());
                     ps.setInt(2, game.getRound());
                     ps.setInt(3, game.getYear());
-                    ps.setInt(4, game.getUnixtime());
+                    ps.setString(4, game.getDate());
                     ps.setString(5, game.getHteam());
                     ps.setString(6, game.getAteam());
                     ps.setObject(7, game.getHscore());
