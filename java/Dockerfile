@@ -11,7 +11,7 @@ COPY pom.xml .
 COPY src src
 
 # Package the application
-RUN mvn -B clean package -DskipTests
+RUN mvn -B clean package -DskipTests -Dmaven.test.skip=true
 
 # Step 2: Use the official OpenJDK image to run the application
 FROM openjdk:11-jre-slim as runtime
