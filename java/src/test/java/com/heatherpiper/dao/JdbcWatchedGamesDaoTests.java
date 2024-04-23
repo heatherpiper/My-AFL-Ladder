@@ -42,10 +42,10 @@ public class JdbcWatchedGamesDaoTests extends BaseDaoTests {
     @Test
     public void findUnwatchedGamesByRound_ShouldReturnExpectedGames() {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        jdbcTemplate.update("INSERT INTO games (id, round, year, unixtime, hteam, ateam, hscore, ascore, winner, " +
+        jdbcTemplate.update("INSERT INTO games (id, round, year, date, hteam, ateam, hscore, ascore, winner, " +
                 "complete)" +
                 " VALUES " +
-                "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 1, 1, 2023, 1703277000, "Team A", "Team B", 100, 90, "Team A", 100);
+                "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 1, 1, 2023, "2024-03-15T08:40:00Z", "Team A", "Team B", 100, 90, "Team A", 100);
 
         int userId = 1;
         int round = 1;
@@ -59,9 +59,9 @@ public class JdbcWatchedGamesDaoTests extends BaseDaoTests {
     @Test
     public void addWatchedGame_ShouldAddGameToWatchedGames() {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        jdbcTemplate.update("INSERT INTO games (id, round, year, unixtime, hteam, ateam, hscore, ascore, winner, " +
+        jdbcTemplate.update("INSERT INTO games (id, round, year, date, hteam, ateam, hscore, ascore, winner, " +
                         "complete) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                1, 1, 2023, 1703277000, "Team A", "Team B", 100, 90, "Team A", 100);
+                1, 1, 2023, "2024-03-15T08:40:00Z", "Team A", "Team B", 100, 90, "Team A", 100);
 
         int userId = 1;
         int gameId = 1;
@@ -114,9 +114,9 @@ public class JdbcWatchedGamesDaoTests extends BaseDaoTests {
         int userId = 1;
         int gameId = 1;
 
-        jdbcTemplate.update("INSERT INTO games (id, round, year, unixtime, hteam, ateam, hscore, ascore, winner, " +
+        jdbcTemplate.update("INSERT INTO games (id, round, year, date, hteam, ateam, hscore, ascore, winner, " +
                         "complete) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                gameId, 1, 2023, 1703277000, "Team A", "Team B", 100, 90, "Team A", 100);
+                gameId, 1, 2023, "2024-03-15T08:40:00Z", "Team A", "Team B", 100, 90, "Team A", 100);
 
         jdbcTemplate.update("INSERT INTO watched_games (user_id, game_id) VALUES (?, ?)",
                 userId, gameId);
