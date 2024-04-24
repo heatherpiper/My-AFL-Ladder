@@ -20,7 +20,7 @@ CREATE TABLE games (
     id INT PRIMARY KEY,
     round INT NOT NULL,
     year INT NOT NULL,
-    unixtime INT NOT NULL,
+    date VARCHAR(25) NOT NULL,
     hteam VARCHAR(255),
     ateam VARCHAR(255),
     hscore INT,

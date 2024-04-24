@@ -1,15 +1,18 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import LandingPage from '../views/LandingPage.vue'
-import Dashboard from '../views/Dashboard.vue'
-import GuestDashboard from '../views/GuestDashboard.vue'
-import Login from '../views/Login.vue'
-import Logout from '../views/Logout.vue'
-import Register from '../views/Register.vue'
-import store from '../store/index'
-import About from '../views/About.vue'
-import PrivacyPolicy from '../views/PrivacyPolicy.vue'
-import TermsOfService from '../views/TermsOfService.vue'
+import Vue from 'vue';
+import Router from 'vue-router';
+import LandingPage from '../views/LandingPage.vue';
+import Dashboard from '../views/Dashboard.vue';
+import GuestDashboard from '../views/GuestDashboard.vue';
+import AdminPanel from '../views/AdminPanel.vue';
+import AdminGames from '../views/AdminGames.vue';
+import AdminUsers from '../views/AdminUsers.vue';
+import Login from '../views/Login.vue';
+import Logout from '../views/Logout.vue';
+import Register from '../views/Register.vue';
+import store from '../store/index';
+import About from '../views/About.vue';
+import PrivacyPolicy from '../views/PrivacyPolicy.vue';
+import TermsOfService from '../views/TermsOfService.vue';
 import { bus } from '../event-bus.js';
 
 Vue.use(Router)
@@ -38,6 +41,26 @@ const router = new Router({
       path: '/guest-dashboard',
       name: 'guest-dashboard',
       component: GuestDashboard,
+    },
+    {
+      path: '/admin',
+      component: AdminPanel,
+      children: [
+        {
+          path: 'games',
+          name: 'AdminGames',
+          component: AdminGames
+        },
+        {
+          path: 'users',
+          name: 'AdminUsers',
+          component: AdminUsers
+        }
+      ],
+      meta: { 
+        requiresAuth: true,
+        requiresAdmin: true
+      }
     },
     {
       path: "/login",
@@ -100,11 +123,19 @@ router.beforeEach((to, from, next) => {
   // Determine if the user is logged in
   const isAuthenticated = store.state.token !== '';
 
+  // Determine if the user is an admin
+  const isAdmin = store.state.user.authorities.some(auth => auth.name === 'ROLE_ADMIN');
+
   // If the route requires authentication and the user is not logged in, redirect to login
   if (requiresAuth && !isAuthenticated) {
     next("/login");
 
-  // If the user is logged in, redirect to dashboard
+  // If the user attempts to access an admin route but is not an admin, alert then redirect them
+  } else if (to.matched.some(x => x.meta.requiresAdmin) && !isAdmin) {
+    alert('You do not have permission to access this page.');
+    next(from.path);
+
+  // If the user is logged in and attempts to access the root path, redirect to dashboard
   } else if  (to.path === '/' && isAuthenticated) {
     next("/dashboard");
 

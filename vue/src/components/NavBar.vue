@@ -4,6 +4,7 @@
           <img src="@/assets/LaterLadder-Wordmark.webp" alt="Later Ladder title" class="site-title">
         </router-link>
         <div class="nav-links">
+          <router-link class="nav-link" to="/admin" v-if="isAdmin">Admin Panel</router-link>
           <router-link class="nav-link" v-bind:to="{ name: 'about' }" v-if="$route.path !== '/about'">About</router-link>
           <router-link class="nav-link" v-bind:to="{ name: 'login' }" v-if="$store.state.token === ''">Login</router-link>
           <router-link class="nav-link" v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link>
@@ -22,6 +23,7 @@ export default {
     components: {},
     computed: {
         ...mapGetters(['isDarkMode']),
+        ...mapGetters(['isAdmin']),
     },
     methods: {
         ...mapActions(['toggleMode']),
