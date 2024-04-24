@@ -1,10 +1,8 @@
 package com.heatherpiper.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.heatherpiper.dao.GameDao;
+import com.heatherpiper.dao.TeamDao;
 import com.heatherpiper.model.Game;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +16,10 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 public class SquiggleServiceTests {
 
     @Mock
@@ -25,6 +27,12 @@ public class SquiggleServiceTests {
 
     @Mock
     private GameDao mockGameDao;
+
+    @Mock
+    private TeamDao mockTeamDao;
+
+    @Mock
+    private ObjectMapper mockObjectMapper;
 
     private SquiggleService squiggleService;
 
@@ -40,7 +48,7 @@ public class SquiggleServiceTests {
 
         when(mockHttpClient.send(any(HttpRequest.class), any())).thenAnswer((Answer<HttpResponse<String>>) invocation -> mockResponse);
 
-        squiggleService = new SquiggleService(mockHttpClient, mockGameDao);
+        squiggleService = new SquiggleService(mockHttpClient, mockGameDao, mockTeamDao, mockObjectMapper);
     }
 
     @Test
@@ -92,7 +100,7 @@ public class SquiggleServiceTests {
         MockitoAnnotations.openMocks(this);
 
         HttpClient mockHttpClient = mock(HttpClient.class);
-        SquiggleService squiggleService = new SquiggleService(mockHttpClient, mockGameDao);
+        SquiggleService squiggleService = new SquiggleService(mockHttpClient, mockGameDao, mockTeamDao, mockObjectMapper);
 
 
         String roundZero2024Json = "{\"games\":[{\"localtime\":\"2024-03-08 18:40:00\",\"id\":35701,\"year\":2024," +
