@@ -4,16 +4,17 @@ import com.heatherpiper.dao.*;
 import com.heatherpiper.model.Game;
 import com.heatherpiper.model.UserLadderEntry;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import static org.mockito.Mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class WatchedGamesServiceTests {
@@ -43,7 +44,7 @@ public class WatchedGamesServiceTests {
         int gameId = 1;
         int teamAId = 1;
         int teamBId = 2;
-        Game mockGame = new Game (1, 1, 2023, 1703277000, "Team A", "Team B", 100, 90, "Team A", 100);
+        Game mockGame = new Game (1, 1, 2023, "2024-03-15T08:40:00Z", "Team A", "Team B", 100, 90, "Team A", 100);
         UserLadderEntry mockEntryTeamA = new UserLadderEntry(1, 1, 4, 110, 1, "Team A", 1, 0, 0, 100, 90);
         UserLadderEntry mockEntryTeamB = new UserLadderEntry(1, 2, 0, 90, 18, "Team B", 0, 1, 0, 90, 100);
 
@@ -76,7 +77,7 @@ public class WatchedGamesServiceTests {
         int gameId = 1;
         int teamAId = 1;
         int teamBId = 2;
-        Game mockGame = new Game(1, 1, 2023, 1703277000, "Team A", "Team B", 100, 90, "Team A", 100);
+        Game mockGame = new Game(1, 1, 2023, "2024-03-15T08:40:00Z", "Team A", "Team B", 100, 90, "Team A", 100);
         UserLadderEntry mockEntryTeamA = new UserLadderEntry(1, 1, 4, 110, 1, "Team A", 1, 0, 0, 100, 90);
         UserLadderEntry mockEntryTeamB = new UserLadderEntry(1, 2, 0, 90, 18, "Team B", 0, 1, 0, 90, 100);
 
@@ -131,8 +132,8 @@ public class WatchedGamesServiceTests {
         // Arrange
         int userId = 1;
         List<Integer> gameIds = Arrays.asList(1, 2);
-        Game mockGame1 = new Game(1, 1, 2023, 1703277000, "Team A", "Team B", 100, 90, "Team A", 100);
-        Game mockGame2 = new Game(2, 1, 2023, 1703277000, "Team C", "Team D", 110, 100, "Team C", 100);
+        Game mockGame1 = new Game(1, 1, 2023, "2024-03-15T08:40:00Z", "Team A", "Team B", 100, 90, "Team A", 100);
+        Game mockGame2 = new Game(2, 1, 2023, "2024-03-15T08:40:00Z", "Team C", "Team D", 110, 100, "Team C", 100);
         int teamAId = 1, teamBId = 2, teamCId = 3, teamDId = 4;
 
         when(userDao.userExists(userId)).thenReturn(true);
