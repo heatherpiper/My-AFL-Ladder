@@ -19,7 +19,7 @@ if(currentToken != null) {
 export default new Vuex.Store({
   state: {
     token: currentToken || '',
-    user: currentUser || {},
+    user: currentUser || null,
     isDarkMode: true
   },
   mutations: {
@@ -50,6 +50,10 @@ export default new Vuex.Store({
   },
   getters: {
     isDarkMode: state => state.isDarkMode,
-    isAdmin: state => state.user.authorities.some(auth => auth.name === 'ROLE_ADMIN'),
+    isAdmin: state => {
+      return state.user && state.user.authorities
+      ? state.user.authorities.some(auth => auth.name === 'ROLE_ADMIN')
+      : false;
+    }
   }
 })

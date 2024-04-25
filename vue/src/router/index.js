@@ -124,7 +124,7 @@ router.beforeEach((to, from, next) => {
   const isAuthenticated = store.state.token !== '';
 
   // Determine if the user is an admin
-  const isAdmin = store.state.user.authorities.some(auth => auth.name === 'ROLE_ADMIN');
+  const isAdmin = store.getters.isAdmin;
 
   // If the route requires authentication and the user is not logged in, redirect to login
   if (requiresAuth && !isAuthenticated) {
