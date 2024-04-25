@@ -12,15 +12,15 @@ export default {
     },
 
     getGamesByRound(round) {
-        return axios.get(`${API_URL}/round/${round}`);
+        return axios.get(`${API_URL}/games/round/${round}`);
     },
 
     getCompleteGames() {
-        return axios.get(`${API_URL}/complete`);
+        return axios.get(`${API_URL}/games/complete`);
     },
 
     getIncompleteGames() {
-        return axios.get(`${API_URL}/incomplete`);
+        return axios.get(`${API_URL}/games/incomplete`);
     },
 
     refreshGameData(year) {
