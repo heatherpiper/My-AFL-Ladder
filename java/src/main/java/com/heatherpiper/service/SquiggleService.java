@@ -32,6 +32,9 @@ import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Service class for handling operations related to the Squiggle API.
+ */
 @Service
 public class SquiggleService {
 
@@ -47,6 +50,14 @@ public class SquiggleService {
     private final TeamDao teamDao;
     private final ObjectMapper objectMapper;
 
+    /**
+     * Constructor for the SquiggleService class.
+     *
+     * @param httpClient   The HTTP client to be used for making requests.
+     * @param gameDao      The DAO for accessing game data.
+     * @param teamDao      The DAO for accessing team data.
+     * @param objectMapper The object mapper for JSON serialization/deserialization.
+     */
     @Autowired
     public SquiggleService(HttpClient httpClient, GameDao gameDao, TeamDao teamDao, ObjectMapper objectMapper) {
         this.httpClient = httpClient;
@@ -55,11 +66,32 @@ public class SquiggleService {
         this.objectMapper = objectMapper;
     }
 
+    /**
+     * This method is annotated with @PostConstruct, which means it is automatically
+     * called by the Spring framework after the SquiggleService bean is instantiated and
+     * dependency injection is complete. In this method, we call the subscribeToGameUpdates()
+     * method to start the subscription to game updates from the Squiggle API. This ensures
+     * that as soon as the SquiggleService is ready, it starts receiving game updates.
+     */
     @PostConstruct
     public void init() {
         subscribeToGameUpdates();
     }
 
+    /**
+     * Fetches games for a specific year and round from the Squiggle API.
+     *
+     * <p>This method constructs a URL to the Squiggle API's games endpoint, specifying the year and round as query parameters.
+     * It then sends a GET request to this URL and parses the response body into a list of Game objects.
+     *
+     * <p>If the list of games is not empty, the games are saved to the database.
+     *
+     * <p>If an exception occurs during the request or parsing process, an error message is logged and an empty list is returned.
+     *
+     * @param year The year for which to fetch games.
+     * @param round The round for which to fetch games.
+     * @return A list of games for the specified year and round. If an error occurs, an empty list is returned.
+     */
     public List<Game> fetchGamesForYearAndRound(int year, int round) {
         String url = "https://api.squiggle.com.au/?q=games;year=" + year + ";round=" + round;
         HttpRequest request = HttpRequest.newBuilder()
@@ -83,6 +115,19 @@ public class SquiggleService {
         }
     }
 
+    /**
+     * Fetches games for a specific year from the Squiggle API.
+     *
+     * <p>This method constructs a URL to the Squiggle API's games endpoint, specifying the year as a query parameter.
+     * It then sends a GET request to this URL and parses the response body into a list of Game objects.
+     *
+     * <p>If the list of games is not empty, the games are saved to the database.
+     *
+     * <p>If an exception occurs during the request or parsing process, an error message is logged and an empty list is returned.
+     *
+     * @param year The year for which to fetch games.
+     * @return A list of games for the specified year. If an error occurs, an empty list is returned.
+     */
     public List<Game> fetchGamesForYear(int year) {
         String url = "https://api.squiggle.com.au/?q=games;year=" + year;
         HttpRequest request = HttpRequest.newBuilder()
@@ -106,6 +151,22 @@ public class SquiggleService {
         }
     }
 
+    /**
+     * Fetches games up to the most recent round for a specific year from the Squiggle API.
+     *
+     * <p>This method constructs a URL to the Squiggle API's games endpoint, specifying the year as a query parameter.
+     * It then sends a GET request to this URL and parses the response body into a list of Game objects.
+     *
+     * <p>The method determines the highest completed round for the year. If no games are completed and it's not the current year or later,
+     * the method recursively calls itself with the previous year as the parameter.
+     *
+     * <p>If games are completed, it fetches games for all rounds up to the highest completed round and adds them to the list of all games.
+     *
+     * <p>If an exception occurs during the request or parsing process, an error message is logged.
+     *
+     * @param year The year for which to fetch games.
+     * @return A list of games for the specified year up to the most recent round. If an error occurs, an empty list is returned.
+     */
     public List<Game> fetchGamesUpToMostRecentRound(int year) {
         List<Game> allGames = new ArrayList<>();
 
@@ -145,6 +206,24 @@ public class SquiggleService {
         return allGames;
     }
 
+    /**
+     * Initiates a refresh of game data for a specific year. This method is typically called by an admin as a backup method in case
+     * automatic game updates via SSEs fail to update the database as expected.
+     *
+     * <p>The method first validates the year. It must be within the last 2 years. If the year is invalid, an IllegalArgumentException is thrown.
+     *
+     * <p>Next, the method checks if a refresh operation is allowed. Refresh operations are rate-limited to prevent excessive requests.
+     * If the last refresh was less than 5 minutes ago, an IllegalStateException is thrown.
+     *
+     * <p>If the year is valid and a refresh operation is allowed, the method fetches games up to the most recent round for the specified year.
+     * If the fetch operation is successful, a success message is logged. If an error occurs during the fetch operation, an error message is logged
+     * and a RuntimeException is thrown.
+     *
+     * @param year The year for which to refresh game data.
+     * @throws IllegalArgumentException If the year is not within the last 2 years.
+     * @throws IllegalStateException If a refresh operation is not allowed because the last refresh was less than 5 minutes ago.
+     * @throws RuntimeException If an error occurs during the fetch operation.
+     */
     public void adminInitiatedRefresh(int year) {
         logger.info("Admin initiated refresh of games data for current year");
 
@@ -157,7 +236,7 @@ public class SquiggleService {
         // Rate limiting check
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastRefreshTime < MIN_REFRESH_INTERVAL) {
-            logger.warn("Refresh operation is rate-limited. Last refresh was less than 15 minutes ago.");
+            logger.warn("Refresh operation is rate-limited. Last refresh was less than 5 minutes ago.");
             throw new IllegalStateException("Refresh operation is rate-limited. Please wait before trying again.");
         }
         lastRefreshTime = currentTime;
@@ -171,6 +250,20 @@ public class SquiggleService {
         }
     }
 
+    /**
+     * Parses a JSON response body from the Squiggle API into a list of Game objects.
+     *
+     * <p>This method uses Jackson's ObjectMapper to parse the JSON response body. It first reads the response body into a JsonNode tree,
+     * then extracts the "games" array from the root node. It iterates over each element in the "games" array, deserializes it into a Game object,
+     * and adds it to a list of games.
+     *
+     * <p>If the "games" field in the response body is not an array or if an error occurs during the parsing process, an error message is logged
+     * and an empty list is returned.
+     *
+     * @param responseBody The JSON response body from the Squiggle API.
+     * @return A list of Game objects parsed from the response body. If an error occurs, an empty list is returned.
+     * @throws IOException If an error occurs during the parsing process.
+     */
     private List<Game> parseGames(String responseBody) {
         ObjectMapper objectMapper = new ObjectMapper();
         List<Game> gamesList = new ArrayList<>();
@@ -190,6 +283,20 @@ public class SquiggleService {
         }
     }
 
+    /**
+     * Subscribes to game updates from the Squiggle API's Server-Sent Events (SSE) endpoint.
+     *
+     * <p>If a previous subscription exists and is not disposed, it is disposed and a log message is printed.
+     *
+     * <p>The method then attempts to connect to the Squiggle SSE endpoint. It creates a Flux that emits items representing
+     * Server-Sent Events from the endpoint. The Flux is configured to retry on IOException or TimeoutException, with a backoff
+     * strategy that starts with a delay of 3 seconds and increases exponentially for each subsequent retry, up to a maximum of 1 minute.
+     *
+     * <p>Upon subscribing to the Flux, a log message is printed. The Flux is then subscribed to, with the following behaviors defined:
+     * - On each emitted item, the processSseEvent method is called to process the event.
+     * - On error, a log message prints and the method recursively calls itself to attempt to reconnect.
+     * - On completion, a log message prints and the method recursively calls itself to attempt to reconnect.
+     */
     public void subscribeToGameUpdates() {
         if (gameUpdateSubscription != null && !gameUpdateSubscription.isDisposed()) {
             gameUpdateSubscription.dispose();
@@ -228,6 +335,22 @@ public class SquiggleService {
                 );
     }
 
+    /**
+     * Processes a Server-Sent Event (SSE) from the Squiggle API's game updates endpoint.
+     *
+     * <p>This method is triggered upon receiving an event from the SSE endpoint. It checks if the event starts with "event:"
+     * and then extracts the event type. If the event type is "addGame" or "removeGame", it means the game is over and the final scores are available.
+     * The method then extracts the data from the event, deserializes it into a Game object, and saves it to the database.
+     *
+     * <p>The SSE endpoint provides a stream of current or soon-to-start games. Upon joining the channel, an array of games
+     * that are either in progress or scheduled to start within the next 6 hours is sent. Thereafter, "addGame" and "removeGame"
+     * events are sent as games are added to the list (because they're going to start in the near future) or removed (because they're over).
+     *
+     * <p>Both "addGame" and "removeGame" events broadcast the game's complete state. This method specifically processes "removeGame" events
+     * to capture the final scores of all matches as soon as possible.
+     *
+     * @param sseEvent The Server-Sent Event received from the Squiggle API's game updates endpoint.
+     */
     private void processSseEvent(String sseEvent) {
         String trimmedEvent = sseEvent.trim();
         if (trimmedEvent.equals(":") || trimmedEvent.isEmpty()) {
@@ -259,6 +382,18 @@ public class SquiggleService {
         }
     }
 
+    /**
+     * Extracts the event type from a Server-Sent Event (SSE) string.
+     *
+     * <p>This method uses a regular expression to match the "event:" field in the SSE string, which represents the event type.
+     * The regular expression is case-insensitive and works across multiple lines.
+     *
+     * <p>If the "event:" field is found, the method returns the event type as a trimmed string. If the "event:" field is not found,
+     * the method returns the string "unknown".
+     *
+     * @param sseEvent The Server-Sent Event string from which to extract the event type.
+     * @return The event type extracted from the SSE string, or "unknown" if the "event:" field is not found.
+     */
     private String extractEventType(String sseEvent) {
         Matcher matcher = Pattern.compile("event:\\s*(\\w+)", Pattern.MULTILINE | Pattern.CASE_INSENSITIVE).matcher(sseEvent);
         if (matcher.find()) {
@@ -267,6 +402,18 @@ public class SquiggleService {
         return "unknown";
     }
 
+    /**
+     * Extracts the data field from a Server-Sent Event (SSE) string.
+     *
+     * <p>This method uses a regular expression to match the "data:" field in the SSE string, which represents the event data.
+     * The regular expression is designed to capture a JSON object, and works across multiple lines due to the DOTALL flag.
+     *
+     * <p>If the "data:" field is found, the method returns the data as a trimmed string. If the "data:" field is not found,
+     * the method returns an empty JSON object string "{}".
+     *
+     * @param sseEvent The Server-Sent Event string from which to extract the data.
+     * @return The data extracted from the SSE string, or an empty JSON object string "{}" if the "data:" field is not found.
+     */
     private String extractData(String sseEvent) {
         Matcher matcher = Pattern.compile("data:\\s*(\\{.*?})", Pattern.DOTALL).matcher(sseEvent);
         if (matcher.find()) {
@@ -275,6 +422,15 @@ public class SquiggleService {
         return "{}";
     }
 
+    /**
+     * This method is annotated with @PreDestroy, which means it is automatically
+     * called by the Spring framework just before the SquiggleService bean is destroyed.
+     * This method is used to clean up any resources that the bean has been using.
+     *
+     * <p>Specifically, this method checks if the gameUpdateSubscription exists and is not disposed.
+     * If so, it disposes the subscription. This is important to prevent memory leaks and other
+     * potential issues related to the lifecycle of the subscription.
+     */
     @PreDestroy
     public void onDestroy() {
         if (gameUpdateSubscription != null && !gameUpdateSubscription.isDisposed()) {
