@@ -1,6 +1,8 @@
 package com.heatherpiper.service;
 
 import com.heatherpiper.dao.*;
+import com.heatherpiper.model.Game;
+import com.heatherpiper.model.UserLadderEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,12 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Comparator;
-
-import com.heatherpiper.model.Game;
-import com.heatherpiper.model.UserLadderEntry;
 
 @Service
 public class WatchedGamesService {
@@ -37,6 +36,16 @@ public class WatchedGamesService {
         this.teamDao = teamDao;
     }
 
+    /**
+     * Marks a list of games as watched for a user and updates the user's ladder entries sequentially.
+     *
+     * <p>This method first validates the user ID and the list of game IDs. If the user ID and game IDs are valid, it iterates over the list of game IDs,
+     * and for each game ID, it marks the game as watched and updates the user's ladder entries.
+     *
+     * @param userId The ID of the user.
+     * @param gameIds The list of game IDs to be marked as watched.
+     * @throws IllegalArgumentException If the user does not exist or if the list of game IDs is empty, null, or contains duplicate game IDs.
+     */
     public void markGamesAsWatchedSequentially(int userId, List<Integer> gameIds) {
 
         // Validate user ID and game IDs
@@ -48,6 +57,16 @@ public class WatchedGamesService {
         }
     }
 
+    /**
+     * Marks a list of games as unwatched for a user and updates the user's ladder entries sequentially.
+     *
+     * <p>This method first validates the user ID and the list of game IDs. If the user ID and game IDs are valid, it iterates over the list of game IDs,
+     * and for each game ID, it marks the game as unwatched and updates the user's ladder entries.
+     *
+     * @param userId The ID of the user.
+     * @param gameIds The list of game IDs to be marked as unwatched.
+     * @throws IllegalArgumentException If the user does not exist or if the list of game IDs is empty, null, or contains duplicate game IDs.
+     */
     public void markGamesAsUnwatchedSequentially(int userId, List<Integer> gameIds) {
 
         // Validate user ID and game IDs
@@ -59,6 +78,22 @@ public class WatchedGamesService {
         }
     }
 
+    /**
+     * Marks a game as unwatched and updates the user's ladder entries.
+     *
+     * <p>This method first checks if the game is currently marked as watched for the user. If it is, it validates the existence of the game,
+     * marks the game as unwatched, calculates the points to be subtracted from both the home and away teams based on the game result,
+     * updates the ladder for both teams, and recalculates the positions of each team in the user's ladder.
+     *
+     * <p>If the game is not currently marked as watched, no action is taken.
+     *
+     * <p>This method is transactional, meaning that if any step fails, all changes made within the transaction will be rolled back.
+     *
+     * @param userId The user ID.
+     * @param gameId The game ID.
+     * @throws IllegalArgumentException If the user or game does not exist, or if the game is not currently marked as watched.
+     * @throws RuntimeException If an unexpected error occurs.
+     */
     @Transactional
     public void markGameAsUnwatchedAndUpdateLadder(int userId, int gameId) {
         try {
@@ -104,6 +139,22 @@ public class WatchedGamesService {
         }
     }
 
+    /**
+     * Marks a game as watched and updates the user's ladder entries.
+     *
+     * <p>This method first checks if the game is already marked as watched for the user. If not, it validates the existence of the game,
+     * marks the game as watched, calculates the points for home and away teams based on the game result, updates the ladder for both
+     * teams, and recalculates the positions of each team in the user's ladder.
+     *
+     * <p>If the game is already marked as watched, no action is taken.
+     *
+     * <p>This method is transactional, meaning that if any step fails, all changes made within the transaction will be rolled back.
+     *
+     * @param userId The user ID.
+     * @param gameId The game ID.
+     * @throws IllegalArgumentException If the user or game does not exist, or if the game is already marked as watched.
+     * @throws RuntimeException If an unexpected error occurs.
+     */
     @Transactional
     public void markGameAsWatchedAndUpdateLadder(int userId, int gameId) {
         try {
@@ -145,6 +196,24 @@ public class WatchedGamesService {
         }
     }
 
+    /**
+     * Updates a user's ladder entry for a specific team.
+     *
+     * <p>This method first validates the team name and retrieves the team ID. It then fetches all watched games for the user
+     * and recalculates the wins, losses, and draws based on these games. It checks if a ladder entry exists for the given
+     * user and team, and if it does, it updates the wins, losses, draws, points, pointsFor, and pointsAgainst for the entry.
+     * It also calculates the percentage of pointsFor relative to pointsAgainst and updates this value in the entry.
+     *
+     * <p>Finally, it updates the ladder entry in the database.
+     *
+     * @param userId The user ID.
+     * @param teamName The team name.
+     * @param points The points to be added to the team's current total points.
+     * @param pointsForThisGame The points scored by the team in this game.
+     * @param pointsAgainstThisGame The points conceded by the team in this game.
+     * @throws IllegalArgumentException If the team name is null or empty, or if the team does not exist, or if the ladder entry does not
+     * exist for the given user and team.
+     */
     private void updateTeamLadder(int userId, String teamName, int points, int pointsForThisGame, int pointsAgainstThisGame) {
 
         // Validate team name
@@ -199,6 +268,15 @@ public class WatchedGamesService {
         userLadderEntryDao.updateUserLadderEntry(entry);
     }
 
+    /**
+     * Validate the user ID and game IDs. The user ID must be greater than zero and the user must exist. The game IDs
+     * list must not be empty or null, and must not contain duplicates.
+     *
+     * @param userId The user ID.
+     * @param gameIds The list of game IDs.
+     * @throws IllegalArgumentException if a user does not exist for the given user ID or if the list of game IDs is empty, null, or
+     * contains duplicate game IDs.
+     */
     private void validateUserAndGameIds(int userId, List<Integer> gameIds) {
         if (userId <= 0 || !userDao.userExists(userId)) {
             logger.warn("Invalid userId: {}", userId);
@@ -214,6 +292,12 @@ public class WatchedGamesService {
         }
     }
 
+    /**
+     * Validate that a game exists for the given game ID.
+     *
+     * @param gameId The game ID.
+     * @return the game object if it exists.
+     */
     private Game validateGameExistence(int gameId) {
         Game game = gameDao.findGameById(gameId);
         if (game == null) {
@@ -223,6 +307,12 @@ public class WatchedGamesService {
         return game;
     }
 
+    /**
+     * Calculates the position of all teams in the ladder for the given user ID. The position is based on points, then
+     * percentage, and is ordered in descending order.
+     *
+     * @param userId The user ID.
+     */
     public void calculatePosition(int userId) {
         List<UserLadderEntry> entries = userLadderEntryDao.getAllUserLadderEntries(userId);
 
@@ -239,6 +329,13 @@ public class WatchedGamesService {
         logger.info("Updated ranks for all teams in ladder for userId: {}", userId);
     }
 
+    /**
+     * Calculate the percentage of pointsFor relative to pointsAgainst. If pointsAgainst is zero, return 100.0 to avoid division by zero.
+     *
+     * @param pointsFor The points scored by a team.
+     * @param pointsAgainst The points conceded by a team.
+     * @return the percentage of pointsFor relative to pointsAgainst
+     */
     private double calculatePercentage(int pointsFor, int pointsAgainst) {
         // Avoid division by zero
         if (pointsAgainst == 0) {
@@ -252,6 +349,12 @@ public class WatchedGamesService {
         }
     }
 
+    /**
+     * Reset the user's ladder entries and mark all games as unwatched. This operation is irreversible.
+     *
+     * @param userId The user ID.
+     * @throws IllegalArgumentException if the user does not exist.
+     */
     public void resetUserLadderAndMarkAllGamesUnwatched(int userId) {
         boolean userExists = userDao.userExists(userId);
         if (userId <= 0 || !userExists) {
