@@ -340,7 +340,9 @@ public class SquiggleService {
      *
      * <p>This method is triggered upon receiving an event from the SSE endpoint. It checks if the event starts with "event:"
      * and then extracts the event type. If the event type is "removeGame", it means the game is over and the final scores are available.
-     * The method then extracts the data from the event, deserializes it into a Game object, and saves it to the database.
+     *
+     * <p>The method then extracts the data from the event, deserializes it into a Game object (converting team IDs into team names for
+     * hteam, ateam, and winner), and saves it to the database.
      *
      * @param sseEvent The Server-Sent Event received from the Squiggle API's game updates endpoint.
      */
@@ -359,16 +361,26 @@ public class SquiggleService {
 
                 try {
                     game.setHteam(teamDao.findTeamNameById(Integer.parseInt(game.getHteam())));
+                } catch (NumberFormatException e) {
+                    logger.warn("hteam is not an ID, assuming it's a name for Game ID {}", game.getId());
+                }
+
+                try {
                     game.setAteam(teamDao.findTeamNameById(Integer.parseInt(game.getAteam())));
                 } catch (NumberFormatException e) {
-                    logger.error("Invalid Team ID format, skipping Game ID {}", game.getId(), e);
-                    return;
+                    logger.warn("ateam is not an ID, assuming it's a name for Game ID {}", game.getId());
+                }
+
+                try {
+                    game.setWinner(teamDao.findTeamNameById(Integer.parseInt(game.getWinner())));
+                } catch (NumberFormatException e) {
+                    logger.warn("winner is not an ID, assuming it's a name for Game ID {}", game.getId());
                 }
 
                 gameDao.saveAll(Collections.singletonList(game));
-                logger.info("Processed '{}' event for Game ID: {}", eventType, game.getId());
+                logger.info("Processed 'removeGame' event for Game ID: {}", game.getId());
             } else {
-                logger.info("Received an unhandled event type: {}", eventType);
+                logger.debug("Received an unhandled event type: {}", eventType);
             }
         } catch (JsonProcessingException e) {
             logger.error("Error processing SSE event: {}", trimmedEvent, e);
