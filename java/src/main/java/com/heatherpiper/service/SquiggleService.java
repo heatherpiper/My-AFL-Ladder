@@ -339,15 +339,8 @@ public class SquiggleService {
      * Processes a Server-Sent Event (SSE) from the Squiggle API's game updates endpoint.
      *
      * <p>This method is triggered upon receiving an event from the SSE endpoint. It checks if the event starts with "event:"
-     * and then extracts the event type. If the event type is "addGame" or "removeGame", it means the game is over and the final scores are available.
+     * and then extracts the event type. If the event type is "removeGame", it means the game is over and the final scores are available.
      * The method then extracts the data from the event, deserializes it into a Game object, and saves it to the database.
-     *
-     * <p>The SSE endpoint provides a stream of current or soon-to-start games. Upon joining the channel, an array of games
-     * that are either in progress or scheduled to start within the next 6 hours is sent. Thereafter, "addGame" and "removeGame"
-     * events are sent as games are added to the list (because they're going to start in the near future) or removed (because they're over).
-     *
-     * <p>Both "addGame" and "removeGame" events broadcast the game's complete state. This method specifically processes "removeGame" events
-     * to capture the final scores of all matches as soon as possible.
      *
      * @param sseEvent The Server-Sent Event received from the Squiggle API's game updates endpoint.
      */
@@ -360,7 +353,7 @@ public class SquiggleService {
 
         try {
             String eventType = extractEventType(trimmedEvent);
-            if ("addGame".equals(eventType) || "removeGame".equals(eventType)) {
+            if ("removeGame".equals(eventType)) {
                 String data = extractData(trimmedEvent);
                 Game game = objectMapper.readValue(data, Game.class);
 
