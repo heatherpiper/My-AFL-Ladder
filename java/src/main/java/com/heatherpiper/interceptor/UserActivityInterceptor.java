@@ -11,6 +11,9 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Interceptor to update the last active time of the user.
+ */
 @Component
 public class UserActivityInterceptor extends HandlerInterceptorAdapter {
 

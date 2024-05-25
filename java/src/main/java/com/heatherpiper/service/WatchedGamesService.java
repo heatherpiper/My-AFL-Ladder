@@ -15,6 +15,9 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 
+/**
+ * Service class for marking games as watched or unwatched and updating the user's ladder entries.
+ */
 @Service
 public class WatchedGamesService {
 
