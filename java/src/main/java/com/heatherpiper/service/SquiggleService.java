@@ -152,6 +152,50 @@ public class SquiggleService {
     }
 
     /**
+     * Fetches games from the most recent round for a specific year from the Squiggle API.
+     *
+     * <p>This method sends an HTTP request to the Squiggle API endpoint with the appropriate headers and query parameters to retrieve the games for the specified year. The response body is then parsed to obtain a list of Game objects.
+     *
+     * <p>The method determines the highest completed round by filtering the games based on the 'complete' property (which indicates the
+     * percentage of completion) and finding the maximum round number. If a valid highest completed round is found (i.e., not equal to -1), the method fetches the games for that round using the 'fetchGamesForYearAndRound' method and adds them to the 'gamesFromMostRecentRound' list.
+     *
+     * <p>If an exception occurs during the process, an error message is logged.
+     *
+     * @param year The year for which to fetch games.
+     * @return A list of games from the most recent round for the specified year. If an error occurs, an empty list is returned.
+     */
+    public List<Game> fetchGamesFromMostRecentRound(int year) {
+        List<Game> gamesFromMostRecentRound = new ArrayList<>();
+
+        try {
+            String url = String.format("https://api.squiggle.com.au/?q=games;year=%d", year);
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Accept", "application/json")
+                    .header("User-Agent", "Later Ladder (github.com/heatherpiper/Later-Ladder)")
+                    .build();
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            String responseBody = response.body();
+
+            List<Game> games = parseGames(responseBody);
+
+            // Determine the highest completed round
+            int highestCompletedRound = games.stream()
+                    .filter(game -> game.getComplete() == 100)
+                    .mapToInt(Game::getRound)
+                    .max()
+                    .orElse(-1);
+
+            if (highestCompletedRound != -1) {
+                gamesFromMostRecentRound.addAll(fetchGamesForYearAndRound(year, highestCompletedRound));
+            }
+        } catch (Exception e) {
+            logger.error("Failed to fetch games from most recent round for year {}: ", year, e);
+        }
+        return gamesFromMostRecentRound;
+    }
+
+    /**
      * Fetches games up to the most recent round for a specific year from the Squiggle API.
      *
      * <p>This method constructs a URL to the Squiggle API's games endpoint, specifying the year as a query parameter.
