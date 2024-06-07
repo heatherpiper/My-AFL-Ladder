@@ -8,6 +8,8 @@ public interface WatchedGamesDao {
 
     List<Game> findWatchedGames(int userId);
 
+    List<Game> findWatchedGamesByRound(int userId, int round);
+
     List<Game> findUnwatchedGames(int userId);
 
     List<Game> findUnwatchedGamesByRound(int userId, int round);

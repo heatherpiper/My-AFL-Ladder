@@ -6,17 +6,18 @@ import com.heatherpiper.model.Game;
 import com.heatherpiper.model.GameWatchRequest;
 import com.heatherpiper.service.WatchedGamesService;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin
 @RestController
@@ -42,6 +43,16 @@ public class WatchedGamesController {
     @PostMapping("/unwatch")
     public void removeGamesFromWatchedList(@PathVariable("userId") int userId, @RequestBody @NotNull GameWatchRequest request) {
         watchedGamesService.markGamesAsUnwatchedSequentially(userId, request.getGameIds());
+    }
+
+    @PostMapping("/mark-round-watched")
+    public void markAllGamesInRoundAsWatched(@PathVariable("userId") int userId, @RequestBody Map<String, Integer> requestBody) {
+        watchedGamesService.markAllGamesInRoundAsWatchedAndUpdateLadder(userId, requestBody.get("round"));
+    }
+
+    @PostMapping("/mark-round-unwatched")
+    public void markAllGamesInRoundAsUnwatched(@PathVariable("userId") int userId, @RequestBody Map<String, Integer> requestBody) {
+        watchedGamesService.markAllGamesInRoundAsUnwatchedAndUpdateLadder(userId, requestBody.get("round"));
     }
 
     @GetMapping

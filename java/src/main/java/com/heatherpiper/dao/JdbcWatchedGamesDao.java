@@ -40,6 +40,13 @@ public class JdbcWatchedGamesDao implements WatchedGamesDao {
     }
 
     @Override
+    public List<Game> findWatchedGamesByRound(int userId, int round) {
+        String sql = "SELECT g.* FROM games g INNER JOIN watched_games wg ON g.id = wg.game_id WHERE wg.user_id = ? AND g.round = ? " +
+                "ORDER BY g.date ASC";
+        return jdbcTemplate.query(sql, gameRowMapper, userId, round);
+    }
+
+    @Override
     public List<Game> findUnwatchedGames(int userId) {
         String sql = "SELECT g.* FROM games g " +
                 "LEFT JOIN watched_games wg ON g.id = wg.game_id AND wg.user_id = ? " +

@@ -14,6 +14,7 @@ import java.math.RoundingMode;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Service class for marking games as watched or unwatched and updating the user's ladder entries.
@@ -197,6 +198,22 @@ public class WatchedGamesService {
             logger.error("Unexpected error in markGameAsWatchedAndUpdateLadder for userId: {}, gameId: {}", userId, gameId, e);
             throw new RuntimeException("An unexpected error occurred while processing gameId: " + gameId, e);
         }
+    }
+
+    public void markAllGamesInRoundAsWatchedAndUpdateLadder(int userId, int round) {
+        List<Game> unwatchedGames = watchedGamesDao.findUnwatchedGamesByRound(userId, round);
+        List<Integer> gameIds = unwatchedGames.stream()
+                .map(Game::getId)
+                .collect(Collectors.toList());
+        markGamesAsWatchedSequentially(userId, gameIds);
+    }
+
+    public void markAllGamesInRoundAsUnwatchedAndUpdateLadder(int userId, int round) {
+        List<Game> watchedGames = watchedGamesDao.findWatchedGamesByRound(userId, round);
+        List<Integer> gameIds = watchedGames.stream()
+                .map(Game::getId)
+                .collect(Collectors.toList());
+        markGamesAsUnwatchedSequentially(userId, gameIds);
     }
 
     /**
